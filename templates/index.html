@@ -1,11 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <h1>hello world</h1>
-  </body>
-</html>
+{% extends 'layout.html' %}
+
+{% block title %}User Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- Our Menu Section -->
+<div class="container my-5">
+    <h2 class="text-center">Our Menu</h2>
+    
+    <div class="bd-grid">
+        {% for product in products[:4] %}
+        <article class="card">
+            <div class="card__img">
+                <img src="{{ url_for('static', filename='images/' + product.image_filename) }}" alt="{{ product.name }}">
+            </div>
+            <div class="card__name">
+                <p>{{ product.name }}</p>
+            </div>
+            <div class="card__precis">
+                <a href="" class="card__icon"><ion-icon name="heart-outline"></ion-icon></a>
+                <div>
+                    <span class="card__preci card__preci--before" style="text-decoration: line-through">Rp.20.000</span>
+                    <span class="card__preci card__preci--now">{{ product.price|rupiah }}</span>
+                </div>
+                <a href="" class="card__icon"><ion-icon name="cart-outline"></ion-icon></a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    <!-- View All Button -->
+    <div class="text-center mt-4">
+        <a href="" class="btn btn-secondary">View All</a>
+    </div>
+</div>
+
+{% endblock %}
