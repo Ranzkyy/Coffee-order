@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+
+{% block title %}Order - {{ product['name'] }}{% endblock %}
+
+{% block content %}
+<div class="m-3">
+    <a href="{{ url_for('show_products') }}" class="btn btn-sm btn-outline-dark">
+        <ion-icon name="arrow-back-outline"></ion-icon> Back to Products
+    </a>
+</div>
+
+<div class="container my-5 shadow rounded-lg p-4 bg-light">
+    <h1 class="text-center mb-4">{{ product['name'] }}</h1>
+    <div class="row">
+        <div class="col-md-6 text-center">
+            <div class="product-img-box shadow-sm bg-white p-3 mb-4 rounded">
+                <img src="{{ url_for('static', filename='images/' + product['image_filename']) }}" alt="{{ product['name'] }}" class="img-fluid rounded">
+            </div>
+        </div>
+        <div class="col-md-6 d-flex flex-column justify-content-center">
+            <p class="lead"><strong>Description:</strong> {{ product['description'] }}</p>
+            <p class="h3 text-success"><strong>Price:</strong> {{ product['price'] | rupiah }}</p>
+
+            <p class="h4"><strong>Quantity:</strong> {{ quantity }}</p>
+            <p class="h4"><strong>Total:</strong> {{ total_price | rupiah }}</p>
+            <form method="POST" action="{{ url_for('submit_order') }}">
+                <div class="mb-3">
+                    <label for="fullName" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phoneNumber" class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                </div>
+                <!-- Hidden fields to pass data -->
+                <input type="hidden" name="product_id" value="{{ product['_id'] }}">
+                <input type="hidden" name="quantity" value="{{ quantity }}">
+                <input type="hidden" name="total_price" value="{{ total_price }}">
+                
+                <button type="submit" class="btn btn-primary">Place Order</button>
+            </form>            
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+
+<h3>Order Details</h3>
+
+<div class="card shadow border-0 mb-7">
+  <div class="card-header">
+    <h5 class="mb-0">Order Information</h5>
+  </div>
+  <div class="card-body">
+    <dl class="row">
+      <dt class="col-sm-3">Customer Name</dt>
+      <dd class="col-sm-9">{{ order.customer_name }}</dd>
+
+      <dt class="col-sm-3">Product Name</dt>
+      <dd class="col-sm-9">{{ order.product_name }}</dd>
+
+      <dt class="col-sm-3">Quantity</dt>
+      <dd class="col-sm-9">{{ order.quantity }}</dd>
+
+      <dt class="col-sm-3">Status</dt>
+      <dd class="col-sm-9">
+        <span class="badge bg-{{ 'success' if order.status == 'Delivered' else 'warning' }}">
+          {{ order.status }}
+        </span>
+      </dd>
+
+      <dt class="col-sm-3">Order Date</dt>
+      <dd class="col-sm-9">{{ order.created_at.strftime('%Y-%m-%d') }}</dd>
+
+      <dt class="col-sm-3">Shipping Address</dt>
+      <dd class="col-sm-9">{{ order.shipping_address }}</dd>
+
+      <dt class="col-sm-3">Payment Status</dt>
+      <dd class="col-sm-9">{{ order.payment_status }}</dd>
+    </dl>
+  </div>
+</div>
+
+<a href="{{ url_for('admin_orders') }}" class="btn btn-secondary">Back to Orders</a>
+
+{% endblock %}
