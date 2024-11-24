@@ -24,7 +24,7 @@
                 <p class="h3 text-success"><strong>Price:</strong> {{ product.price|rupiah }}</p>
                 
                 <!-- Form untuk Order Now -->
-                <form method="POST" action="{{ url_for('order', product_id=product['_id']) }}">
+                <!-- <form method="POST" action="{{ url_for('order', product_id=product['_id']) }}">
                     <div class="mb-3">
                         <label for="quantity" class="form-label">Quantity</label>
                         <input type="number" class="form-control" name="quantity" value="1" min="1">
@@ -32,7 +32,7 @@
                     <div class="mt-4">
                         <button type="submit" class="w-100 login-btn">Order Now</button>
                     </div>
-                </form>
+                </form> -->
 
                 <!-- Form untuk Add to Cart -->
                 <form method="POST" action="{{ url_for('add_to_cart_route', product_id=product['_id']) }}" class="mt-3">

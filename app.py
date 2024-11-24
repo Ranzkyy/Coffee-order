@@ -361,16 +361,19 @@ def admin_orders():
     orders = list(db.orders.find())
     
     for order in orders:
-        product = db.products.find_one({'_id': order['product_id']})
-        if product:
-            order['product_name'] = product['name']
+        # Periksa apakah kunci 'items' ada dalam order
+        if 'items' in order:
+            for item in order['items']:
+                product = db.products.find_one({'_id': item['product_id']})
+                if product:
+                    item['product_name'] = product['name']
+                else:
+                    item['product_name'] = 'Product not found'
         else:
-            order['product_name'] = 'Product not found'
+            order['items'] = []  # Jika tidak ada items, set sebagai list kosong atau Anda bisa menambahkan logika lain
 
-            
     return render_template('admin/orders/index.html', orders=orders)
 
-#ADMIN - ORDER DETAIL
 
 @app.route('/admin/orders/view/<order_id>', methods=['GET'])
 def view_order(order_id):
@@ -378,17 +381,26 @@ def view_order(order_id):
         flash('Only admins can view order details.', 'error')
         return redirect(url_for('login'))
 
-    # Mengambil data order berdasarkan ID dari database
-    order = db.orders.find_one({'_id': ObjectId(order_id)})  # Gantilah 'orders' dengan nama koleksi yang sesuai
+    # Fetch the order from the database
+    order = db.orders.find_one({'_id': ObjectId(order_id)})
 
     if order is None:
         flash('Order not found!', 'error')
         return redirect(url_for('admin_orders'))
 
-    # Mengambil informasi produk berdasarkan product_id yang ada di dalam order
-    product = db.products.find_one({'_id': order['product_id']})
-    if product:
-        order['product_name'] = product['name']  # Menambahkan nama produk ke data order
+    # Ensure 'items' is a list, if not an empty list
+    if not isinstance(order.get('items'), list):
+        order['items'] = []  # Set to empty list if not iterable
+
+    # Fetch product details for each item in the order
+    for item in order['items']:
+        product = db.products.find_one({'_id': item['product_id']})
+        
+        # If the product is found, add its details to the item
+        if product:
+            item['product'] = product  # Add the entire product object to the item
+        else:
+            item['product'] = {'name': 'Product not found'}  # Default if the product isn't found
 
     return render_template('admin/orders/view.html', order=order)
 
@@ -551,17 +563,8 @@ def get_cart_items(user_id):
                 "total_price": product["price"] * item["quantity"]
             })
     return cart_items
-@app.route('/add_to_cart/<product_id>', methods=['POST'])
-def add_to_cart_route(product_id):
-    if 'username' not in session:
-        flash("Please log in to add items to cart.", "error")
-        return redirect(url_for('login'))
 
-    quantity = int(request.form.get('quantity', 1))
-    user = db.users.find_one({"username": session["username"]})
-    add_to_cart(user["_id"], product_id, quantity)
-    flash('Product added to cart', 'success')
-    return redirect(url_for('show_products'))
+
 
 # Route untuk melihat keranjang
 @app.route('/cart')
@@ -575,6 +578,18 @@ def view_cart():
     total_amount = sum(item['total_price'] for item in cart_items)
     return render_template('user/cart.html', cart_items=cart_items, total_amount=total_amount)
 
+
+@app.route('/add_to_cart/<product_id>', methods=['POST'])
+def add_to_cart_route(product_id):
+    if 'username' not in session:
+        flash("Please log in to add items to cart.", "error")
+        return redirect(url_for('login'))
+
+    quantity = int(request.form.get('quantity', 1))
+    user = db.users.find_one({"username": session["username"]})
+    add_to_cart(user["_id"], product_id, quantity)
+    flash('Product added to cart', 'success')
+    return redirect(url_for('view_cart'))
 
 # Route untuk checkout
 @app.route('/checkout', methods=['GET', 'POST'])
@@ -604,6 +619,7 @@ def checkout():
 
         # Tambahkan setiap item ke pesan dengan format tabel
         total_price = 0  # Inisialisasi total harga
+        order_items = []  # Menyimpan informasi item pesanan
         for item in cart_items:
             item_name = item['product']['name']
             item_price = item['total_price'] // item['quantity']
@@ -615,6 +631,14 @@ def checkout():
                 f" - {item_name:<14} | {item_price} IDR x {item_quantity} items\n"
             )
 
+            # Menyimpan detail item pesanan untuk dimasukkan ke dalam orders
+            order_items.append({
+                'product_id': item['product']['_id'],
+                'quantity': item_quantity,
+                'price': item_price,
+                'total_price': item['total_price']
+            })
+
         # Tambahkan total harga di akhir pesan
         message += f"\n*Total Price     : {total_price} IDR*"
 
@@ -622,16 +646,32 @@ def checkout():
         encoded_message = urllib.parse.quote_plus(message)
         whatsapp_url = f"https://wa.me/6285155452451?text={encoded_message}"
 
-        # Hapus keranjang setelah checkout
+        # Simpan order ke db.orders
+        order_data = {
+            'user_id': ObjectId(user["_id"]),
+            'full_name': full_name,
+            'phone_number': phone_number,
+            'address': address,
+            'items': order_items,  # Menyimpan detail produk yang dipesan
+            'total_price': total_price,
+            'status': 'pending',  # Status order masih pending
+            'created_at': datetime.now()  # Timestamp pembuatan order
+        }
+        
+        # Insert order ke dalam collection 'orders'
+        db.orders.insert_one(order_data)
+
+        # Hapus keranjang setelah order selesai
         db.carts.delete_one({"user_id": ObjectId(user["_id"])})
 
-        # Redirect ke WhatsApp
+        # Redirect ke WhatsApp untuk konfirmasi order
         return redirect(whatsapp_url)
 
     # Hitung total harga untuk tampilan checkout
     total_price = sum(item['total_price'] for item in cart_items)
     return render_template('user/checkout.html', cart_items=cart_items, total_price=total_price)
-    
+
+
 @app.route('/cart/delete/<product_id>', methods=['POST'])
 def delete_from_cart(product_id):
     if 'username' not in session:
