@@ -3,12 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/static/style/login.css" />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='css/login.css')}}"
+    />
     <title>Document</title>
   </head>
   <body>
     <div class="login-form">
-      <h1>login</h1>
+      <h1>LOGIN</h1>
       <div class="container">
         <div class="main">
           <div class="content">
@@ -35,7 +38,10 @@
             </p>
           </div>
           <div class="form-img">
-            <img src="/static/img/coffee-cup.png" alt="" />
+            <img
+              src="{{url_for('static', filename='img/coffee-cup.png')}}"
+              alt=""
+            />
           </div>
         </div>
       </div>
