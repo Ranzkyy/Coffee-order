@@ -1,0 +1,65 @@
+{% extends 'admin/layout.html' %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ url_for('admin_dashboard') }}">Home</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a href="{{ url_for('admin_dashboard') }}">Products</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Add</li>
+  </ol>
+</nav>
+
+<h2 class="text-center">Add Product</h2>
+
+<div class="card shadow border-0 p-5">
+  <div class="container">
+    <form 
+      method="POST" 
+      enctype="multipart/form-data" 
+      class="add-form" 
+      action="{{ url_for('add_product') }}"
+    >
+      <div class="mb-3">
+        <label for="name" class="form-label">Coffee Name</label>
+        <input type="text" id="name" name="name" required class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <select name="category" class="form-select">
+          <option value="Coffee" selected>Coffee</option>
+          <option value="Tea">Tea</option>
+        </select>
+      </div>
+      
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea id="description" name="description" required class="form-control"></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label for="price" class="form-label">Price</label>
+        <input type="number" id="price" name="price" required class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label for="stock" class="form-label">Stock</label>
+        <input type="number" id="stock" name="stock" required class="form-control" />
+      </div>
+      
+      <div class="mb-3">
+        <label for="image" class="form-label">Upload Image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required class="form-control" />
+      </div>
+
+      <button type="submit" class="btn btn-primary float-end">Add Product</button>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}

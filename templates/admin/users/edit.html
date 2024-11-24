@@ -1,0 +1,47 @@
+{% extends "admin/layout.html" %} 
+
+{% block content %}
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ url_for('admin_dashboard') }}">Home</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a href="{{ url_for('admin_users') }}">Users</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Edit User</li>
+  </ol>
+</nav>
+
+<h2 class="text-center">Edit User</h2>
+
+<div class="card shadow border-0 p-5">
+  <div class="container">
+    <form method="POST" class="edit-form">
+      
+      <div class="mb-3">
+        <label for="username" class="form-label">Username:</label>
+        <input type="text" id="username" name="username" value="{{ user.username }}" required class="form-control" />
+      </div>
+      
+      <div class="mb-3">
+        <label for="password" class="form-label">New Password (leave blank to keep current):</label>
+        <input type="password" id="password" name="password" class="form-control" />
+      </div>
+      
+      <div class="mb-3">
+        <label for="role" class="form-label">Role:</label>
+        <select id="role" name="role" class="form-select" required>
+          <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
+          <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+        </select>
+      </div>
+      
+      <button type="submit" class="btn btn-primary float-end">Save Changes</button>
+      
+    </form>
+  </div>
+</div>
+
+{% endblock %}

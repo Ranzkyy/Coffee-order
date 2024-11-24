@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="container mt-5 p-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Checkout</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{{ url_for('checkout') }}">
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Full Name</label>
+                            <input type="text" name="fullName" id="fullName" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label">Phone Number</label>
+                            <input type="text" name="phoneNumber" id="phoneNumber" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea name="address" id="address" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="bi bi-whatsapp"></i> Checkout with WhatsApp
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

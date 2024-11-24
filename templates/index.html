@@ -4,6 +4,38 @@
 
 {% block content %}
 
+<!-- Jumbotron Header with Background Image -->
+<header class="jumbotron text-white d-flex align-items-center justify-content-center">
+    <div class="container text-center">
+        <h1 class="display-4">Welcome, User!</h1>
+        <p class="lead">Enjoy your personalized dashboard and discover our products</p>
+        <a href="{{ url_for('show_products') }}" class="login-btn">View Products</a>
+    </div>
+</header>
+
+<!-- Dashboard Content -->
+<div class="container my-5">
+    <h2 class="text-center">About Us</h2>
+    <div class="container about-card-container">
+        <div class="about-card">
+            <img src="{{ url_for('static', filename='about2.png') }}" alt="About Us">
+            <h3>Our Story</h3>
+            <p>Discover our journey and passion for creating the finest experiences.</p>
+        </div>
+        <div class="about-card">
+            <img src="{{ url_for('static', filename='about4.png') }}" alt="Our Vision">
+            <h3>Our Vision</h3>
+            <p>We aim to bring warmth and quality to every corner of our community.</p>
+        </div>
+        <div class="about-card">
+            <img src="{{ url_for('static', filename='about3.png') }}" alt="Our Team">
+            <h3>Our Team</h3>
+            <p>Meet the passionate people behind our success and quality.</p>
+        </div>
+    </div>
+    
+</div>
+
 <!-- Our Menu Section -->
 <div class="container my-5">
     <h2 class="text-center">Our Menu</h2>
@@ -12,7 +44,7 @@
         {% for product in products[:4] %}
         <article class="card">
             <div class="card__img">
-                <img src="{{ url_for('static', filename='images/' + product.image_filename) }}" alt="{{ product.name }}">
+                <img src="{{ url_for('static', filename='img/upload/' + product.image_filename) }}" alt="{{ product.name }}">
             </div>
             <div class="card__name">
                 <p>{{ product.name }}</p>
@@ -23,7 +55,7 @@
                     <span class="card__preci card__preci--before" style="text-decoration: line-through">Rp.20.000</span>
                     <span class="card__preci card__preci--now">{{ product.price|rupiah }}</span>
                 </div>
-                <a href="" class="card__icon"><ion-icon name="cart-outline"></ion-icon></a>
+                <a href="{{ url_for('detail_product', product_id=product._id) }}" class="card__icon"><ion-icon name="cart-outline"></ion-icon></a>
             </div>
         </article>
         {% endfor %}
@@ -31,7 +63,7 @@
 
     <!-- View All Button -->
     <div class="text-center mt-4">
-        <a href="" class="btn btn-secondary">View All</a>
+        <a href="{{ url_for('show_products') }}" class="btn btn-secondary">View All</a>
     </div>
 </div>
 
