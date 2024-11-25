@@ -1,49 +1,134 @@
 {% extends 'layout.html' %}
 
-{% block title %}Order - {{ product['name'] }}{% endblock %}
+{% block title %}Cart{% endblock %}
 
 {% block content %}
-<div class="m-3">
-    <a href="{{ url_for('show_products') }}" class="btn btn-sm btn-outline-dark">
-        <ion-icon name="arrow-back-outline"></ion-icon> Back to Products
-    </a>
-</div>
+<div class="container p-5">
+    <div class="mt-5">
+      <h2>Your Orders</h2>
+      {% if orders %}
+          <!-- Order Status -->
+          <ul class="nav nav-tabs" id="orderStatusTabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                  <button class="nav-link {% if active_tab == 'pending' %}active{% endif %}" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab" aria-controls="pending" aria-selected="true">Sedang Dikemas</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <button class="nav-link {% if active_tab == 'proceed' %}active{% endif %}" id="proceed-tab" data-bs-toggle="tab" data-bs-target="#proceed" type="button" role="tab" aria-controls="proceed" aria-selected="false">Dikirim</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <button class="nav-link {% if active_tab == 'done' %}active{% endif %}" id="done-tab" data-bs-toggle="tab" data-bs-target="#done" type="button" role="tab" aria-controls="done" aria-selected="false">Selesai</button>
+              </li>
+          </ul>
+    
+          <!-- Tab Content -->
+          <div class="tab-content mt-3" id="orderStatusContent">
+              <!-- Pending Orders -->
+              <div class="tab-pane fade{% if active_tab == 'pending' %}show active{% endif %}" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+                  {% for order in orders if order.status == 'pending' %}
+                    <div class="card mb-3">
+                      <div class="card-header">
+                        <h5>{{ order.product_name }}</h5>
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-md-2">
 
-<div class="container my-5 shadow rounded-lg p-4 bg-light">
-    <h1 class="text-center mb-4">{{ product['name'] }}</h1>
-    <div class="row">
-        <div class="col-md-6 text-center">
-            <div class="product-img-box shadow-sm bg-white p-3 mb-4 rounded">
-                <img src="{{ url_for('static', filename='images/' + product['image_filename']) }}" alt="{{ product['name'] }}" class="img-fluid rounded">
-            </div>
-        </div>
-        <div class="col-md-6 d-flex flex-column justify-content-center">
-            <p class="lead"><strong>Description:</strong> {{ product['description'] }}</p>
-            <p class="h3 text-success"><strong>Price:</strong> {{ product['price'] | rupiah }}</p>
-
-            <p class="h4"><strong>Quantity:</strong> {{ quantity }}</p>
-            <p class="h4"><strong>Total:</strong> {{ total_price | rupiah }}</p>
-            <form method="POST" action="{{ url_for('submit_order') }}">
-                <div class="mb-3">
-                    <label for="fullName" class="form-label">Full Name</label>
-                    <input type="text" class="form-control" id="fullName" name="fullName" required>
+                            <img 
+                            src="{{ url_for('static', filename='img/upload/' + (order.product_image or 'default.jpg')) }}" 
+                            alt="{{ order.product_name or 'No image available' }}"
+                            class="img-thumbnail"
+                            style="max-width: 150px;"
+                          />
+                          </div>
+                          <div class="col-md-10">
+                            <p>
+                              <strong>Jumlah:</strong> {{ order.quantity }}<br>
+                              <strong>Harga:</strong> {{ order.price }} IDR <br>
+                              <strong>Tanggal:</strong> {{ order.created_at.strftime('%A, %d-%m-%Y') }}<br>
+                              <strong>Total Harga:</strong> {{ order.total_price }} IDR
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {% else %}
+                      <p>No pending orders.</p>
+                  {% endfor %}
+              </div>
+    
+              <!-- Proceed Orders -->
+              <div class="tab-pane fade {% if active_tab == 'proceed' %}show active{% endif %}" id="proceed" role="tabpanel" aria-labelledby="proceed-tab">
+                {% for order in orders if order.status == 'proceed' %}
+                <div class="card mb-3">
+                  <div class="card-header">
+                    <div class="list-group-item">
+                      <h5>{{ order.product_name }}</h5>
+                    </div>
+                  </div>
+                    <div class="card-body">
+                      <p>
+                        <strong>Jumlah:</strong> {{ order.quantity }}<br>
+                        <strong>Harga:</strong> {{ order.price }} IDR <br>
+                        <strong>Tanggal:</strong> {{ order.created_at.strftime('%A, %d-%m-%Y') }}<br>
+                        <strong>Total Harga:</strong> {{ order.total_price }} IDR
+                      </p>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="phoneNumber" class="form-label">Phone Number</label>
-                    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" required>
-                </div>
-                <div class="mb-3">
-                    <label for="address" class="form-label">Address</label>
-                    <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
-                </div>
-                <!-- Hidden fields to pass data -->
-                <input type="hidden" name="product_id" value="{{ product['_id'] }}">
-                <input type="hidden" name="quantity" value="{{ quantity }}">
-                <input type="hidden" name="total_price" value="{{ total_price }}">
-                
-                <button type="submit" class="btn btn-primary">Place Order</button>
-            </form>            
-        </div>
+                  {% else %}
+                      <p>No orders in progress.</p>
+                  {% endfor %}
+              </div>
+    
+              <!-- Done Orders -->
+              <div class="tab-pane fade {% if active_tab == 'done' %}show active{% endif %}" id="done" role="tabpanel" aria-labelledby="done-tab">
+                  {% for order in orders if order.status == 'done' %}
+                  <div class="card mb-3">
+                    <div class="card-header">
+                      <div class="list-group-item">
+                          <h5>{{ order.product_name }}</h5>
+                      </div>
+                    </div>
+                      <div class="card-body">
+                        <p>
+                          <strong>Jumlah:</strong> {{ order.quantity }}<br>
+                          <strong>Harga:</strong> {{ order.price }} IDR <br>
+                          <strong>Tanggal:</strong> {{ order.created_at.strftime('%A, %d-%m-%Y') }}<br>
+                          <strong>Total Harga:</strong> {{ order.total_price }} IDR
+                        </p>
+                      </div>
+                  </div>
+                  {% else %}
+                      <p>No completed orders.</p>
+                  {% endfor %}
+              </div>
+          </div>
+      {% else %}
+          <p>You have no orders yet.</p>
+      {% endif %}
     </div>
 </div>
+
+<!-- Modal template for item deletion -->
+{% for item in cart_items %}
+<div class="modal fade" id="removeModal{{ item.product._id }}" tabindex="-1" aria-labelledby="removeModalLabel{{ item.product._id }}" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="removeModalLabel{{ item.product._id }}">Confirm Removal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to remove "{{ item.product.name }}" from your cart?
+      </div>
+      <div class="modal-footer">
+        <form action="{{ url_for('delete_from_cart', product_id=item.product._id) }}" method="POST" style="display:inline;">
+          <button type="submit" class="btn btn-danger">Yes, Remove</button>
+        </form>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
 {% endblock %}

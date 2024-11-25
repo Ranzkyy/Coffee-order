@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-md-6 text-center">
                 <div class="product-img-box shadow-sm bg-white p-3 mb-4 rounded">
-                    <img src="{{ url_for('static', filename='images/' + product.image_filename) }}" alt="{{ product.name }}" class="img-fluid rounded">
+                    <img src="{{ url_for('static', filename='img/upload/' + product.image_filename) }}" alt="{{ product.name }}" class="img-fluid rounded">
                 </div>
             </div>
 
@@ -23,18 +23,6 @@
                 <p class="lead"><strong>Description:</strong> {{ product.description }}</p>
                 <p class="h3 text-success"><strong>Price:</strong> {{ product.price|rupiah }}</p>
                 
-                <!-- Form untuk Order Now -->
-                <!-- <form method="POST" action="{{ url_for('order', product_id=product['_id']) }}">
-                    <div class="mb-3">
-                        <label for="quantity" class="form-label">Quantity</label>
-                        <input type="number" class="form-control" name="quantity" value="1" min="1">
-                    </div>
-                    <div class="mt-4">
-                        <button type="submit" class="w-100 login-btn">Order Now</button>
-                    </div>
-                </form> -->
-
-                <!-- Form untuk Add to Cart -->
                 <form method="POST" action="{{ url_for('add_to_cart_route', product_id=product['_id']) }}" class="mt-3">
                     <div class="mb-3">
                         <label for="cart_quantity" class="form-label">Add to Cart Quantity</label>

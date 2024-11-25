@@ -5,35 +5,40 @@
 {% block content %}
 <div class="container mt-5 p-5">
     <div class="card">
-    
-    <h1>Your Cart</h1>
-    {% if cart_items %}
-        <ul class="list-group mb-3">
-            {% for item in cart_items %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5>{{ item.product.name }}</h5>
-                        <p>Quantity: {{ item.quantity }}</p>
-                    </div>
-                    <div>
-                        <span class="badge bg-primary">{{ item.total_price }} IDR</span>
-                        <!-- Trigger modal -->
-                        <button type="button" class="btn btn-outline-danger btn-sm ms-3" data-bs-toggle="modal" data-bs-target="#removeModal{{ item.product._id }}">
-                            <i class="bi bi-trash"></i> Remove
-                        </button>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-        <h4>Total Amount: {{ total_amount }} IDR</h4>
-        <a href="{{ url_for('checkout') }}" class="btn btn-success">Proceed to Checkout</a>
-    {% else %}
-        <p>Your cart is empty.</p>
-    {% endif %}
+        <h1>Your Cart</h1>
+        {% if cart_items %}
+        <form action="{{ url_for('checkout_selected') }}" method="POST">
+            <ul class="list-group mb-3">
+                {% for item in cart_items %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <label>
+                                <input type="radio" name="selected_item" value="{{ item.product._id }}">
+                                <h5>{{ item.product.name }}</h5>
+                            </label>
+                            <p>Quantity: {{ item.quantity }}</p>
+                        </div>
+                        <div>
+                            <span class="badge bg-primary">{{ item.total_price }} IDR</span>
+                            <!-- Trigger modal -->
+                            <button type="button" class="btn btn-outline-danger btn-sm ms-3" data-bs-toggle="modal" data-bs-target="#removeModal{{ item.product._id }}">
+                                <i class="bi bi-trash"></i> Remove
+                            </button>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <h4>Total Amount: {{ total_amount }} IDR</h4>
+            <button type="submit" class="btn btn-success">Proceed to Checkout</button>
+        </form>
+        {% else %}
+            <p>Your cart is empty.</p>
+        {% endif %}
     </div>
 </div>
 
-<!-- Modal template for item deletion -->
+<!-- Modal box buat ngapus -->
 {% for item in cart_items %}
 <div class="modal fade" id="removeModal{{ item.product._id }}" tabindex="-1" aria-labelledby="removeModalLabel{{ item.product._id }}" aria-hidden="true">
   <div class="modal-dialog">
@@ -46,7 +51,6 @@
         Are you sure you want to remove "{{ item.product.name }}" from your cart?
       </div>
       <div class="modal-footer">
-        <!-- Form for submitting POST request to delete the item -->
         <form action="{{ url_for('delete_from_cart', product_id=item.product._id) }}" method="POST" style="display:inline;">
           <button type="submit" class="btn btn-danger">Yes, Remove</button>
         </form>
@@ -56,5 +60,4 @@
   </div>
 </div>
 {% endfor %}
-
 {% endblock %}
