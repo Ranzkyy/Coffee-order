@@ -8,11 +8,20 @@
   </head>
   <body>
     <div class="login-form">
-      <h1>login</h1>
       <div class="container">
         <div class="main">
           <div class="content">
             <h2>Log In</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %} {%
+            if messages %}
+            <div class="flash-messages">
+              {% for category, message in messages %}
+              <div class="flash {{ category }}">
+                <p>{{ message }}</p>
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %} {% endwith %}
             <form method="post">
               <input
                 type="text"
@@ -31,7 +40,7 @@
               <button type="submit" class="btn">Login</button>
             </form>
             <p class="account">
-              Don't Have An Account? <a href="#">Register</a>
+              Don't Have An Account? <a href="{{ url_for('register') }}">Register</a>
             </p>
           </div>
           <div class="form-img">

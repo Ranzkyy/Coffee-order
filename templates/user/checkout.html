@@ -13,15 +13,29 @@
                 <div class="card-body">
                     <form method="post" action="{{ url_for('checkout') }}">
                         <div class="mb-3">
-                            <label for="fullName" class="form-label">Full Name</label>
+                            <label for="fullName" class="form-label">Nama Lengkap</label>
                             <input type="text" name="fullName" id="fullName" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label for="phoneNumber" class="form-label">Phone Number</label>
+                            <label for="phoneNumber" class="form-label">Nomor Handphone</label>
                             <input type="text" name="phoneNumber" id="phoneNumber" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label for="address" class="form-label">Address</label>
+                            <label for="payment_method" class="form-label">Metode Pembayaran</label>
+                            <select name="paymentMethod" id="paymentMethod" class="form-select" required>
+                                <option value="BCA">Bank BCA</option>
+                                <option value="BNI">Bank BNI</option>
+                                <option value="BRI">Bank BRI</option>
+                                <option value="Mandiri">Bank Mandiri</option>
+                                <option value="BTN">Bank BTN</option>
+                                <option value="Dana">E-Wallet Dana</option>
+                                <option value="Gopay">E-Wallet Gopay</option>
+                                <option value="OVO">E-Wallet OVO</option>
+                                <option value="ShopeePay">E-Wallet ShopeePay</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Alamat</label>
                             <textarea name="address" id="address" class="form-control" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-success w-100">

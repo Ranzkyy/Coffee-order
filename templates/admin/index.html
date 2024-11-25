@@ -1,65 +1,75 @@
-{% extends 'admin/layout.html' %}
-{% block content %}
+{% extends 'admin/layout.html' %} {% block content %}
 
 <div class="container mt-5">
-    <div class="row">
-        <!-- Users Card -->
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <span class="h6 font-semibold text-muted text-sm d-block mb-2">Total Users</span>
-                            <span class="h3 font-bold mb-0">{{ total_users }}</span>
-                        </div>
-                        <div class="col-auto">
-                            <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
-                                <i class="fas fa-users"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <div class="row">
+    <!-- Users Card -->
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col">
+              <span class="h6 font-semibold text-muted text-sm d-block mb-2"
+                >Total Users</span
+              >
+              <span class="h3 font-bold mb-0">{{ total_users }}</span>
             </div>
-        </div>
-
-        <!-- Products Card -->
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <span class="h6 font-semibold text-muted text-sm d-block mb-2">Total Products</span>
-                            <span class="h3 font-bold mb-0">{{ total_products }}</span>
-                        </div>
-                        <div class="col-auto">
-                            <div class="icon icon-shape bg-success text-white rounded-circle shadow">
-                                <i class="fas fa-box"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-auto">
+              <div
+                class="icon icon-shape bg-primary text-white rounded-circle shadow"
+              >
+                <i class="fas fa-users"></i>
+              </div>
             </div>
+          </div>
         </div>
-
-        <!-- Sales Card (Example) -->
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <span class="h6 font-semibold text-muted text-sm d-block mb-2">Total Sales</span>
-                            <span class="h3 font-bold mb-0">$750.90</span>
-                        </div>
-                        <div class="col-auto">
-                            <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                                <i class="fas fa-dollar-sign"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+
+    <!-- Products Card -->
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col">
+              <span class="h6 font-semibold text-muted text-sm d-block mb-2"
+                >Total Products</span
+              >
+              <span class="h3 font-bold mb-0">{{ total_products }}</span>
+            </div>
+            <div class="col-auto">
+              <div
+                class="icon icon-shape bg-success text-white rounded-circle shadow"
+              >
+                <i class="fas fa-box"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Sales Card (Example) -->
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col">
+              <span class="h6 font-semibold text-muted text-sm d-block mb-2"
+                >Keuntungan</span
+              >
+              <span class="h3 font-bold mb-0">{{ total_sales }} IDR</span>
+            </div>
+            <div class="col-auto">
+              <div
+                class="icon icon-shape bg-warning text-white rounded-circle shadow"
+              >
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

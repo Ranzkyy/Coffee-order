@@ -21,15 +21,15 @@
   </div>
 {% endif %}
 
-<div class="card shadow border-0 mb-7">
+<div class="card shadow border-0 mb-7 p-5">
   <div class="card-header">
     <h5 class="mb-0">Orders</h5>
   </div>
   <div class="table-responsive">
-    <table class="table table-hover table-nowrap">
+    <table id="ordersTable" class="table table-hover table-nowrap">
       <thead class="thead-primary" style="background-color: #5C60F5 !important;">
         <tr>
-          <th scope="col" style="color: white;">Order ID</th>
+          <th scope="col" style="color: white;">Tanggal pesanan</th>
           <th scope="col" style="color: white;">Customer Name</th>
           <th scope="col" style="color: white;">Nama Product</th>
           <th scope="col" style="color: white;">Jumlah</th>
@@ -41,11 +41,11 @@
       <tbody>
         {% for order in orders %}
         <tr>
-          <td>{{ order._id }}</td>
+          <td>{{ order.created_at.strftime('%A, %d-%m-%Y') }}</td>
           <td>{{ order.full_name }}</td>
           <td>{{ order.product_name }}</td>
           <td>{{ order.quantity }}</td>
-          <td>{{ order.total_price }}</td>
+          <td>{{ order.total_price | rupiah }}</td>
           <td>
             <span 
               class="badge {{ 'bg-warning' if order.status == 'pending' else 'bg-primary' if order.status == 'proceed' else 'bg-success' }}" 
@@ -123,11 +123,27 @@
 </div>
 
 <script>
-  // JavaScript for delete using the modal box
-  const deleteModal = document.getElementById("deleteModal");
+  $(document).ready(function () {
+    $('#ordersTable').DataTable({
+      paging: true,
+      searching: true,
+      info: true,
+      order: [[0, 'asc']],
+      language: {
+        paginate: {
+          previous: "&laquo;",
+          next: "&raquo;"
+        },
+        search: "Cari:", 
+        info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+        lengthMenu: "Menampilkan _MENU_ data per halaman", 
+    }
+    });
+  });
 
+  const deleteModal = document.getElementById("deleteModal");
   deleteModal.addEventListener("show.bs.modal", (event) => {
-    const button = event.relatedTarget; 
+    const button = event.relatedTarget;
     const orderId = button.getAttribute("data-order-id");
     const orderCustomer = button.getAttribute("data-order-customer");
 
@@ -135,9 +151,8 @@
     const deleteConfirmBtn = deleteModal.querySelector("#delete-confirm-btn");
 
     modalOrderCustomer.textContent = orderCustomer;
-    deleteConfirmBtn.href = `/admin/orders/delete/${orderId}`; 
+    deleteConfirmBtn.href = `/admin/orders/delete/${orderId}`;
   });
-
 
   async function updateStatus(select) {
     const orderId = select.getAttribute("data-order-id");
@@ -186,13 +201,13 @@
       { value: "done", text: "Done" },
     ];
 
-    select.innerHTML = ""; 
+    select.innerHTML = "";
 
     options.forEach((option) => {
       const opt = document.createElement("option");
       opt.value = option.value;
       opt.textContent = option.text;
-      opt.selected = option.value === currentStatus; 
+      opt.selected = option.value === currentStatus;
       select.appendChild(opt);
     });
   }

@@ -1,4 +1,4 @@
-{% extends "admin/layout.html" %} 
+{% extends "admin/layout.html" %}
 {% block content %}
 
 <nav aria-label="breadcrumb">
@@ -10,8 +10,7 @@
   </ol>
 </nav>
 <a href="{{ url_for('add_user') }}" class="btn btn-primary mt-5 mb-5">
-    <i class="fas fa-plus"></i> 
-    Add User
+  <i class="fas fa-plus"></i> Add User
 </a>
 
 {% if flash_messages() %}
@@ -25,12 +24,12 @@
   </div>
 {% endif %}
 
-<div class="card shadow border-0 mb-7">
+<div class="card shadow border-0 mb-7 p-5">
   <div class="card-header">
     <h5 class="mb-0">Users</h5>
   </div>
   <div class="table-responsive">
-    <table class="table table-hover table-nowrap">
+    <table id="usersTable" class="table table-hover table-striped table-nowrap">
       <thead class="thead-primary" style="background-color: #5C60F5 !important;">
         <tr>
           <th scope="col" style="color: white;">Name</th>
@@ -41,16 +40,12 @@
       <tbody>
         {% for user in users %}
         <tr>
-          <td>
-            <a class="text-heading font-semibold" href="#">{{ user.username }}</a>
-          </td>
+          <td><a class="text-heading font-semibold" href="#">{{ user.username }}</a></td>
           <td>{{ user.role }}</td>
           <td>
-            <!-- Edit and Delete buttons with Font Awesome icons -->
             <a href="{{ url_for('edit_user', user_id=user._id) }}" class="btn btn-sm btn-square btn-warning text-warning-hover">
               <i class="fas fa-edit"></i>
             </a>
-            <!-- Delete button triggers modal -->
             <a 
               class="btn btn-sm btn-square btn-danger text-danger-hover" 
               data-bs-toggle="modal" 
@@ -69,35 +64,18 @@
 </div>
 
 <!-- Delete Confirmation Modal -->
-<div
-  class="modal fade"
-  id="deleteModal"
-  tabindex="-1"
-  aria-labelledby="deleteModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         Are you sure you want to delete <span id="modal-user-name"></span>?
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-        >
-          Cancel
-        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         <a id="delete-confirm-btn" href="#" class="btn btn-danger">Delete</a>
       </div>
     </div>
@@ -105,11 +83,32 @@
 </div>
 
 <script>
-  // JavaScript for delete using the modal box
+  //Datatable
+  $(document).ready(function () {
+      $('#usersTable').DataTable({
+          paging: true,
+          searching: true,
+          info: true,
+          order: [[0, 'asc']],
+          pageLength: 10,
+          lengthMenu: [10, 20, 50],
+          language: {
+            paginate: {
+              previous: "&laquo;",
+              next: "&raquo;"
+            },
+            search: "Cari:", 
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+            lengthMenu: "Menampilkan _MENU_ data per halaman", 
+          }
+      });
+  });
+
+  // Modal confirmation for deletion
   const deleteModal = document.getElementById("deleteModal");
 
   deleteModal.addEventListener("show.bs.modal", (event) => {
-    const button = event.relatedTarget; 
+    const button = event.relatedTarget;
     const userId = button.getAttribute("data-user-id");
     const userName = button.getAttribute("data-user-name");
 
@@ -117,7 +116,7 @@
     const deleteConfirmBtn = deleteModal.querySelector("#delete-confirm-btn");
 
     modalUserName.textContent = userName;
-    deleteConfirmBtn.href = `/admin/users/delete/${userId}`; 
+    deleteConfirmBtn.href = `/admin/users/delete/${userId}`;
   });
 </script>
 

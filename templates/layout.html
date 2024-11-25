@@ -25,7 +25,7 @@
                     {% if 'username' in session %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown
+                            Menu
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="{{ url_for('view_cart') }}">Cart</a></li>
@@ -39,10 +39,9 @@
                     {% endif %}
 
                     <li class="nav-item">
-                        <a class="nav-link">Link</a>
+                        <a class="nav-link" href="{{ url_for('show_products') }}">Products</a>
                     </li>
                 </ul>
-                <!-- Move the buttons here and add ms-auto to align them to the right -->
                 <div class="d-flex ms-auto">
                     {% if 'username' in session %}
                         <a href="{{ url_for('logout') }}" class="login-btn">Logout</a>

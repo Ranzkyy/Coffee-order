@@ -5,20 +5,29 @@
 {% block content %}
 <div class="container mt-5 p-5">
     <div class="card">
+        <div class="card-header">
         <h1>Your Cart</h1>
+        </div>
+        <div class="card-body">
         {% if cart_items %}
         <form action="{{ url_for('checkout_selected') }}" method="POST">
             <ul class="list-group mb-3">
+              <div class="row">
                 {% for item in cart_items %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
+                      <input type="radio" name="selected_item" value="{{ item.product._id }}">
+                      <div class="col-sm-23">
+                        
+                        <img src="{{ url_for('static', filename='img/upload/' + (item.product_image or 'default.jpg')) }}" 
+                        alt="{{ item.product.name }}" class="img-thumbnail" style="max-width: 100px;">
+                      </div>
+                        <div class="col-sm-6">
                             <label>
-                                <input type="radio" name="selected_item" value="{{ item.product._id }}">
                                 <h5>{{ item.product.name }}</h5>
                             </label>
                             <p>Quantity: {{ item.quantity }}</p>
                         </div>
-                        <div>
+                        <div class="col-sm-3">
                             <span class="badge bg-primary">{{ item.total_price }} IDR</span>
                             <!-- Trigger modal -->
                             <button type="button" class="btn btn-outline-danger btn-sm ms-3" data-bs-toggle="modal" data-bs-target="#removeModal{{ item.product._id }}">
@@ -27,6 +36,7 @@
                         </div>
                     </li>
                 {% endfor %}
+              </div>
             </ul>
 
             <h4>Total Amount: {{ total_amount }} IDR</h4>
@@ -35,10 +45,11 @@
         {% else %}
             <p>Your cart is empty.</p>
         {% endif %}
+        </div>
     </div>
 </div>
 
-<!-- Modal box buat ngapus -->
+<!-- Modal box for removing items -->
 {% for item in cart_items %}
 <div class="modal fade" id="removeModal{{ item.product._id }}" tabindex="-1" aria-labelledby="removeModalLabel{{ item.product._id }}" aria-hidden="true">
   <div class="modal-dialog">

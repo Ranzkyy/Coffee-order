@@ -8,7 +8,7 @@
   <div class="card-header">
     <div class="row">
       <div class="col-sm-11">
-        <h5 class="mb-0">Order Information</h5>
+        <h5 class="mb-0">Order ID : {{ order._id }}</h5>
       </div>
       <div class="col-sm-1">  
         <span class="badge 
@@ -30,7 +30,7 @@
       <dd class="col-sm-4">{{ order.created_at.strftime('%Y-%m-%d') }}</dd>
 
       <dt class="col-sm-2">Harga Satuan</dt>
-      <dd class="col-sm-4">Rp. {{ order.price }}</dd>
+      <dd class="col-sm-4">{{ order.price | rupiah }}</dd>
       
       <dt class="col-sm-2">Nomor Handphone</dt>
       <dd class="col-sm-4">{{ order.phone_number }}</dd>
@@ -44,7 +44,7 @@
       <dd class="col-sm-4"></dd>
       
       <dt class="col-sm-2">Total Harga</dt>
-      <dd class="col-sm-4">Rp. {{ order.total_price }}</dd>
+      <dd class="col-sm-4">{{ order.total_price | rupiah }}</dd>
 
       <dt class="col-sm-2">Alamat</dt>
       <dd class="col-sm-10">{{ order.address }}</dd>

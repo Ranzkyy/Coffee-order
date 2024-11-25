@@ -36,9 +36,10 @@ db = client[DB_NAME]
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'geforce'
+
 #format idr
 def format_rupiah(value):
-    return "Rp{:,.0f}".format(value).replace(',', '.')
+    return "Rp{:,.0f}".format(float(value)).replace(',', '.')
 app.jinja_env.filters['rupiah'] = format_rupiah
 
 #setting untuk folder tempat image di upload
@@ -113,8 +114,19 @@ def admin_dashboard():
     if session.get('role') == 'admin':
         total_users = db.users.count_documents({})
         total_products = db.products.count_documents({})
-        return render_template('admin/index.html', total_users=total_users, total_products=total_products)
+
+        total_sales = db.orders.aggregate([
+            {"$match": {"status": "done"}},
+            {"$group": {"_id": None, "total_sales": {"$sum": "$total_price"}}} 
+        ])
+        
+        total_sales = list(total_sales)
+        total_sales = total_sales[0]['total_sales'] if total_sales else 0
+
+        return render_template('admin/index.html', total_users=total_users, total_products=total_products, total_sales=total_sales)
+    
     return redirect(url_for('login'))
+
 
 @app.route('/user_dashboard')
 def user_dashboard():
@@ -513,6 +525,7 @@ def your_order():
         active_tab=active_tab
     )
 
+
 def add_to_cart(user_id, product_id, quantity):
     cart = db.carts.find_one({"user_id": ObjectId(user_id)})
 
@@ -520,6 +533,14 @@ def add_to_cart(user_id, product_id, quantity):
         cart = {"user_id": ObjectId(user_id), "items": []}
     else:
         cart_items = cart["items"]
+
+    #ngambil informasi produk
+    product = db.products.find_one({"_id": ObjectId(product_id)})
+    if not product:
+        return  #kalo produk tidak ditemukan, kita hentikan proses
+
+    #ngambil informasi gambar produk, defaultnya kosong
+    product_image = product.get('image_filename', '') 
 
     item_found = False
     for item in cart["items"]:
@@ -529,7 +550,11 @@ def add_to_cart(user_id, product_id, quantity):
             break
 
     if not item_found:
-        cart["items"].append({"product_id": ObjectId(product_id), "quantity": quantity})
+        cart["items"].append({
+            "product_id": ObjectId(product_id),
+            "quantity": quantity,
+            "product_image": product_image  # Menyimpan gambar produk di cart
+        })
 
     db.carts.update_one(
         {"user_id": ObjectId(user_id)},
@@ -537,19 +562,17 @@ def add_to_cart(user_id, product_id, quantity):
         upsert=True
     )
 
-
 def get_cart_items(user_id):
     try:
         user_id = ObjectId(user_id)
     except Exception:
         return []
 
-    # Fetching
+    # Fetching cart items
     cart = db.carts.find_one({"user_id": user_id})
     if not cart:
         return []
 
-    # Preparing
     cart_items = []
     for item in cart.get("items", []):
         try:
@@ -558,13 +581,16 @@ def get_cart_items(user_id):
                 cart_items.append({
                     "product": product,
                     "quantity": item["quantity"],
-                    "total_price": product["price"] * item["quantity"]
+                    "total_price": product["price"] * item["quantity"],
+                    "product_image": item.get("product_image", '')
                 })
         except Exception as e:
             print(f"Error fetching product details: {e}")
             continue
 
     return cart_items
+
+
 
 @app.route('/cart')
 def view_cart():
@@ -648,12 +674,14 @@ def checkout():
     if request.method == 'POST':
         full_name = request.form.get('fullName')
         phone_number = request.form.get('phoneNumber')
+        payment_method = request.form.get('paymentMethod')
         address = request.form.get('address')
 
         message = (
             f"Order Details:\n\n"
             f"Full Name     : {full_name}\n"
             f"Phone Number  : {phone_number}\n"
+            f"Metode Pembayaran : {payment_method}\n"
             f"Address       : {address}\n\n"
             f"Items:\n"
         )
@@ -678,6 +706,7 @@ def checkout():
                 'user_id': ObjectId(user["_id"]),
                 'full_name': full_name,
                 'phone_number': phone_number,
+                'payment_method': payment_method,
                 'address': address,
                 'product_name': item_name,
                 'product_image': item_image,  
@@ -730,5 +759,10 @@ def delete_from_cart(product_id):
     flash("Product removed from cart.", "success")
     return redirect(url_for('view_cart'))
 
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
