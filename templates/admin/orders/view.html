@@ -6,29 +6,51 @@
 
 <div class="card shadow border-0 mb-7">
   <div class="card-header">
-    <h5 class="mb-0">Order Information</h5>
+    <div class="row">
+      <div class="col-sm-11">
+        <h5 class="mb-0">Order Information</h5>
+      </div>
+      <div class="col-sm-1">  
+        <span class="badge 
+          {% if order.status == 'pending' %}bg-warning{% elif order.status == 'proceed' %}bg-primary{% elif order.status == 'done' %}bg-success{% endif %}">
+          {{ order.status.capitalize() }}
+        </span>
+      </div>
+    </div>
   </div>
   <div class="card-body">
     <dl class="row">
-      <dt class="col-sm-3">Customer Name</dt>
-      <dd class="col-sm-9">{{ order.full_name }}</dd>
+      <dt class="col-sm-2">Customer Name</dt>
+      <dd class="col-sm-4">{{ order.full_name }}</dd>
 
-      <dt class="col-sm-3">Status</dt>
-      <dd class="col-sm-9">
-        <span class="badge bg-{{ 'success' if order.status == 'Delivered' else 'warning' }}">
-          {{ order.status }}
-        </span>
-      </dd>
+      <dt class="col-sm-2">Nama Produk</dt>
+      <dd class="col-sm-4">{{ order.product_name }}</dd>
 
+      <dt class="col-sm-2">Order Date</dt>
+      <dd class="col-sm-4">{{ order.created_at.strftime('%Y-%m-%d') }}</dd>
 
-      <dt class="col-sm-3">Order Date</dt>
-      <dd class="col-sm-9">{{ order.created_at.strftime('%Y-%m-%d') }}</dd>
+      <dt class="col-sm-2">Harga Satuan</dt>
+      <dd class="col-sm-4">Rp. {{ order.price }}</dd>
+      
+      <dt class="col-sm-2">Nomor Handphone</dt>
+      <dd class="col-sm-4">{{ order.phone_number }}</dd>
 
-      <dt class="col-sm-3">Shipping Address</dt>
-      <dd class="col-sm-9">{{ order.address }}</dd>
+      <dt class="col-sm-2">Jumlah</dt>
+      <dd class="col-sm-4">{{ order.quantity }}</dd>
+      
+      <hr>
 
-      <dt class="col-sm-3">Payment Method</dt>
-      <dd class="col-sm-9">{{ order.payment_method }}</dd>
+      <dt class="col-sm-2"></dt>
+      <dd class="col-sm-4"></dd>
+      
+      <dt class="col-sm-2">Total Harga</dt>
+      <dd class="col-sm-4">Rp. {{ order.total_price }}</dd>
+
+      <dt class="col-sm-2">Alamat</dt>
+      <dd class="col-sm-10">{{ order.address }}</dd>
+
+      <dt class="col-sm-2">Metode Pembayaran</dt>
+      <dd class="col-sm-10">{{ order.payment_method }}</dd>
     </dl>
   </div>
 </div>

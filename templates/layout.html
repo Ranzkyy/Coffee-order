@@ -22,19 +22,22 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">About</a>
                     </li>
+                    {% if 'username' in session %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
+                            Dropdown
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{ url_for('view_cart') }}">Cart</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('view_cart') }}">Cart</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('your_order') }}">Your Order</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
                         </ul>
                     </li>
+                    {% endif %}
+
                     <li class="nav-item">
                         <a class="nav-link">Link</a>
                     </li>
@@ -56,7 +59,7 @@
     <main>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                <div class="flash-messages alert alert-info p-3" role="alert">
+                <div class="flash-messages alert alert-info p-3 mt-5" role="alert">
                     {% for category, message in messages %}
                         <div class="flash-message {{ category }}">{{ message }}</div>
                     {% endfor %}

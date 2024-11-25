@@ -35,8 +35,7 @@ client = MongoClient(MONGODB_URI)
 db = client[DB_NAME]
 
 app = Flask(__name__)
-app.secret_key = 'geforce'
-
+app.config['SECRET_KEY'] = 'geforce'
 #format idr
 def format_rupiah(value):
     return "Rp{:,.0f}".format(value).replace(',', '.')
@@ -131,7 +130,7 @@ def logout():
     flash('You have been logged out.', 'success')
     return redirect(url_for('login'))
 
-# <====ADMIN ROUTES====> #
+####### <<<==== ADMIN ROUTES ====>>> #######
 
 #PRODUCTS - INDEX
 @app.route('/admin/products')
@@ -351,7 +350,6 @@ def delete_user(user_id):
 
 
 #ADMIN - ORDERS
-
 @app.route('/admin/orders')
 def admin_orders():
     if session.get('role') != 'admin':
@@ -361,7 +359,6 @@ def admin_orders():
     orders = list(db.orders.find())
     
     for order in orders:
-        # Periksa apakah kunci 'items' ada dalam order
         if 'items' in order:
             for item in order['items']:
                 product = db.products.find_one({'_id': item['product_id']})
@@ -370,7 +367,7 @@ def admin_orders():
                 else:
                     item['product_name'] = 'Product not found'
         else:
-            order['items'] = []  # Jika tidak ada items, set sebagai list kosong atau Anda bisa menambahkan logika lain
+            order['items'] = []
 
     return render_template('admin/orders/index.html', orders=orders)
 
@@ -381,26 +378,22 @@ def view_order(order_id):
         flash('Only admins can view order details.', 'error')
         return redirect(url_for('login'))
 
-    # Fetch the order from the database
     order = db.orders.find_one({'_id': ObjectId(order_id)})
 
     if order is None:
         flash('Order not found!', 'error')
         return redirect(url_for('admin_orders'))
 
-    # Ensure 'items' is a list, if not an empty list
     if not isinstance(order.get('items'), list):
-        order['items'] = []  # Set to empty list if not iterable
+        order['items'] = []
 
-    # Fetch product details for each item in the order
     for item in order['items']:
         product = db.products.find_one({'_id': item['product_id']})
         
-        # If the product is found, add its details to the item
         if product:
-            item['product'] = product  # Add the entire product object to the item
+            item['product'] = product
         else:
-            item['product'] = {'name': 'Product not found'}  # Default if the product isn't found
+            item['product'] = {'name': 'Product not found'}
 
     return render_template('admin/orders/view.html', order=order)
 
@@ -412,14 +405,36 @@ def delete_order(order_id):
         flash('Only admins can delete orders.', 'error')
         return redirect(url_for('login'))
 
-    # Menghapus order berdasarkan ID dari database
-    db.orders.delete_one({'_id': ObjectId(order_id)})  # Gantilah 'orders' dengan nama koleksi yang sesuai
+    db.orders.delete_one({'_id': ObjectId(order_id)})
 
     flash('Order deleted successfully!', 'success')
     return redirect(url_for('admin_orders'))
 
+@app.route('/admin/orders/update_status/<order_id>', methods=['POST'])
+def update_order_status(order_id):
+    data = request.get_json()
+    new_status = data.get('status')
+    
+    if new_status not in ['pending', 'proceed', 'done']:
+        return jsonify({'error': 'Invalid status'}), 400
 
-#ROUTE USERS
+    order = db.orders.find_one({"_id": ObjectId(order_id)})
+    if not order:
+        return jsonify({'error': 'Order not found'}), 404
+    
+    db.orders.update_one(
+        {"_id": ObjectId(order_id)}, 
+        {"$set": {"status": new_status}}
+    )
+    
+    return jsonify({'message': 'Order status updated successfully'})
+
+
+
+######## <<<==== END ADMIN ====>>> ########
+
+
+#ROUTE USER
 @app.route('/products')
 def show_products():
     products = list(db.products.find())
@@ -463,121 +478,129 @@ def order(product_id):
     return render_template('product_details.html', product=product)
 
 
+@app.route('/order')
+def your_order():
+    if 'username' not in session:
+        flash("Please log in to view your cart.", "error")
+        return redirect(url_for('login'))
 
-#
-@app.route('/submit_order', methods=['POST'])
-def submit_order():
-    # Retrieve form data
-    full_name = request.form.get('fullName')
-    phone_number = request.form.get('phoneNumber')
-    address = request.form.get('address')
-    quantity = request.form.get('quantity')
-    product_id = request.form.get('product_id')
+    user = db.users.find_one({"username": session["username"]})
+    if not user:
+        flash("User not found. Please log in again.", "error")
+        return redirect(url_for('logout'))
 
-    # Query the product details (ensure ObjectId)
     try:
-        product_id = ObjectId(product_id)
+        cart_items = get_cart_items(user["_id"])
+        total_amount = sum(item['total_price'] for item in cart_items)
     except Exception as e:
-        flash("Invalid product ID.", "error")
-        return redirect(url_for('show_products'))
+        flash(f"Error loading cart items: {str(e)}", "error")
+        cart_items = []
+        total_amount = 0
 
-    product = db.products.find_one({'_id': product_id})
-    if not product:
-        flash("Product not found.", "error")
-        return redirect(url_for('show_products'))
+    try:
+        orders = list(db.orders.find({"user_id": user["_id"]}).sort("date", -1))
+    except Exception as e:
+        flash(f"Error fetching orders: {str(e)}", "error")
+        orders = []
 
-    # Calculate the total price
-    total_price = product['price'] * int(quantity)
+    active_tab = request.args.get('active_tab', 'pending')
 
-    # Create order data
-    order_data = {
-        'full_name': full_name,
-        'phone_number': phone_number,
-        'address': address,
-        'product_id': product_id,
-        'quantity': int(quantity),
-        'total_price': total_price,
-        'status': 'pending',  # Default status is 'pending'
-        'created_at': datetime.now()  # Add created_at timestamp
-    }
-
-    # Insert the order into the 'orders' collection
-    db.orders.insert_one(order_data)
-
-    # Create a WhatsApp message formatted string
-    message = f"Order Details:\n\nFull Name: {full_name}\nPhone Number: {phone_number}\nProduct: {product['name']}\nQuantity: {quantity}\nTotal Price: {total_price} IDR\nAddress: {address}"
-
-    # URL encode the message to prevent special characters causing issues
-    encoded_message = urllib.parse.quote_plus(message)
-
-    # WhatsApp API URL (replace your phone number here)
-    whatsapp_url = f"https://wa.me/6281287757087?text={encoded_message}"
-
-    # Redirect to WhatsApp
-    return redirect(whatsapp_url)
+    return render_template(
+        'user/order.html',
+        cart_items=cart_items,
+        total_amount=total_amount,
+        orders=orders,
+        active_tab=active_tab
+    )
 
 def add_to_cart(user_id, product_id, quantity):
-    # Temukan cart pengguna berdasarkan user_id
     cart = db.carts.find_one({"user_id": ObjectId(user_id)})
-    
-    # Jika cart belum ada untuk pengguna ini, buat cart baru dengan items kosong
+
     if not cart:
         cart = {"user_id": ObjectId(user_id), "items": []}
     else:
-        # Jika sudah ada cart, ambil daftar items yang ada
         cart_items = cart["items"]
 
-    # Cek apakah produk sudah ada di cart
     item_found = False
     for item in cart["items"]:
         if item["product_id"] == ObjectId(product_id):
-            # Jika produk sudah ada, tambahkan jumlahnya
             item["quantity"] += quantity
             item_found = True
             break
 
-    # Jika produk belum ada di cart, tambahkan sebagai item baru
     if not item_found:
         cart["items"].append({"product_id": ObjectId(product_id), "quantity": quantity})
 
-    # Simpan perubahan ke database
     db.carts.update_one(
         {"user_id": ObjectId(user_id)},
         {"$set": {"items": cart["items"]}},
         upsert=True
     )
 
-# Fungsi untuk mendapatkan item dari cart pengguna tertentu
+
 def get_cart_items(user_id):
-    cart = db.carts.find_one({"user_id": ObjectId(user_id)})
+    try:
+        user_id = ObjectId(user_id)
+    except Exception:
+        return []
+
+    # Fetching
+    cart = db.carts.find_one({"user_id": user_id})
     if not cart:
         return []
 
+    # Preparing
     cart_items = []
-    for item in cart["items"]:
-        product = db.products.find_one({"_id": item["product_id"]})
-        if product:
-            cart_items.append({
-                "product": product,
-                "quantity": item["quantity"],
-                "total_price": product["price"] * item["quantity"]
-            })
+    for item in cart.get("items", []):
+        try:
+            product = db.products.find_one({"_id": ObjectId(item["product_id"])})
+            if product:
+                cart_items.append({
+                    "product": product,
+                    "quantity": item["quantity"],
+                    "total_price": product["price"] * item["quantity"]
+                })
+        except Exception as e:
+            print(f"Error fetching product details: {e}")
+            continue
+
     return cart_items
 
-
-
-# Route untuk melihat keranjang
 @app.route('/cart')
 def view_cart():
     if 'username' not in session:
-        flash("Please log in to view cart.", "error")
-        return redirect(url_for('login'))  # Check if logged in
+        flash("Please log in to view your cart.", "error")
+        return redirect(url_for('login'))
 
     user = db.users.find_one({"username": session["username"]})
-    cart_items = get_cart_items(user["_id"])
-    total_amount = sum(item['total_price'] for item in cart_items)
-    return render_template('user/cart.html', cart_items=cart_items, total_amount=total_amount)
+    if not user:
+        flash("User not found. Please log in again.", "error")
+        return redirect(url_for('logout'))
 
+    try:
+        cart_items = get_cart_items(user["_id"])
+        total_amount = sum(item['total_price'] for item in cart_items)
+    except Exception as e:
+        flash(f"Error loading cart items: {str(e)}", "error")
+        cart_items = []
+        total_amount = 0
+
+    #Fetch orders
+    try:
+        orders = list(db.orders.find({"user_id": user["_id"]}).sort("date", -1))
+    except Exception as e:
+        flash(f"Error fetching orders: {str(e)}", "error")
+        orders = []
+
+    active_tab = request.args.get('active_tab', 'pending')
+
+    return render_template(
+        'user/cart.html',
+        cart_items=cart_items,
+        total_amount=total_amount,
+        orders=orders,
+        active_tab=active_tab
+    )
 
 @app.route('/add_to_cart/<product_id>', methods=['POST'])
 def add_to_cart_route(product_id):
@@ -591,6 +614,27 @@ def add_to_cart_route(product_id):
     flash('Product added to cart', 'success')
     return redirect(url_for('view_cart'))
 
+
+@app.route('/checkout_selected', methods=['POST'])
+def checkout_selected():
+    if 'username' not in session:
+        flash("Please log in to proceed to checkout.", "error")
+        return redirect(url_for('login'))
+    selected_item = request.form.get('selected_item')
+    if not selected_item:
+        flash("No item selected for checkout.", "warning")
+        return redirect(url_for('view_cart'))
+
+    product = db.products.find_one({"_id": ObjectId(selected_item)})
+
+    if not product:
+        flash("Selected item not found.", "error")
+        return redirect(url_for('view_cart'))
+
+    flash("Checkout successful for selected item.", "success")
+    return render_template('user/checkout.html', products=[product])
+
+
 # Route untuk checkout
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
@@ -598,17 +642,14 @@ def checkout():
         flash("Please log in to checkout.", "error")
         return redirect(url_for('login'))
 
-    # Mendapatkan data pengguna
     user = db.users.find_one({"username": session["username"]})
     cart_items = get_cart_items(user["_id"])
 
     if request.method == 'POST':
-        # Mendapatkan data dari form
         full_name = request.form.get('fullName')
         phone_number = request.form.get('phoneNumber')
         address = request.form.get('address')
 
-        # Inisialisasi pesan dengan format tabel
         message = (
             f"Order Details:\n\n"
             f"Full Name     : {full_name}\n"
@@ -617,11 +658,12 @@ def checkout():
             f"Items:\n"
         )
 
-        # Tambahkan setiap item ke pesan dengan format tabel
         total_price = 0  # Inisialisasi total harga
-        order_items = []  # Menyimpan informasi item pesanan
+
         for item in cart_items:
-            item_name = item['product']['name']
+            product = db.products.find_one({'_id': item['product']['_id']}) 
+            item_name = product['name']
+            item_image = product.get('image_filename', '') 
             item_price = item['total_price'] // item['quantity']
             item_quantity = item['quantity']
             total_price += item['total_price']
@@ -631,69 +673,52 @@ def checkout():
                 f" - {item_name:<14} | {item_price} IDR x {item_quantity} items\n"
             )
 
-            # Menyimpan detail item pesanan untuk dimasukkan ke dalam orders
-            order_items.append({
-                'product_id': item['product']['_id'],
+            # Simpan setiap produk sebagai pesanan terpisah
+            order_data = {
+                'user_id': ObjectId(user["_id"]),
+                'full_name': full_name,
+                'phone_number': phone_number,
+                'address': address,
+                'product_name': item_name,
+                'product_image': item_image,  
                 'quantity': item_quantity,
                 'price': item_price,
-                'total_price': item['total_price']
-            })
+                'total_price': item['total_price'],
+                'status': 'pending',  #status defaultnya pending bisa diubah di dahsboard admin
+                'created_at': datetime.now() 
+            }
 
-        # Tambahkan total harga di akhir pesan
-        message += f"\n*Total Price     : {total_price} IDR*"
+            db.orders.insert_one(order_data)
 
-        # Encode pesan untuk WhatsApp
+        #hapus keranjang setelah order selesai
+        db.carts.delete_one({"user_id": ObjectId(user["_id"])})
+
         encoded_message = urllib.parse.quote_plus(message)
         whatsapp_url = f"https://wa.me/6285155452451?text={encoded_message}"
 
-        # Simpan order ke db.orders
-        order_data = {
-            'user_id': ObjectId(user["_id"]),
-            'full_name': full_name,
-            'phone_number': phone_number,
-            'address': address,
-            'items': order_items,  # Menyimpan detail produk yang dipesan
-            'total_price': total_price,
-            'status': 'pending',  # Status order masih pending
-            'created_at': datetime.now()  # Timestamp pembuatan order
-        }
-        
-        # Insert order ke dalam collection 'orders'
-        db.orders.insert_one(order_data)
-
-        # Hapus keranjang setelah order selesai
-        db.carts.delete_one({"user_id": ObjectId(user["_id"])})
-
-        # Redirect ke WhatsApp untuk konfirmasi order
         return redirect(whatsapp_url)
 
-    # Hitung total harga untuk tampilan checkout
     total_price = sum(item['total_price'] for item in cart_items)
     return render_template('user/checkout.html', cart_items=cart_items, total_price=total_price)
-
 
 @app.route('/cart/delete/<product_id>', methods=['POST'])
 def delete_from_cart(product_id):
     if 'username' not in session:
         flash("Please log in to manage your cart.", "error")
-        return redirect(url_for('login'))  # Check if logged in
+        return redirect(url_for('login'))
 
-    # Get user details  
     user = db.users.find_one({"username": session["username"]})
     if not user:
         flash("User not found", "error")
         return redirect(url_for('view_cart'))
 
-    # Find the user's cart
     cart = db.carts.find_one({"user_id": ObjectId(user["_id"])})
     if not cart:
         flash("Your cart is empty.", "error")
         return redirect(url_for('view_cart'))
 
-    # Check if product exists in cart and remove it
     updated_items = [item for item in cart["items"] if str(item["product_id"]) != product_id]
     
-    # If items list is empty, remove the cart document
     if not updated_items:
         db.carts.delete_one({"user_id": ObjectId(user["_id"])})
     else:
@@ -703,7 +728,7 @@ def delete_from_cart(product_id):
         )
 
     flash("Product removed from cart.", "success")
-    return redirect(url_for('view_cart'))  # Redirect to the cart page after deletion
+    return redirect(url_for('view_cart'))
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
