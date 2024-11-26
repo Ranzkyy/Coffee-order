@@ -97,11 +97,14 @@ def register():
             flash('Username already exists', 'error')
         else:
             hashed_password = generate_password_hash(password)
+            
+            default_image = 'user-default.png'
 
             user_data = {
                 'username': username,
                 'password': hashed_password,
-                'role': 'user' 
+                'role': 'user',
+                'image': default_image
             }
             db.users.insert_one(user_data)
             flash('Registration successful! Please log in.', 'success')
@@ -640,26 +643,27 @@ def add_to_cart_route(product_id):
     flash('Product added to cart', 'success')
     return redirect(url_for('view_cart'))
 
-
 @app.route('/checkout_selected', methods=['POST'])
 def checkout_selected():
     if 'username' not in session:
         flash("Please log in to proceed to checkout.", "error")
         return redirect(url_for('login'))
-    selected_item = request.form.get('selected_item')
-    if not selected_item:
-        flash("No item selected for checkout.", "warning")
+
+    selected_items = request.form.getlist('selected_item[]')  # Get selected product IDs
+
+    if not selected_items:
+        flash("No items selected for checkout.", "warning")
         return redirect(url_for('view_cart'))
 
-    product = db.products.find_one({"_id": ObjectId(selected_item)})
+    # Process selected items for checkout
+    products = []
+    for item_id in selected_items:
+        product = db.products.find_one({"_id": ObjectId(item_id)})
+        if product:  # Check if product exists before adding
+            products.append(product)
 
-    if not product:
-        flash("Selected item not found.", "error")
-        return redirect(url_for('view_cart'))
-
-    flash("Checkout successful for selected item.", "success")
-    return render_template('user/checkout.html', products=[product])
-
+    flash("Checkout successful for selected items.", "success")
+    return render_template('user/checkout.html', products=products) 
 
 # Route untuk checkout
 @app.route('/checkout', methods=['GET', 'POST'])
@@ -759,10 +763,51 @@ def delete_from_cart(product_id):
     flash("Product removed from cart.", "success")
     return redirect(url_for('view_cart'))
 
+@app.route('/profile')
+def profile():
+    if 'username' not in session:
+        flash("Please log in to view your profile.", "error")
+        return redirect(url_for('login'))
+    
+    user = db.users.find_one({"username": session["username"]})
+    if not user:
+        flash("User not found", "error")
+        return redirect(url_for('login'))
+
+    return render_template('user/profile.html', user=user)
+
+@app.route('/profile/edit', methods=['GET', 'POST'])
+def edit_profile():
+    if 'username' not in session:
+        flash('Please log in to edit your profile', 'error')
+        return redirect(url_for('login'))
+
+    user = db.users.find_one({'username': session['username']})
+
+    if request.method == 'POST':
+        username = request.form.get('username')
+        user_image_file = request.files.get('user_image') 
+
+        if username:
+            db.users.update_one({'_id': user['_id']}, {'$set': {'username': username}})
+            session['username'] = username 
+
+        if user_image_file and user_image_file.filename != '':
+            image_filename = secure_filename(user_image_file.filename)
+            image_path = f'static/img/upload/{image_filename}'
+            user_image_file.save(image_path)
+
+            db.users.update_one({'_id': user['_id']}, {'$set': {'image': image_filename}})
+        
+        flash('Profile updated successfully', 'success')
+        return redirect(url_for('profile'))
+
+    return render_template('user/edit-profile.html', user=user)
 
 
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
