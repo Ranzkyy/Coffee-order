@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404 - Page Not Found</title>
+  <title>404 - Halaman Tidak Ditemukan</title>
   <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    @import url(https://fonts.googleapis.com/css?family=Inconsolata);
-
     html, body {
       margin: 0;
       padding: 0;
@@ -19,17 +17,20 @@
       align-items: center;
       justify-content: center;
       color: white;
+      overflow-y: hidden; 
     }
 
     .wrap {
       text-align: center;
       position: relative;
-      max-width: 600px;
+      max-width: 100%;
       padding: 20px;
       border: 1px solid #333;
       border-radius: 10px;
       background: rgba(0, 0, 0, 0.8);
       box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+      overflow-x: auto; 
+      max-height: 90vh;
     }
 
     code {
@@ -39,19 +40,26 @@
       font-size: 16px;
       line-height: 1.6;
       margin-bottom: 20px;
+      overflow-x: auto; 
+      white-space: pre; 
     }
 
-    span.blue {
+    .keyword {
       color: #48beef;
     }
 
-    a.comment {
-      color: white;
-      text-decoration: none;
+    .string {
+      color: #f39c12;
     }
 
-    span.load {
+    .comment {
+      color: #7f8c8d;
+    }
+
+    h2 {
+      font-size: 18px;
       color: #f39c12;
+      margin-top: 20px;
     }
 
     .back-button {
@@ -75,28 +83,32 @@
       box-shadow: 0 4px 15px rgba(72, 190, 239, 0.75);
     }
 
-    .back-button:active {
-      transform: scale(0.95);
+    /* Responsif untuk perangkat kecil */
+    @media (max-width: 600px) {
+      .wrap {
+        padding: 15px;
+      }
+
+      code {
+        font-size: 14px;
+      }
+
+      h2 {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="404">
-      <pre><code>
-      (<span class="blue">function</span>( inDevelopment ) {
-           <span class="blue">function</span> launch() {
-              <span class="blue">if</span>( inDevelopment ) {
-                  <span class="blue">return</span>;
-              }
-              <span class="comment">// Relax, you're just lost.</span>
-        }
-      window.addEventListener( <span class="load">'load'</span>, launch );
-      }( <span class="blue">true</span> ));
-      </code></pre>
-    </div>
-    <a href="/" class="back-button">Back to Home</a>
+    <pre><code>
+<span class="keyword">def</span> page_not_found(<span class="keyword">e</span>):
+        error_message = <span class="string">{{ error_message }}</span>
+    
+    <span class="comment">#404 error</span>
+    return render_template(<span class="string">'404.html'</span>, error_message=error_message), 404
+    </code></pre>
+    <a href="/" class="back-button">Kembali ke Beranda</a>
   </div>
 </body>
 </html>
-    
