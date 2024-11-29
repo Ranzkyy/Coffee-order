@@ -5,41 +5,28 @@
 <div class="container">
   <h1 class="title-shop" style="margin-top: 80px">Coffee</h1>
 
-  <main class="main bd-grid">
-    {% for product in products %}
-    <article class="card">
-      <div class="card__img">
-        <img
-          src="{{ url_for('static', filename='img/upload/' + product.image_filename) }}"
-          alt="{{ product.name }}"
-        />
-      </div>
-      <div class="card__name">
-        <p>{{ product.name }}</p>
-      </div>
-      <div class="card__precis">
-        <a href="#" class="card__icon"
-          ><ion-icon name="heart-outline"></ion-icon
-        ></a>
-        <div>
-          <span
-            class="card__preci card__preci--before"
-            style="text-decoration: line-through"
-            >Rp.20.000</span
-          >
-          <span class="card__preci card__preci--now"
-            >{{ product.price|rupiah }}</span
-          >
+  
+  <div class="bd-grid">
+    <div class="cont">
+        <div class="product-row">
+            {% for product in products %}
+            <div class="product-card">
+                <div class="product-card__image">
+                    <img src="{{ url_for('static', filename='img/upload/' + product.image_filename) }}" alt="{{ product.name }}">
+                </div>
+                <div class="product-card__info">
+                    <h2 class="product-card__title">{{ product.name }}</h2>
+                    <p class="product-card__description">{{ product.description }}</p>
+                    <div class="product-card__price-row">
+                        <span class="product-card__price">{{ product.price|rupiah }}</span>
+                        <a href="{{ url_for('detail_product', product_id=product._id) }}" class="product-card__btn text-decoration-none">Detail</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-        <a
-          href="{{ url_for('detail_product', product_id=product._id) }}"
-          class="card__icon"
-          ><ion-icon name="cart-outline"></ion-icon
-        ></a>
-      </div>
-    </article>
-    {% endfor %}
-  </main>
+    </div>
+</div>
 </div>
 
 {% endblock %}

@@ -62,6 +62,10 @@ def home():
     products = list(db.products.find())
     return render_template('index.html', products=products)
 
+@app.route('/about')
+def about():
+    return render_template('about.html')    
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -649,17 +653,16 @@ def checkout_selected():
         flash("Please log in to proceed to checkout.", "error")
         return redirect(url_for('login'))
 
-    selected_items = request.form.getlist('selected_item[]')  # Get selected product IDs
+    selected_items = request.form.getlist('selected_item[]') 
 
     if not selected_items:
         flash("No items selected for checkout.", "warning")
         return redirect(url_for('view_cart'))
 
-    # Process selected items for checkout
     products = []
     for item_id in selected_items:
         product = db.products.find_one({"_id": ObjectId(item_id)})
-        if product:  # Check if product exists before adding
+        if product:  
             products.append(product)
 
     flash("Checkout successful for selected items.", "success")
@@ -804,10 +807,12 @@ def edit_profile():
 
     return render_template('user/edit-profile.html', user=user)
 
-
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    error_message = "Halaman yang Anda cari tidak ditemukan."
+    
+    return render_template('404.html', error_message=error_message), 404
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

@@ -1,0 +1,326 @@
+:root {
+    --primary-color: #D83344;
+    --text-color: #333333;
+    --background-color: #f5f5f7;
+    --card-background: #ffffff;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.cont {
+    max-width: 200px;
+    margin: 1rem auto;
+}
+
+.product-card {
+    background-color: var(--card-background);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border: 3px #2b2625 solid;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.product-card__image {
+    height: 100px;
+    overflow: hidden;
+}
+
+.product-card__image img {
+    width: 10PX;
+    height: 10PX;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-card__image img {
+    transform: scale(2);
+}
+
+.product-card__info {
+    padding: 20px;
+}
+
+.product-card__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.product-card__description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.product-card__price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-card__price {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.product-card__btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.product-card__btn:hover {
+    background-color: #C71729;
+}
+
+@media (max-width: 480px) {
+    .cont {
+        max-width: 100%;
+        padding: 0 20px;
+    }
+
+    .product-card__image {
+        height: 200px;
+    }
+
+    .product-card__title {
+        font-size: 1.3rem;
+    }
+
+    .product-card__description {
+        font-size: 0.8rem;
+    }
+
+    .product-card__price {
+        font-size: 1.1rem;
+    }
+
+    .product-card__btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+    }
+}
+
+.cont {
+    max-width: 1200px;
+    margin: 2rem auto;
+}
+
+.product-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    background-color: var(--card-background);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+.product-card__image {
+    height: 200px; /* Tinggi tetap untuk menjaga proporsi */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-card__image img {
+    width: 70%; /* Sesuaikan lebar dengan container */
+    height: 100%; /* Sesuaikan tinggi */
+    object-fit: fill; /* Potong gambar agar sesuai dimensi */
+    transform: scale(0.6); /* Zoom out */
+    transition: transform 0.3s ease; /* Efek halus saat hover */
+}
+
+.product-card:hover .product-card__image img {
+    transform: scale(1); /* Normal saat hover */
+}
+
+/* Sticky Navbar */
+.navbar {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    color: #D83344;
+}
+
+.nav-link {
+    color: #333;
+    font-weight: 500;
+    margin-right: 10px;
+}
+
+.nav-link:hover {
+    color: #D83344;
+}
+
+.btn-outline-primary {
+    border-color: #D83344;
+    color: #D83344;
+}
+
+.btn-outline-primary:hover {
+    background: #D83344;
+    color: #fff;
+}
+
+.btn-primary {
+    background: #D83344;
+    border: none;
+}
+
+/* Hero Section */
+.hero {
+    background: url('/static/img/bg.jpg ') no-repeat center center/cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    color: #fff;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+.hero-content {
+    z-index: 2;
+    max-width: 600px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.hero p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.hero .btn-light {
+    background: #fff;
+    color: #D83344;
+    border: none;
+    font-weight: 600;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+
+.hero .btn-light:hover {
+    background: #D83344;
+    color: #fff;
+}
+
+
+.about-section {
+    background-color: #f8f9fa;
+    padding: 50px 0;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .sub-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #0062cc;
+  }
+  
+  .about-section p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #555;
+  }
+  
+  .about-section img {
+    border-radius: 10px;
+  }
+  
+  .social-links .btn {
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .social-links .btn:hover {
+    background-color: #0062cc;
+    color: #fff;
+    border-color: #0062cc;
+  }
+  
+  
+.gallery {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 10px;
+  }
+  
+  .gallery img {
+    width: 100%;
+    max-width: 350px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .gallery::after {
+    content: "";
+    width: 350px;
+  }
+  

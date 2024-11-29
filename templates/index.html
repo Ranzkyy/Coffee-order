@@ -4,61 +4,41 @@
 
 {% block content %}
 
-<!-- Jumbotron Header with Background Image -->
-<header class="jumbotron text-white d-flex align-items-center justify-content-center">
-    <div class="container text-center">
-        <h1 class="display-4">Welcome, User!</h1>
-        <p class="lead">Enjoy your personalized dashboard and discover our products</p>
-        <a href="{{ url_for('show_products') }}" class="login-btn">View Products</a>
+<section class="hero">
+    <div class="hero-content text-center text-white">
+      <h1 class="display-3 fw-bold">Discover the Art of Coffee</h1>
+      <p class="lead mt-3">Brewed from the finest beans, grown on the most stunning mountains.</p>
+      <a href="{{ url_for('show_products') }}" class="btn btn-light mt-4">Explore Our Menu</a>
     </div>
-</header>
+  </section>
 
-<!-- Dashboard Content -->
-<div class="container my-5">
-    <h2 class="text-center">About Us</h2>
-    <div class="container about-card-container">
-        <div class="about-card">
-            <img src="{{ url_for('static', filename='about2.png') }}" alt="About Us">
-            <h3>Our Story</h3>
-            <p>Discover our journey and passion for creating the finest experiences.</p>
-        </div>
-        <div class="about-card">
-            <img src="{{ url_for('static', filename='about4.png') }}" alt="Our Vision">
-            <h3>Our Vision</h3>
-            <p>We aim to bring warmth and quality to every corner of our community.</p>
-        </div>
-        <div class="about-card">
-            <img src="{{ url_for('static', filename='about3.png') }}" alt="Our Team">
-            <h3>Our Team</h3>
-            <p>Meet the passionate people behind our success and quality.</p>
-        </div>
-    </div>
-    
-</div>
 
+
+  
 <!-- Our Menu Section -->
 <div class="container my-5">
     <h2 class="text-center">Our Menu</h2>
     
     <div class="bd-grid">
-        {% for product in products[:4] %}
-        <article class="card">
-            <div class="card__img">
-                <img src="{{ url_for('static', filename='img/upload/' + product.image_filename) }}" alt="{{ product.name }}">
-            </div>
-            <div class="card__name">
-                <p>{{ product.name }}</p>
-            </div>
-            <div class="card__precis">
-                <a href="" class="card__icon"><ion-icon name="heart-outline"></ion-icon></a>
-                <div>
-                    <span class="card__preci card__preci--before" style="text-decoration: line-through">Rp.20.000</span>
-                    <span class="card__preci card__preci--now">{{ product.price|rupiah }}</span>
+        <div class="cont">
+            <div class="product-row">
+                {% for product in products[:3] %}
+                <div class="product-card">
+                    <div class="product-card__image">
+                        <img src="{{ url_for('static', filename='img/upload/' + product.image_filename) }}" alt="{{ product.name }}">
+                    </div>
+                    <div class="product-card__info">
+                        <h2 class="product-card__title">{{ product.name }}</h2>
+                        <p class="product-card__description">{{ product.description }}</p>
+                        <div class="product-card__price-row">
+                            <span class="product-card__price">{{ product.price|rupiah }}</span>
+                            <a href="{{ url_for('detail_product', product_id=product._id) }}" class="product-card__btn text-decoration-none">Detail</a>
+                        </div>
+                    </div>
                 </div>
-                <a href="{{ url_for('detail_product', product_id=product._id) }}" class="card__icon"><ion-icon name="cart-outline"></ion-icon></a>
+                {% endfor %}
             </div>
-        </article>
-        {% endfor %}
+        </div>
     </div>
 
     <!-- View All Button -->
@@ -66,5 +46,9 @@
         <a href="{{ url_for('show_products') }}" class="btn btn-secondary">View All</a>
     </div>
 </div>
+
+<section class="location">
+    
+</section>
 
 {% endblock %}
