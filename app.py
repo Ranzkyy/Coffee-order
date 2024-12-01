@@ -57,12 +57,25 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 #flash message 
+
 @app.context_processor
 def utility_processor():
+    # Fungsi untuk mengambil flash messages
     def flash_messages():
         messages = get_flashed_messages(with_categories=True)
         return messages
-    return dict(flash_messages=flash_messages)
+
+    # Data pengguna untuk layout
+    user_data = {
+        'user_image': session.get('image', 'user-default.png'),
+        'username': session.get('username', 'Guest')
+    }
+
+    # Gabungkan semuanya dalam satu dictionary
+    return dict(
+        flash_messages=flash_messages,
+        **user_data
+    )
 
 
 #homepage, pengunjung bisa liat homepage tanpa login
@@ -752,7 +765,6 @@ def view_cart():
 
 @app.route('/view_payment_proof/<order_id>')
 def view_payment_proof(order_id):
-    # Here, you would retrieve and display the payment proof for the given order_id
     return f"Viewing payment proof for order: {order_id}"
 
 @app.route('/add_to_cart/<product_id>', methods=['POST'])
@@ -761,14 +773,12 @@ def add_to_cart_route(product_id):
         flash("Please log in to add items to cart.", "error")
         return redirect(url_for('login'))
 
-    quantity = int(request.form.get('quantity', 1))  # Get the quantity
-    topping_id = request.form.get('topping')  # Get the topping ID from the form
+    quantity = int(request.form.get('quantity', 1)) 
+    topping_id = request.form.get('topping') 
     total_price = float(request.form.get('total_price'))  # Ambil harga total dari hidden field
 
-    # Fetch the user from the database
     user = db.users.find_one({"username": session["username"]})
 
-    # Call the function to add the product to the cart, including topping_id and total_price
     add_to_cart(user["_id"], product_id, quantity, topping_id, total_price)
 
     flash('Product added to cart', 'success')
@@ -846,7 +856,6 @@ def checkout():
         address = request.form.get('address')
         note = request.form.get('note')
 
-        # Format order message
         message = (
             f"Order Details:\n\n"
             f"Full Name: {full_name}\n"
@@ -868,7 +877,6 @@ def checkout():
 
             message += f" - {item_name} | {item_price} IDR x {item_quantity} items\n"
 
-            # Save each product as a separate order
             order_data = {
                 'user_id': ObjectId(user["_id"]),
                 'full_name': full_name,
@@ -887,7 +895,6 @@ def checkout():
 
             db.orders.insert_one(order_data)
 
-        # Clear the cart after order completion
         db.carts.delete_one({"user_id": ObjectId(user["_id"])})
 
         if payment_method == "QRIS":
