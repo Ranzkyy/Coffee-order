@@ -28,10 +28,50 @@
                         <label for="cart_quantity" class="form-label">Add to Cart Quantity</label>
                         <input type="number" class="form-control" name="quantity" value="1" min="1">
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
+                
+                    <!-- Dropdown untuk memilih topping -->
+                    <div class="mb-3">
+                        <label for="topping" class="form-label">Select Topping (Optional)</label>
+                        <select class="form-control" name="topping" id="topping">
+                            <option value="">No Topping</option>
+                            {% for topping in toppings %}
+                                <option value="{{ topping['_id'] }}" data-price="{{ topping.price }}">{{ topping.name }} - {{ topping.price|rupiah }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                
+                    <p class="h4">Total Price: <span id="total-price">{{ product.price|float }}</span></p>
+                    <!-- Hidden field untuk total price -->
+                    <input type="hidden" name="total_price" id="total-price-hidden" value="{{ product.price|float }}">
+                
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a href="{{ product.shopee_url }}" target="_blank" class="btn btn-success">Pesan Lewat Shopee</a>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-primary float-end">Add to Cart</button>
+                        </div>
+                    </div>
                 </form>
+                
                 
             </div>
         </div>
     </div>
+
+    <script>
+        // Update total price based on selected topping
+        document.querySelector('select[name="topping"]').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const toppingPrice = parseFloat(selectedOption.getAttribute('data-price') || 0);
+            const basePrice = parseFloat("{{ product.price }}");
+            const totalPrice = basePrice + toppingPrice;
+            
+            // Update tampilan harga total
+            document.getElementById('total-price').textContent = totalPrice.toFixed(2);
+            
+            // Update hidden field dengan harga total
+            document.getElementById('total-price-hidden').value = totalPrice.toFixed(2);
+        });
+    </script>
 {% endblock %}

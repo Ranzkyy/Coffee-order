@@ -12,9 +12,10 @@
                 </div>
                 <div class="card-body">
                     <form method="post" action="{{ url_for('checkout') }}">
+                        <!-- Full Name akan diisi otomatis dari session -->
                         <div class="mb-3">
                             <label for="fullName" class="form-label">Nama Lengkap</label>
-                            <input type="text" name="fullName" id="fullName" class="form-control" required>
+                            <input type="text" name="fullName" id="fullName" class="form-control" value="{{ user['username'] }}" readonly required disabled>
                         </div>
                         <div class="mb-3">
                             <label for="phoneNumber" class="form-label">Nomor Handphone</label>
@@ -24,19 +25,25 @@
                             <label for="payment_method" class="form-label">Metode Pembayaran</label>
                             <select name="paymentMethod" id="paymentMethod" class="form-select" required>
                                 <option value="BCA">Bank BCA</option>
-                                <option value="BNI">Bank BNI</option>
-                                <option value="BRI">Bank BRI</option>
-                                <option value="Mandiri">Bank Mandiri</option>
-                                <option value="BTN">Bank BTN</option>
-                                <option value="Dana">E-Wallet Dana</option>
-                                <option value="Gopay">E-Wallet Gopay</option>
-                                <option value="OVO">E-Wallet OVO</option>
-                                <option value="ShopeePay">E-Wallet ShopeePay</option>
+                                <option value="QRIS">QRIS</option>
                             </select>
+                        </div>
+                        <div class="mb-3" id="paymentDetails" style="display:none;">
+                            <p><strong>Instruksi Pembayaran:</strong></p>
+                            <div id="qrisImage" style="display:none;">
+                                <img src="path/to/your/qris-image.png" alt="QRIS" class="img-fluid">
+                            </div>
+                            <div id="bcaDetails" style="display:none;">
+                                <p>Nomor Rekening BCA: 1234567890</p>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="address" class="form-label">Alamat</label>
                             <textarea name="address" id="address" class="form-control" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="note" class="form-label">Catatan</label>
+                            <textarea name="note" id="note" class="form-control" placeholder="Masukkan catatan tambahan jika ada"></textarea>
                         </div>
                         <button type="submit" class="btn btn-success w-100">
                             <i class="bi bi-whatsapp"></i> Checkout with WhatsApp
@@ -47,4 +54,26 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Menampilkan detail pembayaran berdasarkan pilihan metode pembayaran
+    document.getElementById('paymentMethod').addEventListener('change', function() {
+        const paymentMethod = this.value;
+        const paymentDetails = document.getElementById('paymentDetails');
+        const qrisImage = document.getElementById('qrisImage');
+        const bcaDetails = document.getElementById('bcaDetails');
+
+        if (paymentMethod === 'QRIS') {
+            paymentDetails.style.display = 'block';
+            qrisImage.style.display = 'block';
+            bcaDetails.style.display = 'none';
+        } else if (paymentMethod === 'BCA') {
+            paymentDetails.style.display = 'block';
+            qrisImage.style.display = 'none';
+            bcaDetails.style.display = 'block';
+        } else {
+            paymentDetails.style.display = 'none';
+        }
+    });
+</script>
 {% endblock %}

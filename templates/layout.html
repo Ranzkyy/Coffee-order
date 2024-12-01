@@ -3,93 +3,75 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <title>{% block title %}{% endblock %}</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    
+    <!-- Bootstrap core CSS -->
+     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+
+
+    <!-- Additional CSS Files -->
+     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/fontawesome.css') }}">
+     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templatemo-onix-digital.css') }}">
+     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/animated.css') }}">
+     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/owl.css') }}">
   </head>
   <body>
-    <header class="">
-      <nav class="navbar navbar-expand-lg navbar-light px-3 fixed-top">
-        <a class="navbar-brand fw-bold" href="{{ url_for('home') }}"
-          >Bean to Drinks</a
-        >
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('about')}}">About</a>
-            </li>
-            {% if 'username' in session %}
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Menu
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li>
-                  <a class="dropdown-item" href="{{ url_for('view_cart') }}"
-                    >Cart</a
-                  >
-                </li>
-                <li>
-                  <a class="dropdown-item" href="{{ url_for('your_order') }}"
-                    >Your Order</a
-                  >
-                </li>
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-                <li>
-                  <a class="dropdown-item" href="{{ url_for('profile')}}"
-                    >Your Profile</a
-                  >
-                </li>
-              </ul>
-            </li>
-            {% endif %}
+    
+    <!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <nav class="main-nav">
+          <!-- ***** Logo Start ***** -->
+          <a href="{{ url_for('home') }}" class="logo">
+            <img src="{{ url_for('static', filename='assets/images/logo.png') }}" width="80" alt="" height="80">
+          </a>
+          <!-- ***** Logo End ***** -->
 
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('show_products') }}"
-                >Products</a
-              >
-            </li>
-          </ul>
-          <div class="d-flex ms-auto">
+          <!-- ***** Menu Start ***** -->
+          <ul class="nav ms-auto">
+            
+            <li class="scroll-to-section"><a href="{{ url_for('home') }}" class="active">Home</a></li>
+            <li class="scroll-to-section"><a href="{{ url_for('home') }}#services">Layanan</a></li>
+            <li class="scroll-to-section"><a href="{{ url_for('about') }}">About</a></li>
+            <li class="scroll-to-section"><a href="{{ url_for('home') }}#menu">Menu</a></li>
+            <li class="scroll-to-section"><a href="{{ url_for('home') }}#contact">Contact Us</a></li> 
+
             {% if 'username' in session %}
-            <a href="{{ url_for('logout') }}" class="login-btn">Logout</a>
-            {% else %}
-            <a href="{{ url_for('login') }}" class="login-btn me-2">Login</a>
-            <a href="{{ url_for('register') }}" class="login-btn">Register</a>
-            {% endif %}
-          </div>
-        </div>
-      </nav>
-    </header>
+              <!-- Dropdown Menu for Logged-in User -->
+              <li class="scroll-to-section dropdown">
+                <a class="scroll-to-section dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                 
+                  Menu
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="{{ url_for('view_cart') }}">Cart</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('your_order') }}">Your Order</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('profile') }}">Your Profile</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('profile') }}" style="display: none;">Your Profile</a></li>
+                </ul>
+              </li>
+              <!-- Logout Button -->
+              <li class="scroll-to-section">
+                <a href="{{ url_for('logout') }}" class="btn btn-primary" >Logout</a>
+              </li>
+              {% else %}
+                <li class="scroll-to-section">
+                  <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+                </li>
+              {% endif %}
+          </ul>
+          <!-- ***** Menu End ***** -->
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- ***** Header Area End ***** -->
 
     <main>
       {% with messages = get_flashed_messages(with_categories=true) %} {% if
@@ -106,8 +88,100 @@
       {% endblock %}
     </main>
 
-    {% block footer %} {% include 'footer.html' %} {% endblock %}
-    <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <div class="footer-dec">
+      <img src="{{ url_for('static', filename='assets/images/footer-dec.png') }}" alt="">
+    </div>
+  
+  
+
+    <footer>
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-3">
+                  <div class="about footer-item">
+                      <div class="logo">
+                          <a href="#"><img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="Bean to Drinks"></a>
+                      </div>
+                      <p>Kunjungi kami untuk menikmati secangkir kopi terbaik dengan suasana yang nyaman.</p>
+                      <ul>
+                          <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                          <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                          <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                      </ul>
+                  </div>
+              </div>
+              <div class="col-lg-3">
+                  <div class="services footer-item">
+                      <h4>Layanan</h4>
+                      <ul>
+                          <li><a href="#">Pemesanan Online</a></li>
+                          <li><a href="#">Pengantaran Kopi</a></li>
+                          <li><a href="#">Custom Minuman</a></li>
+                          <li><a href="#">Workshop Kopi</a></li>
+                      </ul>
+                  </div>
+              </div>
+              <div class="col-lg-3">
+                  <div class="community footer-item">
+                      <h4>Lokasi Kami</h4>
+                      <ul>
+                          <li><a href="#">Jl. Sudirman, Jakarta</a></li>
+                          <li><a href="#">Jl. Braga, Bandung</a></li>
+                          <li><a href="#">Jl. Malioboro, Yogyakarta</a></li>
+                      </ul>
+                  </div>
+              </div>
+              <div class="col-lg-3">
+                  <div class="subscribe-newsletters footer-item">
+                      <h4>Berlangganan</h4>
+                      <p>Dapatkan info promo dan berita terbaru kami!</p>
+                      <form action="#" method="post">
+                          <input type="email" name="email" id="email" placeholder="Email Anda" required>
+                          <button type="submit" id="form-submit" class="main-button"><i class="fa fa-paper-plane-o"></i></button>
+                      </form>
+                  </div>
+              </div>
+              <div class="col-lg-12">
+                  <div class="copyright">
+                      <p>Copyright © 2024 Bean to Drinks. All Rights Reserved.</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </footer>
+    
+    
+
+  <!-- Scripts -->
+   <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
+   <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+   <script src="{{ url_for('static', filename='assets/js/owl-carousel.js') }}"></script>
+   <script src="{{ url_for('static', filename='assets/js/animation.js') }}"></script>
+   <script src="{{ url_for('static', filename='assets/js/imagesloaded.js') }}"></script>
+   <script src="{{ url_for('static', filename='assets/js/custom.js')}}"></script>
+
+    
+  <script>
+    // Acc
+      $(document).on("click", ".naccs .menu div", function() {
+        var numberIndex = $(this).index();
+  
+        if (!$(this).is("active")) {
+            $(".naccs .menu div").removeClass("active");
+            $(".naccs ul li").removeClass("active");
+  
+            $(this).addClass("active");
+            $(".naccs ul").find("li:eq(" + numberIndex + ")").addClass("active");
+  
+            var listItemHeight = $(".naccs ul")
+              .find("li:eq(" + numberIndex + ")")
+              .innerHeight();
+            $(".naccs ul").height(listItemHeight + "px");
+          }
+      });
+    </script>
+
   </body>
 </html>

@@ -1,15 +1,16 @@
 {% extends 'layout.html' %} {% block title %}Cart{% endblock %} {% block content
 %}
 <style>
-    p{
-        font-size: 14pt;
-    }
+  p {
+    font-size: 14pt;
+  }
 </style>
+
 <div class="container p-5">
   <div class="mt-5">
     <h2>Your Orders</h2>
     {% if orders %}
-    <!-- Order Status -->
+    <!-- Order Status Tabs -->
     <ul class="nav nav-tabs" id="orderStatusTabs" role="tablist">
       <li class="nav-item" role="presentation">
         <button
@@ -59,7 +60,7 @@
     <div class="tab-content mt-3" id="orderStatusContent">
       <!-- Pending Orders -->
       <div
-        class="tab-pane fade{% if active_tab == 'pending' %}show active{% endif %}"
+        class="tab-pane fade {% if active_tab == 'pending' %}show active{% endif %}"
         id="pending"
         role="tabpanel"
         aria-labelledby="pending-tab"
@@ -87,6 +88,76 @@
                   %d-%m-%Y') }}<br />
                   <strong>Total Harga:</strong> {{ order.total_price }} IDR
                 </p>
+
+                {% if order.payment_proof %}
+                <p>
+                  <strong>Proof of Payment:</strong><br />
+                  <a
+                    href="#"
+                    data-bs-toggle="modal"
+                    data-bs-target="#paymentProofModal{{ order._id }}"
+                    >{{ order.payment_proof }}</a
+                  >
+                </p>
+
+                <!-- Modal for Proof of Payment -->
+                <div
+                  class="modal fade"
+                  id="paymentProofModal{{ order._id }}"
+                  tabindex="-1"
+                  aria-labelledby="paymentProofModalLabel{{ order._id }}"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5
+                          class="modal-title"
+                          id="paymentProofModalLabel{{ order._id }}"
+                        >
+                          Proof of Payment
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        <img
+                          src="{{ url_for('static', filename='img/upload_bukti/' + order.payment_proof) }}"
+                          alt="Proof of Payment"
+                          class="img-fluid"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% else %}
+                <p>No proof of payment uploaded.</p>
+                {% endif %}
+                <form
+                  action="{{ url_for('upload_payment_proof', order_id=order._id) }}"
+                  method="POST"
+                  enctype="multipart/form-data"
+                >
+                  <div class="mb-3">
+                    <label for="payment_proof" class="form-label"
+                      >Upload Proof of Payment</label
+                    >
+                    <input
+                      type="file"
+                      class="form-control"
+                      id="payment_proof"
+                      name="payment_proof"
+                      required
+                    />
+                  </div>
+                  <button type="submit" class="btn btn-primary">
+                    Upload Proof
+                  </button>
+                </form>
               </div>
             </div>
           </div>
@@ -97,39 +168,19 @@
       </div>
 
       <!-- Proceed Orders -->
-      <div
-        class="tab-pane fade {% if active_tab == 'proceed' %}show active{% endif %}"
-        id="proceed"
-        role="tabpanel"
-        aria-labelledby="proceed-tab"
-      >
+      <div class="tab-pane fade {% if active_tab == 'proceed' %}show active{% endif %}" id="proceed" role="tabpanel" aria-labelledby="proceed-tab">
         {% for order in orders if order.status == 'proceed' %}
         <div class="card mb-3">
           <div class="card-header">
-            <div class="list-group-item">
-              <h5>{{ order.product_name }}</h5>
-            </div>
+            <h5>{{ order.product_name }}</h5>
           </div>
           <div class="card-body">
-            <div class="row">
-              <div class="col-md-2">
-                <img
-                  src="{{ url_for('static', filename='img/upload/' + (order.product_image or 'default.jpg')) }}"
-                  alt="{{ order.product_name or 'No image available' }}"
-                  class="img-thumbnail"
-                  style="max-width: 150px"
-                />
-              </div>
-              <div class="col-md-10">
-                <p>
-                  <strong>Jumlah:</strong> {{ order.quantity }}<br />
-                  <strong>Harga:</strong> {{ order.price }} IDR <br />
-                  <strong>Tanggal:</strong> {{ order.created_at.strftime('%A,
-                  %d-%m-%Y') }}<br />
-                  <strong>Total Harga:</strong> {{ order.total_price }} IDR
-                </p>
-              </div>
-            </div>
+            <p>
+              <strong>Jumlah:</strong> {{ order.quantity }}<br />
+              <strong>Harga:</strong> {{ order.price }} IDR<br />
+              <strong>Total Harga:</strong> {{ order.total_price }} IDR<br />
+              <strong>Tanggal:</strong> {{ order.created_at.strftime('%A, %d-%m-%Y') }}
+            </p>
           </div>
         </div>
         {% else %}
@@ -138,45 +189,26 @@
       </div>
 
       <!-- Done Orders -->
-      <div
-        class="tab-pane fade {% if active_tab == 'done' %}show active{% endif %}"
-        id="done"
-        role="tabpanel"
-        aria-labelledby="done-tab"
-      >
+      <div class="tab-pane fade {% if active_tab == 'done' %}show active{% endif %}" id="done" role="tabpanel" aria-labelledby="done-tab">
         {% for order in orders if order.status == 'done' %}
         <div class="card mb-3">
           <div class="card-header">
-            <div class="list-group-item">
-              <h5>{{ order.product_name }}</h5>
-            </div>
+            <h5>{{ order.product_name }}</h5>
           </div>
           <div class="card-body">
-            <div class="row">
-              <div class="col-md-2">
-                <img
-                  src="{{ url_for('static', filename='img/upload/' + (order.product_image or 'default.jpg')) }}"
-                  alt="{{ order.product_name or 'No image available' }}"
-                  class="img-thumbnail"
-                  style="max-width: 150px"
-                />
-              </div>
-              <div class="col-md-10">
-                <p>
-                  <strong>Jumlah:</strong> {{ order.quantity }}<br />
-                  <strong>Harga:</strong> {{ order.price }} IDR <br />
-                  <strong>Tanggal:</strong> {{ order.created_at.strftime('%A,
-                  %d-%m-%Y') }}<br />
-                  <strong>Total Harga:</strong> {{ order.total_price }} IDR
-                </p>
-              </div>
-            </div>
+            <p>
+              <strong>Jumlah:</strong> {{ order.quantity }}<br />
+              <strong>Harga:</strong> {{ order.price }} IDR<br />
+              <strong>Total Harga:</strong> {{ order.total_price }} IDR<br />
+              <strong>Tanggal:</strong> {{ order.created_at.strftime('%A, %d-%m-%Y') }}
+            </p>
           </div>
         </div>
         {% else %}
         <p>No completed orders.</p>
         {% endfor %}
       </div>
+
     </div>
     {% else %}
     <p>You have no orders yet.</p>
@@ -184,7 +216,7 @@
   </div>
 </div>
 
-<!-- Modal template for item deletion -->
+<!-- Modal box for removing items -->
 {% for item in cart_items %}
 <div
   class="modal fade"

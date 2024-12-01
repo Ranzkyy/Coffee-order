@@ -1,0 +1,39 @@
+{% extends "admin/layout.html" %}
+
+{% block content %}
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ url_for('admin_dashboard') }}">Home</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a href="{{ url_for('admin_toppings') }}">Toppings</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Add</li>
+  </ol>
+</nav>
+
+<h2 class="text-center">Add Topping</h2>
+
+<div class="card shadow border-0 p-5">
+  <div class="container">
+    <form method="POST" class="add-form">
+      
+      <div class="mb-3">
+        <label for="name" class="form-label">Topping Name:</label>
+        <input type="text" id="name" name="name" required class="form-control" />
+      </div>
+      
+      <div class="mb-3">
+        <label for="price" class="form-label">Price:</label>
+        <input type="number" id="price" name="price" required class="form-control" step="0.01" />
+      </div>
+      
+      <button type="submit" class="btn btn-primary float-end">Add Topping</button>
+      
+    </form>
+  </div>
+</div>
+
+{% endblock %}

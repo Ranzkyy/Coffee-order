@@ -4,8 +4,63 @@
 
 {% block content %}
 
+<div id="about" class="about-us section">
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-6 align-self-center">
+              <div class="left-image">
+                  <img src="{{ url_for('static', filename='assets/images/tentang-kiri.png') }}" alt="Tentang Kami" style="width: 100%;">
+              </div>
+          </div>
+          <div class="col-lg-6">
+              <div class="section-heading">
+                  <h2>Tentang <em>Bean to Drinks</em> &amp; <span>Coffee Experience</span></h2>
+                  <p>Di Bean to Drinks, kami percaya bahwa secangkir kopi yang baik dapat menciptakan momen spesial. Kami menggunakan biji kopi terbaik, diproses dengan penuh perhatian, untuk memberikan rasa yang otentik dan memuaskan.</p>
+                  <div class="row">
+                      <div class="col-lg-4">
+                          <div class="fact-item">
+                              <div class="count-area-content">
+                                  <div class="icon">
+                                      <img src="assets/images/service-icon-01.png" alt="">
+                                  </div>
+                                  <div class="count-digit">500+</div>
+                                  <div class="count-title">Cangkir Kopi</div>
+                                  <p>Disajikan setiap hari di berbagai lokasi.</p>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-lg-4">
+                          <div class="fact-item">
+                              <div class="count-area-content">
+                                  <div class="icon">
+                                      <img src="assets/images/service-icon-02.png" alt="">
+                                  </div>
+                                  <div class="count-digit">20+</div>
+                                  <div class="count-title">Varian Menu</div>
+                                  <p>Dari Espresso klasik hingga Latte favorit Anda.</p>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-lg-4">
+                          <div class="fact-item">
+                              <div class="count-area-content">
+                                  <div class="icon">
+                                      <img src="assets/images/service-icon-03.png" alt="">
+                                  </div>
+                                  <div class="count-digit">100%</div>
+                                  <div class="count-title">Kopi Premium</div>
+                                  <p>Dari biji kopi pilihan lokal terbaik.</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
 
-<section id="about" class="about-section py-5 mt-5">
+<section id="logo" class="logo section">
     <div class="container">
       <h2 class="section-title text-center mb-4">Logo</h2>
       <div class="row align-items-center">
@@ -64,21 +119,4 @@
       </div>
     </div>
   </section>
-<section id="gallery">
-  <header class="header">
-    <h1>Gallery</h1>
-  </header>
-  <div class="gallery">
-    <img src="https://cdn.freecodecamp.org/curriculum/css-photo-gallery/1.jpg" alt="sleeping cat">
-    <img src="https://cdn.freecodecamp.org/curriculum/css-photo-gallery/2.jpg" alt="cat laying upside down">
-    <img src="https://cdn.freecodecamp.org/curriculum/css-photo-gallery/3.jpg" alt="staring cat">
-    <img src="https://cdn.freecodecamp.org/curriculum/css-photo-gallery/4.jpg" alt="a cat sleeping under a duvet">
-    <img src="https://cdn.freecodecamp.org/curriculum/css-photo-gallery/5.jpg" alt="one worried looking cat">
-    <img src="https://cdn.freecodecamp.org/curriculum/css-photo-gallery/6.jpg" alt="two cats">
-    <img src="https://cdn.freecodecamp.org/curriculum/css-photo-gallery/7.jpg" alt="hiding cat">
-    <img src="https://cdn.freecodecamp.org/curriculum/css-photo-gallery/8.jpg" alt="staring garfield cat">
-    <img src="https://cdn.freecodecamp.org/curriculum/css-photo-gallery/9.jpg" alt="a black cat and a white cat">
-  </div>
-</section>
-
 {% endblock %}
