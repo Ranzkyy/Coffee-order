@@ -1,108 +1,143 @@
-{% extends "layout.html" %} 
-{% block title %}Products{% endblock %} 
-{% block content %}
+{% extends "layout.html" %} {% block title %}Products{% endblock %} {% block
+content %}
 
 <div class="main-banner" id="top">
-    <div class="container">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
         <div class="row">
-            <div class="col-lg-12">
-                <div class="row">
-                    <div class="col-lg-6 align-self-center">
-                        <div class="owl-carousel owl-banner">
-                            <div class="item header-text">
-                                <h6>Selamat Datang di Bean to Drinks</h6>
-                                <h2><em>Rasakan</em> kenikmatan kopi terbaik untuk <span>setiap momen</span></h2>
-                                <p>Mulai hari Anda dengan secangkir kopi yang sempurna, diseduh dengan cinta dan biji kopi pilihan.</p>
-                                <div class="down-buttons">
-                                    <div class="main-blue-button-hover">
-                                        <a href="#menu">Lihat Menu Kami</a>
-                                    </div>
-                                    <div class="call-button">
-                                        <a href="#"><i class="fa fa-phone"></i> 081-234-56789</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item header-text">
-                                <h6>Espresso atau Latte?</h6>
-                                <h2><em>Temukan</em> rasa favorit Anda di <span>Bean to Drinks</span></h2>
-                                <p>Dari Americano yang klasik hingga Cappuccino yang creamy, kami siap memuaskan selera kopi Anda.</p>
-                                <div class="down-buttons">
-                                    <div class="main-blue-button-hover">
-                                        <a href="#about">Tentang Kami</a>
-                                    </div>
-                                    <div class="call-button">
-                                        <a href="#"><i class="fa fa-phone"></i> 081-234-56789</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item header-text">
-                                <h6>Coffee On The Go</h6>
-                                <h2><em>Pesan sekarang</em> dan nikmati kopi <span>dimanapun</span></h2>
-                                <p>Kami menyediakan kopi siap saji dengan kualitas terbaik. Klik dan pesan untuk menikmati kopi Anda sekarang juga!</p>
-                                <div class="down-buttons">
-                                    <div class="main-blue-button-hover">
-                                        <a href="#contact">Hubungi Kami</a>
-                                    </div>
-                                    <div class="call-button">
-                                        <a href="#"><i class="fa fa-phone"></i> 081-234-56789</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <!-- Optional: Tempat untuk gambar kopi -->
-                        <img src="{{ url_for('static', filename='assets/images/banner-coffee.jpg') }}" alt="Coffee Banner" class="img-fluid">
-                    </div>
+          <div class="col-lg-6 align-self-center">
+            <div class="owl-carousel owl-banner">
+              <div class="item header-text">
+                <h6>Selamat Datang di Bean to Drinks</h6>
+                <h2>
+                  <em>Rasakan</em> kenikmatan kopi terbaik untuk
+                  <span>setiap momen</span>
+                </h2>
+                <p>
+                  Mulai hari Anda dengan secangkir kopi yang sempurna, diseduh
+                  dengan cinta dan biji kopi pilihan.
+                </p>
+                <div class="down-buttons">
+                  <div class="main-blue-button-hover">
+                    <a href="#menu">Lihat Menu Kami</a>
+                  </div>
+                  <div class="call-button">
+                    <a href="#"><i class="fa fa-phone"></i> 081-234-56789</a>
+                  </div>
                 </div>
+              </div>
+              <div class="item header-text">
+                <h6>Espresso atau Latte?</h6>
+                <h2>
+                  <em>Temukan</em> rasa favorit Anda di
+                  <span>Bean to Drinks</span>
+                </h2>
+                <p>
+                  Dari Americano yang klasik hingga Cappuccino yang creamy, kami
+                  siap memuaskan selera kopi Anda.
+                </p>
+                <div class="down-buttons">
+                  <div class="main-blue-button-hover">
+                    <a href="#about">Tentang Kami</a>
+                  </div>
+                  <div class="call-button">
+                    <a href="#"><i class="fa fa-phone"></i> 081-234-56789</a>
+                  </div>
+                </div>
+              </div>
+              <div class="item header-text">
+                <h6>Coffee On The Go</h6>
+                <h2>
+                  <em>Pesan sekarang</em> dan nikmati kopi
+                  <span>dimanapun</span>
+                </h2>
+                <p>
+                  Kami menyediakan kopi siap saji dengan kualitas terbaik. Klik
+                  dan pesan untuk menikmati kopi Anda sekarang juga!
+                </p>
+                <div class="down-buttons">
+                  <div class="main-blue-button-hover">
+                    <a href="#contact">Hubungi Kami</a>
+                  </div>
+                  <div class="call-button">
+                    <a href="#"><i class="fa fa-phone"></i> 081-234-56789</a>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
+          <div class="col-lg-6">
+            <!-- Optional: Tempat untuk gambar kopi -->
+            <img
+              src="{{ url_for('static', filename='assets/images/banner-coffee.jpg') }}"
+              alt="Coffee Banner"
+              class="img-fluid"
+            />
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-    <div id="menu" class="pricing-tables section">
-        <div class="tables-left-dec">
-            <img src="{{ url_for('static', filename='assets/images/tables-left-dec.png') }}" alt="">
+<div id="menu" class="pricing-tables section">
+  <div class="tables-left-dec">
+    <img
+      src="{{ url_for('static', filename='assets/images/tables-left-dec.png') }}"
+      alt=""
+    />
+  </div>
+  <div class="tables-right-dec">
+    <img
+      src="{{ url_for('static', filename='assets/images/tables-right-dec.png') }}"
+      alt=""
+    />
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 offset-lg-3">
+        <div class="section-heading">
+          <h2>Nikmati <em>cita rasa</em> terbaik dari kopi & teh kami</h2>
+          <span>Menu Kami</span>
         </div>
-        <div class="tables-right-dec">
-            <img src="{{ url_for('static', filename='assets/images/tables-right-dec.png') }}"alt="">
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 offset-lg-3">
-                    <div class="section-heading">
-                        <h2>Nikmati <em>cita rasa</em> terbaik dari kopi & teh kami</h2>
-                        <span>Menu Kami</span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                {% for product in products %}
-                <div class="col-lg-4 col-md-6">
-                    <div class="item first-item">
-                        <img src="{{ url_for('static', filename='img/upload/' + product.image_filename) }}" alt="Latte" style="width: 100%; margin-bottom: 15px;">
-                        <h4>{{ product.name }}</h4>
-                        <ul>
-                            <li><strong>Kategori:</strong> {{product.category}}</li>
-                            <li><strong>Harga:</strong>{{ product.price|rupiah }}</li>
-                            <li> {{ product.description }}</li>
-                        </ul>
-                        <div class="main-blue-button-hover">
-                            <a href="{{ url_for('detail_product', product_id=product._id) }}" class="product-card__btn text-decoration-none">Detail</a>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-            
-                <!-- Button Lihat Semua Produk -->
-                <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="main-blue-button-hover" style="margin-top: 30px;">
-                        <a href="{{ url_for('show_products') }}">Lihat Semua Produk</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="row">
+      {% for product in products %}
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="item first-item">
+          <img
+            src="{{ url_for('static', filename='img/upload/' + product.image_filename) }}"
+            alt="Latte"
+            style="width: 100%; margin-bottom: 15px"
+          />
+          <h4>{{ product.name }}</h4>
+          <ul>
+            <li><strong>Kategori:</strong> {{product.category}}</li>
+            <li><strong>Harga:</strong>{{ product.price|rupiah }}</li>
+            <li>{{ product.description }}</li>
+          </ul>
+          <div class="main-blue-button-hover">
+            <a
+              href="{{ url_for('detail_product', product_id=product._id) }}"
+              class="product-card__btn text-decoration-none"
+              >Detail</a
+            >
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Button Lihat Semua Produk -->
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <div class="main-blue-button-hover" style="margin-top: 30px">
+          <a href="{{ url_for('show_products') }}">Lihat Semua Produk</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
