@@ -17,6 +17,22 @@
      <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/templatemo-onix-digital.css') }}">
      <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/animated.css') }}">
      <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/owl.css') }}">
+     <style>
+      .mobile-only {
+        display: none;
+      }
+
+      /* Tampilkan elemen pada layar kecil (mobile) */
+      @media (max-width: 768px) {
+          .mobile-only {
+              display: block;
+              background-color: rgb(255, 181, 43) !important;
+              color: white;
+              text-align: center;
+              padding: 10px;
+          }
+      }
+     </style>
   </head>
   <body>
     
@@ -39,7 +55,12 @@
             <li class="scroll-to-section"><a href="{{ url_for('home') }}#services">Layanan</a></li>
             <li class="scroll-to-section"><a href="{{ url_for('about') }}">About</a></li>
             <li class="scroll-to-section"><a href="{{ url_for('home') }}#menu">Menu</a></li>
-            <li class="scroll-to-section"><a href="{{ url_for('home') }}#contact">Contact Us</a></li> 
+            <li class="scroll-to-section"><a href="{{ url_for('home') }}#contact">Contact Us</a></li>
+            {% if 'username' in session %}
+            <li class="scroll-to-section mobile-only"><a href="{{ url_for('logout') }}">Logout</a></li>
+            {% else %}
+            <li class="scroll-to-section mobile-only"><a href="{{ url_for('login')}}">Login</a></li>
+            {% endif %}
 
             {% if 'username' in session %}
               <!-- Dropdown Menu for Logged-in User -->
@@ -52,6 +73,8 @@
                   <li><a class="dropdown-item" href="{{ url_for('view_cart') }}">Cart</a></li>
                   <li><a class="dropdown-item" href="{{ url_for('your_order') }}">Your Order</a></li>
                   <li><a class="dropdown-item" href="{{ url_for('profile') }}">Your Profile</a></li>
+                  <hr class="dropdown-divider"/>
+                  <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
                   <li><a class="dropdown-item" href="{{ url_for('profile') }}" style="display: none;">Your Profile</a></li>
                 </ul>
               </li>
@@ -65,6 +88,10 @@
                 </li>
               {% endif %}
           </ul>
+          
+          <a class='menu-trigger'>
+            <span>Menu</span>
+          </a>
           <!-- ***** Menu End ***** -->
         </nav>
       </div>
