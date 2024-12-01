@@ -13,7 +13,6 @@ from flask import (
 )
 
 from flask import get_flashed_messages
-from midtransclient import Snap
 from pymongo import MongoClient
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash

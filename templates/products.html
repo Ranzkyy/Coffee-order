@@ -1,6 +1,16 @@
 {% extends "layout.html" %} {% block title %}Products{% endblock %} {% block
 content %}
-
+<style>
+  .product-image {
+    width: 100%;
+  }
+  @media (max-width: 768px) {
+    .product-image {
+      width: 100px;
+      height: auto;
+    }
+  }
+</style>
 <div class="main-banner" id="top">
   <div class="container">
     <div class="row">
@@ -107,16 +117,19 @@ content %}
       <div class="col-lg-4 col-md-6 mb-4">
         <div class="item first-item">
           <img
+            class="product-image"
             src="{{ url_for('static', filename='img/upload/' + product.image_filename) }}"
             alt="Latte"
-            style="width: 100%; margin-bottom: 15px"
+            style="margin-bottom: 15px"
           />
-          <h4>{{ product.name }}</h4>
-          <ul>
-            <li><strong>Kategori:</strong> {{product.category}}</li>
-            <li><strong>Harga:</strong>{{ product.price|rupiah }}</li>
-            <li>{{ product.description }}</li>
-          </ul>
+          <div>
+            <h4>{{ product.name }}</h4>
+            <ul>
+              <li><strong>Kategori:</strong> {{product.category}}</li>
+              <li><strong>Harga:</strong>{{ product.price|rupiah }}</li>
+              <li>{{ product.description }}</li>
+            </ul>
+          </div>
           <div class="main-blue-button-hover">
             <a
               href="{{ url_for('detail_product', product_id=product._id) }}"
