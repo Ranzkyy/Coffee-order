@@ -28,123 +28,124 @@
     </style>
   </head>
   <body>
-    {% extends 'layout.html' %} {% block title %}Cart{% endblock %} {% block
-    content %}
-    <div class="d-flex justify-content-center m-5">
-      <div class="container mt-5 shadow">
-        <h1 class="mb-4">Shopping Cart</h1>
-        {% if cart_items %}
-        <form action="{{ url_for('checkout_selected') }}" method="POST">
-          <div class="row">
-            <div class="col-md-8">
-              {% for item in cart_items %}
-              <div class="cart-item d-flex align-items-center">
-                <input
-                  class="form-check-input me-3"
-                  type="checkbox"
-                  name="selected_item[]"
-                  value="{{ item.product._id }}"
-                  id="checkbox{{ item.product._id }}"
-                />
-                <img
-                  src="{{ url_for('static', filename='img/upload/' + (item.product_image or 'default.jpg')) }}"
-                  alt="{{ item.product.name }}"
-                  class="img-fluid"
-                  height="100"
-                  width="100"
-                />
-                <div class="ms-3">
-                  <h5>{{ item.product.name }}</h5>
-                  <p class="mb-1">Category</p>
+    {% extends 'layout.html' %}
+    {% block title %}Cart{% endblock %}
+    {% block content %}
+      <div class="d-flex justify-content-center m-5">
+        <div class="container mt-5 shadow">
+          <h1 class="mb-4">Shopping Cart</h1>
+          {% if cart_items %}
+          <form action="{{ url_for('checkout_selected') }}" method="POST">
+            <div class="row">
+              <div class="col-md-8">
+                {% for item in cart_items %}
+                <div class="cart-item d-flex align-items-center">
+                  <input
+                    class="form-check-input me-3"
+                    type="checkbox"
+                    name="selected_item[]"
+                    value="{{ item.product._id }}"
+                    id="checkbox{{ item.product._id }}"
+                    checked hidden
+                  />
+                  <img
+                    src="{{ url_for('static', filename='img/upload/' + (item.product_image or 'default.jpg')) }}"
+                    alt="{{ item.product.name }}"
+                    class="img-fluid"
+                    height="100"
+                    width="100"
+                  />
+                  <div class="ms-3">
+                    <h5>{{ item.product.name }}</h5>
+                    <p class="mb-1">{{ item.product.category }}</p>
+                    <p>{{ item.topping_name  }} - {{ item.topping_price|rupiah }}</p>
+                  </div>
+                  <div class="ms-auto quantity-center">
+                    <p>{{ item.quantity }}</p>
+                  </div>
+                  <div class="ms-auto text-center">
+                    <p class="mb-1 fw-bold">{{ item.total_price }} IDR</p>
+                    <button
+                      type="button"
+                      class="btn btn-danger"
+                      data-bs-toggle="modal"
+                      data-bs-target="#removeModal{{ item.product._id }}"
+                    >
+                      <i class="bx bxs-trash"></i>
+                    </button>
+                  </div>
                 </div>
-                <div class="ms-auto quantity-center">
-                  <p>{{ item.quantity }}</p>
-                </div>
-                <div class="ms-auto text-center">
-                  <p class="mb-1 fw-bold">{{ item.total_price }} IDR</p>
-                  <button
-                    type="button"
-                    class="btn btn-danger"
-                    data-bs-toggle="modal"
-                    data-bs-target="#removeModal{{ item.product._id }}"
-                  >
-                    <i class="bx bxs-trash"></i>
+                {% endfor %}
+              </div>
+              <div class="col-md-4">
+                <div class="cart-total">
+                  <h4 class="text-center">Total</h4>
+                  <p>subtotal: {{ total_amount }} IDR</p>
+                  <h5>Total: {{ total_amount }} IDR</h5>
+                  <button class="btn btn-primary btn-lg btn-block">
+                    Proceed to Checkout
                   </button>
                 </div>
               </div>
-              {% endfor %}
             </div>
-            <div class="col-md-4">
-              <div class="cart-total">
-                <h4 class="text-center">Total</h4>
-                <p>subtotal: {{ total_amount }} IDR</p>
-                <p>toping: boba</p>
-                <p>note: less ice</p>
-                <h5>Total: {{ total_amount }} IDR</h5>
-                <button class="btn btn-primary btn-lg btn-block">
-                  Proceed to Checkout
-                </button>
-              </div>
-            </div>
-          </div>
-        </form>
-        {% else %}
-        <p>Your cart is empty.</p>
-        {% endif %}
+          </form>
+          {% else %}
+          <p>Your cart is empty.</p>
+          {% endif %}
+        </div>
       </div>
-    </div>
-
-    <!-- Modal box for removing items -->
-    {% for item in cart_items %}
-    <div
-      class="modal fade"
-      id="removeModal{{ item.product._id }}"
-      tabindex="-1"
-      aria-labelledby="removeModalLabel{{ item.product._id }}"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="removeModalLabel{{ item.product._id }}">
-              Confirm Removal
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            Are you sure you want to remove "{{ item.product.name }}" from your
-            cart?
-          </div>
-          <div class="modal-footer">
-            <form
-              action="{{ url_for('delete_from_cart', product_id=item.product._id) }}"
-              method="POST"
-              style="display: inline"
-            >
-              <button type="submit" class="btn btn-danger">Yes, Remove</button>
-            </form>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
+  
+      <!-- Modal box for removing items -->
+      {% for item in cart_items %}
+      <div
+        class="modal fade"
+        id="removeModal{{ item.product._id }}"
+        tabindex="-1"
+        aria-labelledby="removeModalLabel{{ item.product._id }}"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="removeModalLabel{{ item.product._id }}">
+                Confirm Removal
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to remove "{{ item.product.name }}" from your
+              cart?
+            </div>
+            <div class="modal-footer">
+              <form
+                action="{{ url_for('delete_from_cart', product_id=item.product._id) }}"
+                method="POST"
+                style="display: inline"
+              >
+                <button type="submit" class="btn btn-danger">Yes, Remove</button>
+              </form>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    {% endfor %} {% endblock %}
-
-    <!-- no footer -->
-
-    {% block footer %}
-    <!-- Kosongkan untuk menghilangkan footer -->
-    {% endblock %}
+      {% endfor %} {% endblock %}
+  
+      <!-- no footer -->
+  
+      {% block footer %}
+      <!-- Kosongkan untuk menghilangkan footer -->
+      {% endblock %}
   </body>
 </html>

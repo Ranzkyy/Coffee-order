@@ -51,9 +51,39 @@
 
       <dt class="col-sm-2">Metode Pembayaran</dt>
       <dd class="col-sm-10">{{ order.payment_method }}</dd>
+
+      <dt class="col-sm-2">Bukti Pembayaran</dt>
+      <dd class="col-sm-10">
+        {% if order.payment_proof %}
+          <!-- Thumbnail Image and Modal Trigger -->
+          <img src="{{ url_for('static', filename='img/upload_bukti/' + order.payment_proof) }}" alt="Payment Proof" class="img-fluid" style="max-width: 150px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#paymentProofModal">
+        {% else %}
+          <p>No payment proof uploaded.</p>
+        {% endif %}
+      </dd>
     </dl>
   </div>
 </div>
+
+<!-- Modal for Viewing Payment Proof -->
+{% if order.payment_proof %}
+  <div class="modal fade" id="paymentProofModal" tabindex="-1" aria-labelledby="paymentProofModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="paymentProofModalLabel">Payment Proof</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body d-flex justify-content-center">
+          <img src="{{ url_for('static', filename='img/upload_bukti/' + order.payment_proof) }}" alt="Payment Proof" class="img-fluid border" style="max-height: 500px; max-width: 100%; object-fit: contain;">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
 
 <a href="{{ url_for('admin_orders') }}" class="btn btn-secondary">Back to Orders</a>
 

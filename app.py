@@ -13,7 +13,7 @@ from flask import (
 )
 
 from flask import get_flashed_messages
-
+from midtransclient import Snap
 from pymongo import MongoClient
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -42,6 +42,15 @@ def format_rupiah(value):
     return "Rp{:,.0f}".format(float(value)).replace(',', '.')
 app.jinja_env.filters['rupiah'] = format_rupiah
 
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+UPLOAD_FOLDER_BUKTI = 'static/img/upload_bukti/'
+app.config['UPLOAD_FOLDER_BUKTI'] = UPLOAD_FOLDER_BUKTI
+os.makedirs(app.config['UPLOAD_FOLDER_BUKTI'], exist_ok=True)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 #setting untuk folder tempat image di upload
 UPLOAD_FOLDER = 'static/img/upload'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -60,6 +69,7 @@ def utility_processor():
 @app.route('/')
 def home():
     products = list(db.products.find())
+    
     return render_template('index.html', products=products)
 
 @app.route('/about')
@@ -138,8 +148,9 @@ def admin_dashboard():
 @app.route('/user_dashboard')
 def user_dashboard():
     products = list(db.products.find())
+    user = db.users.find_one({"username": session["username"]})
     if session.get('role') == 'user':
-        return render_template('index.html', products=products)
+        return render_template('index.html', products=products, user=user)
     return redirect(url_for('login'))
 
 @app.route('/logout')
@@ -174,6 +185,7 @@ def add_product():
         description = request.form.get('description')
         category = request.form.get('category')
         stock = request.form.get('stock')
+        shopee_url = request.form.get('shopee_url')
         
         try:
             price = float(request.form.get('price'))
@@ -199,6 +211,7 @@ def add_product():
                 'category': category,
                 'price': price,
                 'stock': stock,
+                'shopee_url': shopee_url,
                 'image_filename': filename,
                 'created_at': datetime.now()
             }
@@ -226,7 +239,9 @@ def edit_product(product_id):
         description = request.form.get('description')
         category = request.form.get('category')
         stock = request.form.get('stock')
+        shopee_url = request.form.get('shopee_url')
         price = float(request.form.get('price'))
+        
         
         image = request.files.get('image')
         image_filename = product['image_filename']
@@ -244,6 +259,7 @@ def edit_product(product_id):
                       'stock': stock, 
                       'description': description, 
                       'price': price, 
+                      'shopee_url': shopee_url,
                       'image_filename': image_filename
                     }}
         )
@@ -367,6 +383,80 @@ def delete_user(user_id):
     flash('User deleted successfully!', 'success')
     return redirect(url_for('admin_users'))
 
+#TOPPINGS - INDEX
+@app.route('/admin/toppings')
+def admin_toppings():
+    if session.get('role') != 'admin':
+        flash('Only admins can view toppings.', 'error')
+        return redirect(url_for('login'))
+
+    toppings = list(db.topping.find())
+    return render_template('admin/toppings/index.html', toppings=toppings)
+
+#TOPPINGS - ADD
+@app.route('/admin/toppings/add', methods=['GET', 'POST'])
+def add_topping():
+    if session.get('role') != 'admin':
+        flash('Only admins can add toppings.', 'error')
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        name = request.form.get('name')
+        price = request.form.get('price')
+
+        if not name or not price:
+            flash('Name and Price are required', 'error')
+            return redirect(url_for('add_topping'))
+
+        # Insert the new topping into the database
+        db.topping.insert_one({
+            'name': name,
+            'price': float(price)  # Ensure price is stored as a float
+        })
+
+        flash('Topping added successfully!', 'success')
+        return redirect(url_for('admin_toppings'))
+
+    return render_template('admin/toppings/add.html')
+
+
+#TOPPINGS - EDIT
+@app.route('/admin/toppings/edit/<topping_id>', methods=['GET', 'POST'])
+def edit_topping(topping_id):
+    if session.get('role') != 'admin':
+        flash('Only admins can edit toppings.', 'error')
+        return redirect(url_for('login'))
+
+    topping = db.topping.find_one({'_id': ObjectId(topping_id)})
+
+    if request.method == 'POST':
+        name = request.form.get('name')
+        price = request.form.get('price')
+
+        update_data = {'name': name, 'price': float(price)}
+
+        db.topping.update_one(
+            {'_id': ObjectId(topping_id)},
+            {'$set': update_data}
+        )
+
+        flash('Topping updated successfully!', 'success')
+        return redirect(url_for('admin_toppings'))
+
+    return render_template('admin/toppings/edit.html', topping=topping)
+
+#TOPPINGS - DELETE
+@app.route('/admin/toppings/delete/<topping_id>')
+def delete_topping(topping_id):
+    if session.get('role') != 'admin':
+        flash('Only admins can delete toppings.', 'error')
+        return redirect(url_for('login'))
+
+    db.topping.delete_one({'_id': ObjectId(topping_id)})
+    flash('Topping deleted successfully!', 'success')
+    return redirect(url_for('admin_toppings'))
+
+
 
 #ADMIN - ORDERS
 @app.route('/admin/orders')
@@ -467,11 +557,13 @@ def detail_product(product_id):
         return redirect(url_for('login'))
     
     product = db.products.find_one({'_id': ObjectId(product_id)})
+    topping = db.topping.find()
+    
     if not product:
         flash("Product not found.", "error")
         return redirect(url_for('show_products'))
     
-    return render_template('user/detail-product.html', product=product)
+    return render_template('user/detail-product.html', product=product , toppings=topping)
 
 @app.route('/order/<product_id>', methods=['GET', 'POST'])
 def order(product_id):
@@ -532,8 +624,7 @@ def your_order():
         active_tab=active_tab
     )
 
-
-def add_to_cart(user_id, product_id, quantity):
+def add_to_cart(user_id, product_id, quantity, topping_id=None, total_price=None):
     cart = db.carts.find_one({"user_id": ObjectId(user_id)})
 
     if not cart:
@@ -541,18 +632,26 @@ def add_to_cart(user_id, product_id, quantity):
     else:
         cart_items = cart["items"]
 
-    #ngambil informasi produk
+    # Mengambil informasi produk
     product = db.products.find_one({"_id": ObjectId(product_id)})
     if not product:
-        return  #kalo produk tidak ditemukan, kita hentikan proses
+        return  # Jika produk tidak ditemukan, proses dihentikan
 
-    #ngambil informasi gambar produk, defaultnya kosong
-    product_image = product.get('image_filename', '') 
+    # Mengambil informasi topping jika ada
+    topping = db.toppings.find_one({"_id": ObjectId(topping_id)}) if topping_id else None
+    topping_price = topping['price'] if topping else 0  # Harga topping, jika ada
 
+    # Menghitung total harga dengan topping jika tidak diberikan
+    if total_price is None:
+        total_price = (product['price'] + topping_price) * quantity  # Total harga dengan topping
+
+    # Cek apakah item sudah ada dalam keranjang
     item_found = False
     for item in cart["items"]:
         if item["product_id"] == ObjectId(product_id):
             item["quantity"] += quantity
+            item["topping_id"] = topping_id  # Menambahkan topping_id
+            item["total_price"] = total_price  # Update harga total
             item_found = True
             break
 
@@ -560,7 +659,9 @@ def add_to_cart(user_id, product_id, quantity):
         cart["items"].append({
             "product_id": ObjectId(product_id),
             "quantity": quantity,
-            "product_image": product_image  # Menyimpan gambar produk di cart
+            "topping_id": topping_id,
+            "total_price": total_price,
+            "product_image": product.get('image_filename', ''),
         })
 
     db.carts.update_one(
@@ -568,14 +669,15 @@ def add_to_cart(user_id, product_id, quantity):
         {"$set": {"items": cart["items"]}},
         upsert=True
     )
-
+    
 def get_cart_items(user_id):
+    
     try:
         user_id = ObjectId(user_id)
     except Exception:
         return []
 
-    # Fetching cart items
+    # Mengambil item cart
     cart = db.carts.find_one({"user_id": user_id})
     if not cart:
         return []
@@ -583,20 +685,32 @@ def get_cart_items(user_id):
     cart_items = []
     for item in cart.get("items", []):
         try:
+            # Ambil data produk
             product = db.products.find_one({"_id": ObjectId(item["product_id"])})
+            
+            # Ambil data topping jika ada
+            topping = db.topping.find_one({"_id": ObjectId(item.get("topping_id"))}) if item.get("topping_id") else None
+            
+            # Menyusun data topping
+            topping_name = topping['name'] if topping else "No Topping"
+            topping_price = topping['price'] if topping else 0
+
+            # Pastikan produk ada
             if product:
                 cart_items.append({
                     "product": product,
                     "quantity": item["quantity"],
-                    "total_price": product["price"] * item["quantity"],
-                    "product_image": item.get("product_image", '')
+                    "total_price": item["total_price"],
+                    "product_image": item.get("product_image", ''),
+                    "topping_name": topping_name,
+                    "topping_price": topping_price,
                 })
         except Exception as e:
             print(f"Error fetching product details: {e}")
             continue
+        
 
     return cart_items
-
 
 
 @app.route('/cart')
@@ -618,7 +732,7 @@ def view_cart():
         cart_items = []
         total_amount = 0
 
-    #Fetch orders
+    # Fetch orders
     try:
         orders = list(db.orders.find({"user_id": user["_id"]}).sort("date", -1))
     except Exception as e:
@@ -632,8 +746,14 @@ def view_cart():
         cart_items=cart_items,
         total_amount=total_amount,
         orders=orders,
-        active_tab=active_tab
+        active_tab=active_tab,
+        order=orders[0] if orders else None
     )
+
+@app.route('/view_payment_proof/<order_id>')
+def view_payment_proof(order_id):
+    # Here, you would retrieve and display the payment proof for the given order_id
+    return f"Viewing payment proof for order: {order_id}"
 
 @app.route('/add_to_cart/<product_id>', methods=['POST'])
 def add_to_cart_route(product_id):
@@ -641,101 +761,18 @@ def add_to_cart_route(product_id):
         flash("Please log in to add items to cart.", "error")
         return redirect(url_for('login'))
 
-    quantity = int(request.form.get('quantity', 1))
+    quantity = int(request.form.get('quantity', 1))  # Get the quantity
+    topping_id = request.form.get('topping')  # Get the topping ID from the form
+    total_price = float(request.form.get('total_price'))  # Ambil harga total dari hidden field
+
+    # Fetch the user from the database
     user = db.users.find_one({"username": session["username"]})
-    add_to_cart(user["_id"], product_id, quantity)
+
+    # Call the function to add the product to the cart, including topping_id and total_price
+    add_to_cart(user["_id"], product_id, quantity, topping_id, total_price)
+
     flash('Product added to cart', 'success')
     return redirect(url_for('view_cart'))
-
-@app.route('/checkout_selected', methods=['POST'])
-def checkout_selected():
-    if 'username' not in session:
-        flash("Please log in to proceed to checkout.", "error")
-        return redirect(url_for('login'))
-
-    selected_items = request.form.getlist('selected_item[]') 
-
-    if not selected_items:
-        flash("No items selected for checkout.", "warning")
-        return redirect(url_for('view_cart'))
-
-    products = []
-    for item_id in selected_items:
-        product = db.products.find_one({"_id": ObjectId(item_id)})
-        if product:  
-            products.append(product)
-
-    flash("Checkout successful for selected items.", "success")
-    return render_template('user/checkout.html', products=products) 
-
-# Route untuk checkout
-@app.route('/checkout', methods=['GET', 'POST'])
-def checkout():
-    if 'username' not in session:
-        flash("Please log in to checkout.", "error")
-        return redirect(url_for('login'))
-
-    user = db.users.find_one({"username": session["username"]})
-    cart_items = get_cart_items(user["_id"])
-
-    if request.method == 'POST':
-        full_name = request.form.get('fullName')
-        phone_number = request.form.get('phoneNumber')
-        payment_method = request.form.get('paymentMethod')
-        address = request.form.get('address')
-
-        message = (
-            f"Order Details:\n\n"
-            f"Full Name     : {full_name}\n"
-            f"Phone Number  : {phone_number}\n"
-            f"Metode Pembayaran : {payment_method}\n"
-            f"Address       : {address}\n\n"
-            f"Items:\n"
-        )
-
-        total_price = 0  # Inisialisasi total harga
-
-        for item in cart_items:
-            product = db.products.find_one({'_id': item['product']['_id']}) 
-            item_name = product['name']
-            item_image = product.get('image_filename', '') 
-            item_price = item['total_price'] // item['quantity']
-            item_quantity = item['quantity']
-            total_price += item['total_price']
-
-            # Format untuk item
-            message += (
-                f" - {item_name:<14} | {item_price} IDR x {item_quantity} items\n"
-            )
-
-            # Simpan setiap produk sebagai pesanan terpisah
-            order_data = {
-                'user_id': ObjectId(user["_id"]),
-                'full_name': full_name,
-                'phone_number': phone_number,
-                'payment_method': payment_method,
-                'address': address,
-                'product_name': item_name,
-                'product_image': item_image,  
-                'quantity': item_quantity,
-                'price': item_price,
-                'total_price': item['total_price'],
-                'status': 'pending',  #status defaultnya pending bisa diubah di dahsboard admin
-                'created_at': datetime.now() 
-            }
-
-            db.orders.insert_one(order_data)
-
-        #hapus keranjang setelah order selesai
-        db.carts.delete_one({"user_id": ObjectId(user["_id"])})
-
-        encoded_message = urllib.parse.quote_plus(message)
-        whatsapp_url = f"https://wa.me/6285155452451?text={encoded_message}"
-
-        return redirect(whatsapp_url)
-
-    total_price = sum(item['total_price'] for item in cart_items)
-    return render_template('user/checkout.html', cart_items=cart_items, total_price=total_price)
 
 @app.route('/cart/delete/<product_id>', methods=['POST'])
 def delete_from_cart(product_id):
@@ -766,12 +803,111 @@ def delete_from_cart(product_id):
     flash("Product removed from cart.", "success")
     return redirect(url_for('view_cart'))
 
+@app.route('/checkout_selected', methods=['POST'])
+def checkout_selected():
+    if 'username' not in session:
+        flash("Please log in to proceed to checkout.", "error")
+        return redirect(url_for('login'))
+
+    user = db.users.find_one({"username": session["username"]})
+    selected_items = request.form.getlist('selected_item[]')
+
+    if not selected_items:
+        flash("No items selected for checkout.", "warning")
+        return redirect(url_for('view_cart'))
+
+    products = []
+    for item_id in selected_items:
+        product = db.products.find_one({"_id": ObjectId(item_id)})
+        if product:
+            products.append(product)
+
+    if not products:
+        flash("No valid products selected.", "error")
+        return redirect(url_for('view_cart'))
+
+    flash("Checkout successful for selected items.", "success")
+    return render_template('user/checkout.html', products=products, user=user)
+
+
+@app.route('/checkout', methods=['GET', 'POST'])
+def checkout():
+    if 'username' not in session:
+        flash("Please log in to checkout.", "error")
+        return redirect(url_for('login'))
+
+    user = db.users.find_one({"username": session["username"]})
+    cart_items = get_cart_items(user["_id"])
+
+    if request.method == 'POST':
+        full_name = request.form.get('fullName')
+        phone_number = request.form.get('phoneNumber')
+        payment_method = request.form.get('paymentMethod')
+        address = request.form.get('address')
+        note = request.form.get('note')
+
+        # Format order message
+        message = (
+            f"Order Details:\n\n"
+            f"Full Name: {full_name}\n"
+            f"Phone Number: {phone_number}\n"
+            f"Payment Method: {payment_method}\n"
+            f"Address: {address}\n"
+            f"Note: {note}\n\n"
+            f"Items:\n"
+        )
+
+        total_price = 0
+        for item in cart_items:
+            product = db.products.find_one({'_id': item['product']['_id']})
+            item_name = product['name']
+            item_image = product.get('image_filename', '')
+            item_price = item['total_price'] // item['quantity']
+            item_quantity = item['quantity']
+            total_price += item['total_price']
+
+            message += f" - {item_name} | {item_price} IDR x {item_quantity} items\n"
+
+            # Save each product as a separate order
+            order_data = {
+                'user_id': ObjectId(user["_id"]),
+                'full_name': full_name,
+                'phone_number': phone_number,
+                'payment_method': payment_method,
+                'address': address,
+                'note': note,
+                'product_name': item_name,
+                'product_image': item_image,
+                'quantity': item_quantity,
+                'price': item_price,
+                'total_price': item['total_price'],
+                'status': 'pending',
+                'created_at': datetime.now()
+            }
+
+            db.orders.insert_one(order_data)
+
+        # Clear the cart after order completion
+        db.carts.delete_one({"user_id": ObjectId(user["_id"])})
+
+        if payment_method == "QRIS":
+            return redirect(url_for('payment_instructions', method='QRIS'))
+        elif payment_method == "BCA":
+            return redirect(url_for('payment_instructions', method='BCA'))
+
+    total_price = sum(item['total_price'] for item in cart_items)
+    return render_template('user/checkout.html', cart_items=cart_items, total_price=total_price, user=user)
+
+@app.route('/payment-instructions/<method>')
+def payment_instructions(method):
+    return render_template('user/payment-instructions.html', method=method)
+
 @app.route('/profile')
 def profile():
     if 'username' not in session:
         flash("Please log in to view your profile.", "error")
         return redirect(url_for('login'))
-    
+
     user = db.users.find_one({"username": session["username"]})
     if not user:
         flash("User not found", "error")
@@ -789,17 +925,16 @@ def edit_profile():
 
     if request.method == 'POST':
         username = request.form.get('username')
-        user_image_file = request.files.get('user_image') 
+        user_image_file = request.files.get('user_image')
 
         if username:
             db.users.update_one({'_id': user['_id']}, {'$set': {'username': username}})
-            session['username'] = username 
+            session['username'] = username
 
         if user_image_file and user_image_file.filename != '':
             image_filename = secure_filename(user_image_file.filename)
             image_path = f'static/img/upload/{image_filename}'
             user_image_file.save(image_path)
-
             db.users.update_one({'_id': user['_id']}, {'$set': {'image': image_filename}})
         
         flash('Profile updated successfully', 'success')
@@ -807,6 +942,40 @@ def edit_profile():
 
     return render_template('user/edit-profile.html', user=user)
 
+@app.route('/upload_payment_proof/<order_id>', methods=['POST'])
+def upload_payment_proof(order_id):
+    order = db.orders.find_one({"_id": ObjectId(order_id)})
+
+    if not order:
+        flash('Order not found.', 'error')
+        return redirect(url_for('checkout'))
+
+    if 'payment_proof' not in request.files:
+        flash('No file part.', 'error')
+        return redirect(url_for('checkout'))
+
+    file = request.files['payment_proof']
+    
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        filename = f"{timestamp}_{filename}"
+        file_path = os.path.join(app.config['UPLOAD_FOLDER_BUKTI'], filename)
+        
+        file.save(file_path)
+        
+        db.orders.update_one(
+            {"_id": ObjectId(order_id)},
+            {"$set": {"payment_proof": filename}}
+        )
+        
+        flash('Payment proof uploaded successfully!', 'success')
+        return redirect(url_for('your_order'))
+
+    else:
+        flash('Invalid file type. Only images are allowed.', 'error')
+        return redirect(url_for('your_order'))
+    
 @app.errorhandler(404)
 def page_not_found(e):
     error_message = "Halaman yang Anda cari tidak ditemukan."

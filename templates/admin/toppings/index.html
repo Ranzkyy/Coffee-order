@@ -1,0 +1,103 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ url_for('admin_dashboard') }}">Home</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Toppings</li>
+  </ol>
+</nav>
+
+<a href="{{ url_for('add_topping') }}" class="btn btn-primary mt-5 mb-5">
+  <i class="fas fa-plus"></i> Add Topping
+</a>
+
+{% if flash_messages() %}
+  <div class="p-1">
+    {% for category, message in flash_messages() %}
+      <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div class="card shadow border-0 mb-7 p-5">
+  <div class="card-header">
+    <h5 class="mb-0">Toppings</h5>
+  </div>
+  <div class="table-responsive">
+    <table id="toppingsTable" class="table table-hover table-striped table-nowrap">
+      <thead class="thead-primary" style="background-color: #5C60F5 !important;">
+        <tr>
+          <th scope="col" style="color: white;">Name</th>
+          <th scope="col" style="color: white;">Price</th>
+          <th scope="col" style="color: white;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for topping in toppings %}
+        <tr>
+          <td><a class="text-heading font-semibold" href="#">{{ topping.name }}</a></td>
+          <td>{{ topping.price }}</td>
+          <td>
+            <a href="{{ url_for('edit_topping', topping_id=topping._id) }}" class="btn btn-sm btn-square btn-warning text-warning-hover">
+              <i class="fas fa-edit"></i>
+            </a>
+            <a 
+              class="btn btn-sm btn-square btn-danger text-danger-hover" 
+              data-bs-toggle="modal" 
+              data-bs-target="#deleteModal" 
+              data-topping-id="{{ topping._id }}" 
+              data-topping-name="{{ topping.name }}"
+            >
+              <i class="fas fa-trash-alt"></i>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete <span id="modal-topping-name"></span>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <a id="delete-confirm-btn" href="#" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Modal confirmation for deletion
+  const deleteModal = document.getElementById("deleteModal");
+
+  deleteModal.addEventListener("show.bs.modal", (event) => {
+    const button = event.relatedTarget;
+    const toppingId = button.getAttribute("data-topping-id");
+    const toppingName = button.getAttribute("data-topping-name");
+
+    const modalToppingName = deleteModal.querySelector("#modal-topping-name");
+    const deleteConfirmBtn = deleteModal.querySelector("#delete-confirm-btn");
+
+    modalToppingName.textContent = toppingName;
+    deleteConfirmBtn.href = `/admin/toppings/delete/${toppingId}`;
+  });
+</script>
+
+{% endblock %}
