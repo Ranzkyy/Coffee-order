@@ -1,296 +1,447 @@
-{% extends 'layout.html' %}
+{% extends 'layout.html' %} {% block title %}User Dashboard{% endblock %} {%
+block content %}
 
-{% block title %}User Dashboard{% endblock %}
-
-{% block content %}
-
-    <div class="main-banner" id="top">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-6 align-self-center">
-                            <div class="owl-carousel owl-banner">
-                                <div class="item header-text">
-                                    <h6>Selamat Datang di Bean to Drinks</h6>
-                                    <h2><em>Rasakan</em> kenikmatan kopi terbaik untuk <span>setiap momen</span></h2>
-                                    <p>Mulai hari Anda dengan secangkir kopi yang sempurna, diseduh dengan cinta dan biji kopi pilihan.</p>
-                                    <div class="down-buttons">
-                                        <div class="main-blue-button-hover">
-                                            <a href="#menu">Lihat Menu Kami</a>
-                                        </div>
-                                        <div class="call-button">
-                                            <a href="#"><i class="fa fa-phone"></i> 081-234-56789</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="item header-text">
-                                    <h6>Espresso atau Latte?</h6>
-                                    <h2><em>Temukan</em> rasa favorit Anda di <span>Bean to Drinks</span></h2>
-                                    <p>Dari Americano yang klasik hingga Cappuccino yang creamy, kami siap memuaskan selera kopi Anda.</p>
-                                    <div class="down-buttons">
-                                        <div class="main-blue-button-hover">
-                                            <a href="#about">Tentang Kami</a>
-                                        </div>
-                                        <div class="call-button">
-                                            <a href="#"><i class="fa fa-phone"></i> 081-234-56789</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="item header-text">
-                                    <h6>Coffee On The Go</h6>
-                                    <h2><em>Pesan sekarang</em> dan nikmati kopi <span>dimanapun</span></h2>
-                                    <p>Kami menyediakan kopi siap saji dengan kualitas terbaik. Klik dan pesan untuk menikmati kopi Anda sekarang juga!</p>
-                                    <div class="down-buttons">
-                                        <div class="main-blue-button-hover">
-                                            <a href="#contact">Hubungi Kami</a>
-                                        </div>
-                                        <div class="call-button">
-                                            <a href="#"><i class="fa fa-phone"></i> 081-234-56789</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="services" class="our-services section">
-        <div class="services-right-dec">
-            <img src="{{ url_for('static', filename='assets/images/services-right-dec.png') }}" alt="">
-        </div>
-        <div class="container">
-            <div class="services-left-dec">
-                <img src="{{ url_for('static', filename='assets/images/services-left-dec.png') }}" alt="">
-            </div>
-            <div class="row">
-                <div class="col-lg-6 offset-lg-3">
-                    <div class="section-heading">
-                        <h2>Kami <em>Menyediakan</em> Kopi Terbaik dengan <span>Pelayanan Unggul</span></h2>
-                        <span>Layanan Kami</span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="owl-carousel owl-services">
-                        <div class="item">
-                            <h4>Pemesanan Online</h4>
-                            <div class="icon"><img src="assets/images/service-icon-01.png" alt=""></div>
-                            <p>Pesan kopi favorit Anda kapan saja, dimana saja melalui website kami.</p>
-                        </div>
-                        <div class="item">
-                            <h4>Kopi Siap Antar</h4>
-                            <div class="icon"><img src="assets/images/service-icon-02.png" alt=""></div>
-                            <p>Pengantaran cepat untuk memastikan kopi Anda tetap segar dan nikmat.</p>
-                        </div>
-                        <div class="item">
-                            <h4>Biji Kopi Pilihan</h4>
-                            <div class="icon"><img src="assets/images/service-icon-03.png" alt=""></div>
-                            <p>Kami hanya menggunakan biji kopi berkualitas tinggi dari petani lokal terbaik.</p>
-                        </div>
-                        <div class="item">
-                            <h4>Custom Kopi</h4>
-                            <div class="icon"><img src="assets/images/service-icon-04.png" alt=""></div>
-                            <p>Buat kopi sesuai selera Anda dengan pilihan tingkat kepekatan dan rasa tambahan.</p>
-                        </div>
-                        <div class="item">
-                            <h4>Paket Langganan</h4>
-                            <div class="icon"><img src="assets/images/service-icon-02.png" alt=""></div>
-                            <p>Nikmati diskon khusus untuk pelanggan setia dengan langganan bulanan.</p>
-                        </div>
-                        <div class="item">
-                            <h4>Workshop Kopi</h4>
-                            <div class="icon"><img src="assets/images/service-icon-03.png" alt=""></div>
-                            <p>Ikuti kelas membuat kopi untuk memahami seni brewing dan menyeduh kopi.</p>
-                        </div>
-                        <div class="item">
-                            <h4>Biji Kopi Pilihan</h4>
-                            <div class="icon"><img src="assets/images/service-icon-03.png" alt=""></div>
-                            <p>Kami hanya menggunakan biji kopi berkualitas tinggi dari petani lokal terbaik.</p>
-                        </div>
-                        <div class="item">
-                            <h4>Custom Kopi</h4>
-                            <div class="icon"><img src="assets/images/service-icon-04.png" alt=""></div>
-                            <p>Buat kopi sesuai selera Anda dengan pilihan tingkat kepekatan dan rasa tambahan.</p>
-                        </div>
-                        <div class="item">
-                            <h4>Paket Langganan</h4>
-                            <div class="icon"><img src="assets/images/service-icon-02.png" alt=""></div>
-                            <p>Nikmati diskon khusus untuk pelanggan setia dengan langganan bulanan.</p>
-                        </div>
-                        <div class="item">
-                            <h4>Workshop Kopi</h4>
-                            <div class="icon"><img src="assets/images/service-icon-03.png" alt=""></div>
-                            <p>Ikuti kelas membuat kopi untuk memahami seni brewing dan menyeduh kopi.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="about" class="about-us section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 align-self-center">
-                    <div class="left-image">
-                        <img src="{{ url_for('static', filename='assets/images/tentang-kiri.png') }}" alt="Tentang Kami" style="width: 100%;">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="section-heading">
-                        <h2>Tentang <em>Bean to Drinks</em> &amp; <span>Coffee Experience</span></h2>
-                        <p>Di Bean to Drinks, kami percaya bahwa secangkir kopi yang baik dapat menciptakan momen spesial. Kami menggunakan biji kopi terbaik, diproses dengan penuh perhatian, untuk memberikan rasa yang otentik dan memuaskan.</p>
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="fact-item">
-                                    <div class="count-area-content">
-                                        <div class="icon">
-                                            <img src="assets/images/service-icon-01.png" alt="">
-                                        </div>
-                                        <div class="count-digit">500+</div>
-                                        <div class="count-title">Cangkir Kopi</div>
-                                        <p>Disajikan setiap hari di berbagai lokasi.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="fact-item">
-                                    <div class="count-area-content">
-                                        <div class="icon">
-                                            <img src="assets/images/service-icon-02.png" alt="">
-                                        </div>
-                                        <div class="count-digit">20+</div>
-                                        <div class="count-title">Varian Menu</div>
-                                        <p>Dari Espresso klasik hingga Latte favorit Anda.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="fact-item">
-                                    <div class="count-area-content">
-                                        <div class="icon">
-                                            <img src="assets/images/service-icon-03.png" alt="">
-                                        </div>
-                                        <div class="count-digit">100%</div>
-                                        <div class="count-title">Kopi Premium</div>
-                                        <p>Dari biji kopi pilihan lokal terbaik.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="menu" class="pricing-tables section">
-        <div class="tables-left-dec">
-            <img src="{{ url_for('static', filename='assets/images/tables-left-dec.png') }}" alt="">
-        </div>
-        <div class="tables-right-dec">
-            <img src="{{ url_for('static', filename='assets/images/tables-right-dec.png') }}"alt="">
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 offset-lg-3">
-                    <div class="section-heading">
-                        <h2>Nikmati <em>cita rasa</em> terbaik dari kopi & teh kami</h2>
-                        <span>Menu Kami</span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                {% for product in products[:3] %}
-                <div class="col-lg-4 col-md-6">
-                    <div class="item first-item">
-                        <img src="{{ url_for('static', filename='img/upload/' + product.image_filename) }}" alt="Latte" style="width: 100%; margin-bottom: 15px;">
-                        <h4>{{ product.name }}</h4>
-                        <ul>
-                            <li><strong>Kategori:</strong> {{product.category}}</li>
-                            <li><strong>Harga:</strong>{{ product.price|rupiah }}</li>
-                            <li> {{ product.description }}</li>
-                        </ul>
-                        <div class="main-blue-button-hover">
-                            <a href="{{ url_for('detail_product', product_id=product._id) }}" class="product-card__btn text-decoration-none">Detail</a>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-            
-                <!-- Button Lihat Semua Produk -->
-                <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="main-blue-button-hover" style="margin-top: 30px;">
-                        <a href="{{ url_for('show_products') }}">Lihat Semua Produk</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="contact" class="contact-us section">
-        <div class="container">
+<div class="main-banner" id="top">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
         <div class="row">
-            <div class="col-lg-7">
-            <div class="section-heading">
-                <h2>Hubungi Kami di <em>Bandung</em> untuk <span>Informasi & Pesanan</span></h2>
-                <div id="map">
-                <iframe src="https://maps.google.com/maps?q=Jl.+Braga,+Bandung&t=&z=13&ie=UTF8&iwloc=&output=embed" 
-                width="100%" height="360px" frameborder="0" style="border:0" allowfullscreen=""></iframe>
+          <div class="col-lg-6 align-self-center">
+            <div class="owl-carousel owl-banner">
+              <div class="item header-text">
+                <h6>Selamat Datang di Bean to Drinks</h6>
+                <h2>
+                  <em>Rasakan</em> kenikmatan kopi terbaik untuk
+                  <span>setiap momen</span>
+                </h2>
+                <p>
+                  Mulai hari Anda dengan secangkir kopi yang sempurna, diseduh
+                  dengan cinta dan biji kopi pilihan.
+                </p>
+                <div class="down-buttons">
+                  <div class="main-blue-button-hover">
+                    <a href="#menu">Lihat Menu Kami</a>
+                  </div>
+                  <div class="call-button">
+                    <a href="#"><i class="fa fa-phone"></i> 081-234-56789</a>
+                  </div>
                 </div>
-                <div class="info">
-                <span><i class="fa fa-whatsapp"></i> <a href="#">010-020-0340<br>090-080-0760</a></span>
-                <span><i class="fa fa-envelope"></i> <a href="#">info@company.com<br>mail@company.com</a></span>
-                <span><i class="fa fa-instagram"></i> <a href="#">@bean_to_drinks<br>@bean_to_drinks</a></span>
+              </div>
+              <div class="item header-text">
+                <h6>Espresso atau Latte?</h6>
+                <h2>
+                  <em>Temukan</em> rasa favorit Anda di
+                  <span>Bean to Drinks</span>
+                </h2>
+                <p>
+                  Dari Americano yang klasik hingga Cappuccino yang creamy, kami
+                  siap memuaskan selera kopi Anda.
+                </p>
+                <div class="down-buttons">
+                  <div class="main-blue-button-hover">
+                    <a href="#about">Tentang Kami</a>
+                  </div>
+                  <div class="call-button">
+                    <a href="#"><i class="fa fa-phone"></i> 081-234-56789</a>
+                  </div>
                 </div>
+              </div>
+              <div class="item header-text">
+                <h6>Coffee On The Go</h6>
+                <h2>
+                  <em>Pesan sekarang</em> dan nikmati kopi
+                  <span>dimanapun</span>
+                </h2>
+                <p>
+                  Kami menyediakan kopi siap saji dengan kualitas terbaik. Klik
+                  dan pesan untuk menikmati kopi Anda sekarang juga!
+                </p>
+                <div class="down-buttons">
+                  <div class="main-blue-button-hover">
+                    <a href="#contact">Hubungi Kami</a>
+                  </div>
+                  <div class="call-button">
+                    <a href="#"><i class="fa fa-phone"></i> 081-234-56789</a>
+                  </div>
+                </div>
+              </div>
             </div>
-            </div>
-            <div class="col-lg-5 align-self-center">
-            <form id="contact" action="" method="get">
-                <div class="row">
-                <div class="col-lg-12">
-                    <fieldset>
-                    <input type="name" name="name" id="name" placeholder="Name" autocomplete="on" required>
-                    </fieldset>
-                </div>
-                <div class="col-lg-12">
-                    <fieldset>
-                    <input type="surname" name="surname" id="surname" placeholder="Surname" autocomplete="on" required>
-                    </fieldset>
-                </div>
-                <div class="col-lg-12">
-                    <fieldset>
-                    <input type="text" name="email" id="email" pattern="[^ @]*@[^ @]*" placeholder="Your Email" required="">
-                    </fieldset>
-                </div>
-                <div class="col-lg-12">
-                    <fieldset>
-                    <input type="text" name="website" id="website" placeholder="Your Website URL" required="">
-                    </fieldset>
-                </div>
-                <div class="col-lg-12">
-                    <fieldset>
-                    <button type="submit" id="form-submit" class="main-button">Submit Request</button>
-                    </fieldset>
-                </div>
-                </div>
-            </form>
-            </div>
+          </div>
         </div>
-        </div>
-        <div class="contact-dec">
-        <img src="{{ url_for('static', filename='assets/images/contact-dec.png') }}" alt="">
-        </div>
-        <div class="contact-left-dec">
-        <img src="{{ url_for('static', filename='assets/images/contact-left-dec.png') }}" alt="">
-        </div>
+      </div>
     </div>
-    <div class="footer-dec">
-        <img src="assets/images/footer-dec.png" alt="">
+  </div>
+</div>
+<div id="services" class="our-services section">
+  <div class="services-right-dec">
+    <img
+      src="{{ url_for('static', filename='assets/images/services-right-dec.png') }}"
+      alt=""
+    />
+  </div>
+  <div class="container">
+    <div class="services-left-dec">
+      <img
+        src="{{ url_for('static', filename='assets/images/services-left-dec.png') }}"
+        alt=""
+      />
+    </div>
+    <div class="row">
+      <div class="col-lg-6 offset-lg-3">
+        <div class="section-heading">
+          <h2>
+            Kami <em>Menyediakan</em> Kopi Terbaik dengan
+            <span>Pelayanan Unggul</span>
+          </h2>
+          <span>Layanan Kami</span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="owl-carousel owl-services">
+          <div class="item">
+            <h4>Pemesanan Online</h4>
+            <div class="icon">
+              <img src="assets/images/service-icon-01.png" alt="" />
+            </div>
+            <p>
+              Pesan kopi favorit Anda kapan saja, dimana saja melalui website
+              kami.
+            </p>
+          </div>
+          <div class="item">
+            <h4>Kopi Siap Antar</h4>
+            <div class="icon">
+              <img src="assets/images/service-icon-02.png" alt="" />
+            </div>
+            <p>
+              Pengantaran cepat untuk memastikan kopi Anda tetap segar dan
+              nikmat.
+            </p>
+          </div>
+          <div class="item">
+            <h4>Biji Kopi Pilihan</h4>
+            <div class="icon">
+              <img src="assets/images/service-icon-03.png" alt="" />
+            </div>
+            <p>
+              Kami hanya menggunakan biji kopi berkualitas tinggi dari petani
+              lokal terbaik.
+            </p>
+          </div>
+          <div class="item">
+            <h4>Custom Kopi</h4>
+            <div class="icon">
+              <img src="assets/images/service-icon-04.png" alt="" />
+            </div>
+            <p>
+              Buat kopi sesuai selera Anda dengan pilihan tingkat kepekatan dan
+              rasa tambahan.
+            </p>
+          </div>
+          <div class="item">
+            <h4>Paket Langganan</h4>
+            <div class="icon">
+              <img src="assets/images/service-icon-02.png" alt="" />
+            </div>
+            <p>
+              Nikmati diskon khusus untuk pelanggan setia dengan langganan
+              bulanan.
+            </p>
+          </div>
+          <div class="item">
+            <h4>Workshop Kopi</h4>
+            <div class="icon">
+              <img src="assets/images/service-icon-03.png" alt="" />
+            </div>
+            <p>
+              Ikuti kelas membuat kopi untuk memahami seni brewing dan menyeduh
+              kopi.
+            </p>
+          </div>
+          <div class="item">
+            <h4>Biji Kopi Pilihan</h4>
+            <div class="icon">
+              <img src="assets/images/service-icon-03.png" alt="" />
+            </div>
+            <p>
+              Kami hanya menggunakan biji kopi berkualitas tinggi dari petani
+              lokal terbaik.
+            </p>
+          </div>
+          <div class="item">
+            <h4>Custom Kopi</h4>
+            <div class="icon">
+              <img src="assets/images/service-icon-04.png" alt="" />
+            </div>
+            <p>
+              Buat kopi sesuai selera Anda dengan pilihan tingkat kepekatan dan
+              rasa tambahan.
+            </p>
+          </div>
+          <div class="item">
+            <h4>Paket Langganan</h4>
+            <div class="icon">
+              <img src="assets/images/service-icon-02.png" alt="" />
+            </div>
+            <p>
+              Nikmati diskon khusus untuk pelanggan setia dengan langganan
+              bulanan.
+            </p>
+          </div>
+          <div class="item">
+            <h4>Workshop Kopi</h4>
+            <div class="icon">
+              <img src="assets/images/service-icon-03.png" alt="" />
+            </div>
+            <p>
+              Ikuti kelas membuat kopi untuk memahami seni brewing dan menyeduh
+              kopi.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="about" class="about-us section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 align-self-center">
+        <div class="left-image">
+          <img
+            src="{{ url_for('static', filename='assets/images/tentang-kiri.png') }}"
+            alt="Tentang Kami"
+            style="width: 100%"
+          />
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="section-heading">
+          <h2>
+            Tentang <em>Bean to Drinks</em> &amp; <span>Coffee Experience</span>
+          </h2>
+          <p>
+            Di Bean to Drinks, kami percaya bahwa secangkir kopi yang baik dapat
+            menciptakan momen spesial. Kami menggunakan biji kopi terbaik,
+            diproses dengan penuh perhatian, untuk memberikan rasa yang otentik
+            dan memuaskan.
+          </p>
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="fact-item">
+                <div class="count-area-content">
+                  <div class="icon">
+                    <img src="assets/images/service-icon-01.png" alt="" />
+                  </div>
+                  <div class="count-digit">500+</div>
+                  <div class="count-title">Cangkir Kopi</div>
+                  <p>Disajikan setiap hari di berbagai lokasi.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="fact-item">
+                <div class="count-area-content">
+                  <div class="icon">
+                    <img src="assets/images/service-icon-02.png" alt="" />
+                  </div>
+                  <div class="count-digit">20+</div>
+                  <div class="count-title">Varian Menu</div>
+                  <p>Dari Espresso klasik hingga Latte favorit Anda.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="fact-item">
+                <div class="count-area-content">
+                  <div class="icon">
+                    <img src="assets/images/service-icon-03.png" alt="" />
+                  </div>
+                  <div class="count-digit">100%</div>
+                  <div class="count-title">Kopi Premium</div>
+                  <p>Dari biji kopi pilihan lokal terbaik.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="menu" class="pricing-tables section">
+  <div class="tables-left-dec">
+    <img
+      src="{{ url_for('static', filename='assets/images/tables-left-dec.png') }}"
+      alt=""
+    />
+  </div>
+  <div class="tables-right-dec">
+    <img
+      src="{{ url_for('static', filename='assets/images/tables-right-dec.png') }}"
+      alt=""
+    />
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 offset-lg-3">
+        <div class="section-heading">
+          <h2>Nikmati <em>cita rasa</em> terbaik dari kopi & teh kami</h2>
+          <span>Menu Kami</span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      {% for product in products[:3] %}
+      <div class="col-lg-4 col-md-6">
+        <div class="item first-item">
+          <img
+            src="{{ url_for('static', filename='img/upload/' + product.image_filename) }}"
+            alt="Latte"
+            style="width: 100%; margin-bottom: 15px"
+          />
+          <h4>{{ product.name }}</h4>
+          <ul>
+            <li><strong>Kategori:</strong> {{product.category}}</li>
+            <li><strong>Harga:</strong>{{ product.price|rupiah }}</li>
+            <li>{{ product.description }}</li>
+          </ul>
+          <div class="main-blue-button-hover">
+            <a
+              href="{{ url_for('detail_product', product_id=product._id) }}"
+              class="product-card__btn text-decoration-none"
+              >Order</a
+            >
+          </div>
+        </div>
+      </div>
+      {% endfor %}
     </div>
 
+    <!-- Button Lihat Semua Produk -->
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <div class="main-blue-button-hover" style="margin-top: 30px">
+          <a href="{{ url_for('show_products') }}">Lihat Semua Produk</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="contact" class="contact-us section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-7">
+        <div class="section-heading">
+          <h2>
+            Hubungi Kami di <em>Bandung</em> untuk
+            <span>Informasi & Pesanan</span>
+          </h2>
+          <div id="map">
+            <iframe
+              src="https://maps.google.com/maps?q=Jl.+Braga,+Bandung&t=&z=13&ie=UTF8&iwloc=&output=embed"
+              width="100%"
+              height="360px"
+              frameborder="0"
+              style="border: 0"
+              allowfullscreen=""
+            ></iframe>
+          </div>
+          <!-- <div class="info">
+            <span
+              ><i class="fa fa-whatsapp"></i>
+              <a href="#">010-020-0340<br />090-080-0760</a></span
+            >
+            <span
+              ><i class="fa fa-envelope"></i>
+              <a href="#">info@company.com<br />mail@company.com</a></span
+            >
+            <span
+              ><i class="fa fa-instagram"></i>
+              <a href="#">@bean_to_drinks<br />@bean_to_drinks</a></span
+            >
+          </div> -->
+        </div>
+      </div>
+      <div class="col-lg-5 align-self-center">
+        <form id="contact" action="" method="get">
+          <div class="row">
+            <div class="col-lg-12">
+              <fieldset>
+                <input
+                  type="name"
+                  name="name"
+                  id="name"
+                  placeholder="Name"
+                  autocomplete="on"
+                  required
+                />
+              </fieldset>
+            </div>
+            <div class="col-lg-12">
+              <fieldset>
+                <input
+                  type="surname"
+                  name="surname"
+                  id="surname"
+                  placeholder="Surname"
+                  autocomplete="on"
+                  required
+                />
+              </fieldset>
+            </div>
+            <div class="col-lg-12">
+              <fieldset>
+                <input
+                  type="text"
+                  name="email"
+                  id="email"
+                  pattern="[^ @]*@[^ @]*"
+                  placeholder="Your Email"
+                  required=""
+                />
+              </fieldset>
+            </div>
+            <div class="col-lg-12">
+              <fieldset>
+                <input
+                  type="text"
+                  name="website"
+                  id="website"
+                  placeholder="Your Website URL"
+                  required=""
+                />
+              </fieldset>
+            </div>
+            <div class="col-lg-12">
+              <fieldset>
+                <button type="submit" id="form-submit" class="main-button">
+                  Submit Request
+                </button>
+              </fieldset>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="contact-dec">
+    <img
+      src="{{ url_for('static', filename='assets/images/contact-dec.png') }}"
+      alt=""
+    />
+  </div>
+  <div class="contact-left-dec">
+    <img
+      src="{{ url_for('static', filename='assets/images/contact-left-dec.png') }}"
+      alt=""
+    />
+  </div>
+</div>
+<div class="footer-dec">
+  <img src="assets/images/footer-dec.png" alt="" />
+</div>
 
 {% endblock %}
