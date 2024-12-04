@@ -8,6 +8,10 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
 
     <title>{% block title %}{% endblock %}</title>
 
@@ -17,11 +21,8 @@
       href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}"
     />
 
-    <!-- Additional CSS Files -->
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='assets/css/fontawesome.css') }}"
-    />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='assets/css/templatemo-onix-digital.css') }}"
@@ -103,8 +104,8 @@
                     id="navbarDropdown"
                     role="button"
                     data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  <i class="fa fa-gear"></i> >
+                    aria-expanded="false">
+                  <i class="fa fa-gear"></i> 
                 Menu
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -143,7 +144,7 @@
                 </li>
                 <!-- Logout Button -->
                 <li class="scroll-to-section">
-                  <a href="{{ url_for('logout') }}" class="btn btn-primary"
+                  <a href="{{ url_for('logout') }}" class="btn btn-primary "
                     >Logout</a
                   >
                 </li>
@@ -167,7 +168,7 @@
     </header>
     <!-- ***** Header Area End ***** -->
 
-    <main>
+    <main style="margin-top: 7rem">
       {% with messages = get_flashed_messages(with_categories=true) %} {% if
       messages %}
       <div
