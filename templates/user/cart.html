@@ -3,10 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-      rel="stylesheet"
-    />
+    
     <style>
       .cart-item {
         border-bottom: 1px solid #dee2e6;
@@ -31,60 +28,85 @@
     {% extends 'layout.html' %} {% block title %}Cart{% endblock %} {% block
     content %}
     <div class="d-flex justify-content-center m-5">
-      <div class="container mt-5 shadow">
-        <h1 class="mb-4">Shopping Cart</h1>
+      <div class="container mt-5 shadow p-4 rounded bg-light">
+        <h1 class="mb-4 text-center text-primary">Shopping Cart</h1>
         {% if cart_items %}
         <form action="{{ url_for('checkout_selected') }}" method="POST">
           <div class="row">
+            <!-- Cart Items -->
             <div class="col-md-8">
-              {% for item in cart_items %}
-              <div class="cart-item d-flex align-items-center">
-                <input
-                  class="form-check-input me-3"
-                  type="checkbox"
-                  name="selected_item[]"
-                  value="{{ item.product._id }}"
-                  id="checkbox{{ item.product._id }}"
-                  checked
-                  hidden
-                />
-                <img
-                  src="{{ url_for('static', filename='img/upload/' + (item.product_image or 'default.jpg')) }}"
-                  alt="{{ item.product.name }}"
-                  class="img-fluid"
-                  height="100"
-                  width="100"
-                />
-                <div class="ms-3">
-                  <h5>{{ item.product.name }}</h5>
-                  <p class="mb-1">{{ item.product.category }}</p>
-                  <p>
-                    {{ item.topping_name }} - {{ item.topping_price|rupiah }}
+              <div class="list-group">
+                {% for item in cart_items %}
+                <div class="list-group-item d-flex align-items-center p-3 mb-2 shadow-sm">
+                  <input
+                    class="form-check-input me-3"
+                    type="checkbox"
+                    name="selected_item[]"
+                    value="{{ item.product._id }}"
+                    id="checkbox{{ item.product._id }}"
+                    checked
+                    hidden
+                  />
+                  <img
+                    src="{{ url_for('static', filename='img/upload/' + (item.product_image or 'default.jpg')) }}"
+                    alt="{{ item.product.name }}"
+                    class="img-thumbnail"
+                    style="height: 75px; width: 75px; object-fit: cover;"
+                  />
+                  <div class="ms-3">
+                    <h5 class="mb-1">{{ item.product.name }}</h5>
+                    <small class="text-muted">{{ item.product.category }}</small><br />
+                    <span>{{ item.product.price | rupiah }}</span>
+                    {% if item.topping_name %}
+                    <p class="text-muted small mt-1">
+                      + {{ item.topping_name }}: {{ item.topping_price | rupiah }}
+                    </p>
+                    {% endif %}
+                  </div>
+                  <div class="ms-auto text-center">
+                    <p class="mb-0">Qty: <strong>{{ item.quantity }}</strong></p>
+                  </div>
+                  <div class="ms-auto text-center">
+                    <p class="mb-1 fw-bold text-success">
+                      {{ (item.total_price * item.quantity) | rupiah }}
+                    </p>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-danger"
+                      data-bs-toggle="modal"
+                      data-bs-target="#removeModal{{ item.product._id }}"
+                    >
+                      <i class="bx bxs-trash"></i>
+                    </button>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+    
+            <!-- Cart Summary -->
+            <div class="col-md-4">
+              <div class="border p-4 bg-white rounded shadow-sm">
+                <h4 class="text-center text-primary">Order Summary</h4>
+                <hr />
+                <div class="mb-3">
+                  <p class="d-flex justify-content-between">
+                    <span>Subtotal:</span>
+                    <span>{{ total_amount | rupiah }}</span>
+                  </p>
+                  <p class="d-flex justify-content-between">
+                    <span>Pajak:</span>
+                    <span>Rp. 0</span>
                   </p>
                 </div>
-                <div class="ms-auto quantity-center">
-                  <p>{{ item.quantity }}</p>
-                </div>
-                <div class="ms-auto text-center">
-                  <p class="mb-1 fw-bold">{{ item.total_price }} IDR</p>
-                  <button
-                    type="button"
-                    class="btn btn-danger"
-                    data-bs-toggle="modal"
-                    data-bs-target="#removeModal{{ item.product._id }}"
-                  >
-                    <i class="bx bxs-trash"></i>
-                  </button>
-                </div>
-              </div>
-              {% endfor %}
-            </div>
-            <div class="col-md-4">
-              <div class="cart-total">
-                <h4 class="text-center">Total</h4>
-                <p>subtotal: {{ total_amount }} IDR</p>
-                <h5>Total: {{ total_amount }} IDR</h5>
-                <button class="btn btn-primary btn-lg btn-block">
+                <hr />
+                <h5 class="text-center text-dark fw-bold">
+                  Total: {{ total_amount | rupiah }}
+                </h5>
+                <button
+                  class="btn btn-primary btn-lg btn-block mt-3 w-100"
+                  type="submit"
+                >
                   Proceed to Checkout
                 </button>
               </div>
@@ -92,11 +114,11 @@
           </div>
         </form>
         {% else %}
-        <p>Your cart is empty.</p>
+        <p class="text-center text-muted">Your cart is empty.</p>
         {% endif %}
       </div>
     </div>
-
+    
     <!-- Modal box for removing items -->
     {% for item in cart_items %}
     <div

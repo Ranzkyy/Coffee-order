@@ -635,14 +635,11 @@ def your_order():
         orders=orders,
         active_tab=active_tab
     )
-
 def add_to_cart(user_id, product_id, quantity, topping_id=None, total_price=None):
     cart = db.carts.find_one({"user_id": ObjectId(user_id)})
 
     if not cart:
         cart = {"user_id": ObjectId(user_id), "items": []}
-    else:
-        cart_items = cart["items"]
 
     # Mengambil informasi produk
     product = db.products.find_one({"_id": ObjectId(product_id)})
@@ -657,31 +654,22 @@ def add_to_cart(user_id, product_id, quantity, topping_id=None, total_price=None
     if total_price is None:
         total_price = (product['price'] + topping_price) * quantity  # Total harga dengan topping
 
-    # Cek apakah item sudah ada dalam keranjang
-    item_found = False
-    for item in cart["items"]:
-        if item["product_id"] == ObjectId(product_id):
-            item["quantity"] += quantity
-            item["topping_id"] = topping_id  # Menambahkan topping_id
-            item["total_price"] = total_price  # Update harga total
-            item_found = True
-            break
+    # Menambahkan item baru ke keranjang tanpa memeriksa duplikat
+    cart["items"].append({
+        "product_id": ObjectId(product_id),
+        "quantity": quantity,
+        "topping_id": topping_id,
+        "total_price": total_price,
+        "product_image": product.get('image_filename', ''),
+    })
 
-    if not item_found:
-        cart["items"].append({
-            "product_id": ObjectId(product_id),
-            "quantity": quantity,
-            "topping_id": topping_id,
-            "total_price": total_price,
-            "product_image": product.get('image_filename', ''),
-        })
-
+    # Menyimpan perubahan ke database
     db.carts.update_one(
         {"user_id": ObjectId(user_id)},
         {"$set": {"items": cart["items"]}},
         upsert=True
     )
-    
+
 def get_cart_items(user_id):
     
     try:
@@ -738,7 +726,7 @@ def view_cart():
 
     try:
         cart_items = get_cart_items(user["_id"])
-        total_amount = sum(item['total_price'] for item in cart_items)
+        total_amount = sum((item['total_price'] * item['quantity']) for item in cart_items)
     except Exception as e:
         flash(f"Error loading cart items: {str(e)}", "error")
         cart_items = []
@@ -774,7 +762,7 @@ def add_to_cart_route(product_id):
 
     quantity = int(request.form.get('quantity', 1)) 
     topping_id = request.form.get('topping') 
-    total_price = float(request.form.get('total_price'))  # Ambil harga total dari hidden field
+    total_price = float(request.form.get('total_price'))
 
     user = db.users.find_one({"username": session["username"]})
 
@@ -811,6 +799,8 @@ def delete_from_cart(product_id):
 
     flash("Product removed from cart.", "success")
     return redirect(url_for('view_cart'))
+
+
 
 @app.route('/checkout_selected', methods=['POST'])
 def checkout_selected():
@@ -870,9 +860,9 @@ def checkout():
             product = db.products.find_one({'_id': item['product']['_id']})
             item_name = product['name']
             item_image = product.get('image_filename', '')
-            item_price = item['total_price'] // item['quantity']
+            item_price = item['total_price'] 
             item_quantity = item['quantity']
-            total_price += item['total_price']
+            total_price = item['total_price'] * item['quantity']
 
             message += f" - {item_name} | {item_price} IDR x {item_quantity} items\n"
 
@@ -887,7 +877,7 @@ def checkout():
                 'product_image': item_image,
                 'quantity': item_quantity,
                 'price': item_price,
-                'total_price': item['total_price'],
+                'total_price': total_price,
                 'status': 'pending',
                 'created_at': datetime.now()
             }
