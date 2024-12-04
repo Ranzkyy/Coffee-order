@@ -565,7 +565,7 @@ def show_products():
 @app.route('/product/<product_id>')
 def detail_product(product_id):
     if 'username' not in session:
-        flash("Please log in to view product details.", "error")
+        flash("Silahkan login terlebih dahulu untuk meng-order.", "error")
         return redirect(url_for('login'))
     
     product = db.products.find_one({'_id': ObjectId(product_id)})
@@ -636,29 +636,26 @@ def your_order():
         active_tab=active_tab
     )
 def add_to_cart(user_id, product_id, quantity, topping_id=None, total_price=None):
+    
     cart = db.carts.find_one({"user_id": ObjectId(user_id)})
 
     if not cart:
         cart = {"user_id": ObjectId(user_id), "items": []}
 
-    # Mengambil informasi produk
     product = db.products.find_one({"_id": ObjectId(product_id)})
     if not product:
-        return  # Jika produk tidak ditemukan, proses dihentikan
-
-    # Mengambil informasi topping jika ada
+        return  
     topping = db.toppings.find_one({"_id": ObjectId(topping_id)}) if topping_id else None
-    topping_price = topping['price'] if topping else 0  # Harga topping, jika ada
+    topping_price = topping['price'] if topping else 0  
 
-    # Menghitung total harga dengan topping jika tidak diberikan
     if total_price is None:
-        total_price = (product['price'] + topping_price) * quantity  # Total harga dengan topping
+        total_price = (product['price'] + topping_price) * quantity 
 
-    # Menambahkan item baru ke keranjang tanpa memeriksa duplikat
     cart["items"].append({
+        "item_id": ObjectId(),
         "product_id": ObjectId(product_id),
         "quantity": quantity,
-        "topping_id": topping_id,
+        "topping_id": ObjectId(topping_id) if topping_id else None,
         "total_price": total_price,
         "product_image": product.get('image_filename', ''),
     })
@@ -677,7 +674,6 @@ def get_cart_items(user_id):
     except Exception:
         return []
 
-    # Mengambil item cart
     cart = db.carts.find_one({"user_id": user_id})
     if not cart:
         return []
@@ -685,19 +681,16 @@ def get_cart_items(user_id):
     cart_items = []
     for item in cart.get("items", []):
         try:
-            # Ambil data produk
             product = db.products.find_one({"_id": ObjectId(item["product_id"])})
             
-            # Ambil data topping jika ada
             topping = db.topping.find_one({"_id": ObjectId(item.get("topping_id"))}) if item.get("topping_id") else None
             
-            # Menyusun data topping
             topping_name = topping['name'] if topping else "No Topping"
             topping_price = topping['price'] if topping else 0
 
-            # Pastikan produk ada
             if product:
                 cart_items.append({
+                    "item_id": item["item_id"],
                     "product": product,
                     "quantity": item["quantity"],
                     "total_price": item["total_price"],
@@ -708,7 +701,7 @@ def get_cart_items(user_id):
         except Exception as e:
             print(f"Error fetching product details: {e}")
             continue
-        
+        print(cart_items)
 
     return cart_items
 
@@ -771,8 +764,8 @@ def add_to_cart_route(product_id):
     flash('Product added to cart', 'success')
     return redirect(url_for('view_cart'))
 
-@app.route('/cart/delete/<product_id>', methods=['POST'])
-def delete_from_cart(product_id):
+@app.route('/cart/delete/<item_id>', methods=['POST'])
+def delete_from_cart(item_id):
     if 'username' not in session:
         flash("Please log in to manage your cart.", "error")
         return redirect(url_for('login'))
@@ -787,7 +780,8 @@ def delete_from_cart(product_id):
         flash("Your cart is empty.", "error")
         return redirect(url_for('view_cart'))
 
-    updated_items = [item for item in cart["items"] if str(item["product_id"]) != product_id]
+    # Filter out the item based on item_id
+    updated_items = [item for item in cart["items"] if str(item["item_id"]) != item_id]
     
     if not updated_items:
         db.carts.delete_one({"user_id": ObjectId(user["_id"])})
@@ -797,9 +791,8 @@ def delete_from_cart(product_id):
             {"$set": {"items": updated_items}}
         )
 
-    flash("Product removed from cart.", "success")
+    flash("Item removed from cart.", "success")
     return redirect(url_for('view_cart'))
-
 
 
 @app.route('/checkout_selected', methods=['POST'])

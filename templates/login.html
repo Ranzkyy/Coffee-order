@@ -8,6 +8,39 @@
       href="{{url_for('static', filename='css/login.css')}}"
     />
     <title>Document</title>
+    <style>
+      .flash-messages {
+        margin: 20px 0;
+        padding: 10px;
+      }
+
+      .flash-message {
+        border: 1px solid;
+        border-radius: 5px;
+        padding: 10px 15px;
+        margin-bottom: 10px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+      }
+
+      .flash-message.error {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+      }
+
+      .flash-message.success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+      }
+
+      .flash-message.info {
+        color: #0c5460;
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+      }
+    </style>
   </head>
   <body>
     <div class="login-form">
@@ -20,12 +53,15 @@
             if messages %}
             <div class="flash-messages">
               {% for category, message in messages %}
-              <div class="flash {{ category }}">
-                <p>{{ message }}</p>
+              <div
+                class="flash-message {% if category == 'error' %}error{% elif category == 'success' %}success{% else %}info{% endif %}"
+              >
+                {{ message }}
               </div>
               {% endfor %}
             </div>
             {% endif %} {% endwith %}
+
             <form method="post">
               <input
                 type="text"

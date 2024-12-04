@@ -24,9 +24,8 @@ Details{% endblock %} {% block content %}
                   <div class="mb-3">
                       <label for="topping" class="form-label">Select Topping (Optional)</label>
                       <select class="form-control" name="topping" id="topping">
-                          <option value="">No Topping</option>
                           {% for topping in toppings %}
-                          <option value="{{ topping['_id'] }}" data-price="{{ topping.price }}">{{ topping.name }} - {{ topping.price|rupiah }}</option>
+                          <option value="{{ topping['_id'] }}" data-price="{{ topping.price }}" selected>{{ topping.name }} - {{ topping.price|rupiah }}</option>
                           {% endfor %}
                       </select>
                   </div>

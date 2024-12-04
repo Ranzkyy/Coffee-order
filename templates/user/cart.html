@@ -54,6 +54,7 @@
                     style="height: 75px; width: 75px; object-fit: cover;"
                   />
                   <div class="ms-3">
+
                     <h5 class="mb-1">{{ item.product.name }}</h5>
                     <small class="text-muted">{{ item.product.category }}</small><br />
                     <span>{{ item.product.price | rupiah }}</span>
@@ -146,13 +147,10 @@
             cart?
           </div>
           <div class="modal-footer">
-            <form
-              action="{{ url_for('delete_from_cart', product_id=item.product._id) }}"
-              method="POST"
-              style="display: inline"
-            >
+            <form action="{{ url_for('delete_from_cart', item_id=item.item_id) }}" method="POST" style="display: inline">
               <button type="submit" class="btn btn-danger">Yes, Remove</button>
-            </form>
+          </form>
+          
             <button
               type="button"
               class="btn btn-secondary"
