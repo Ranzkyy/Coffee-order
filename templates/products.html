@@ -1,8 +1,11 @@
 {% extends "layout.html" %} {% block title %}Products{% endblock %} {% block
 content %}
 <style>
-  .product-image {
+  .pricing-tables .item img{
     width: 100%;
+    height: 100%;
+    object-fit:fill;
+    border-radius: 15px;
   }
   @media (max-width: 768px) {
     .product-image {
@@ -11,86 +14,7 @@ content %}
     }
   }
 </style>
-<div class="main-banner" id="top">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="row">
-          <div class="col-lg-6 align-self-center">
-            <div class="owl-carousel owl-banner">
-              <div class="item header-text">
-                <h6>Selamat Datang di Bean to Drinks</h6>
-                <h2>
-                  <em>Rasakan</em> kenikmatan kopi terbaik untuk
-                  <span>setiap momen</span>
-                </h2>
-                <p>
-                  Mulai hari Anda dengan secangkir kopi yang sempurna, diseduh
-                  dengan cinta dan biji kopi pilihan.
-                </p>
-                <div class="down-buttons">
-                  <div class="main-blue-button-hover">
-                    <a href="#menu">Lihat Menu Kami</a>
-                  </div>
-                  <div class="call-button">
-                    <a href="#"><i class="fa fa-phone"></i> 081-234-56789</a>
-                  </div>
-                </div>
-              </div>
-              <div class="item header-text">
-                <h6>Espresso atau Latte?</h6>
-                <h2>
-                  <em>Temukan</em> rasa favorit Anda di
-                  <span>Bean to Drinks</span>
-                </h2>
-                <p>
-                  Dari Americano yang klasik hingga Cappuccino yang creamy, kami
-                  siap memuaskan selera kopi Anda.
-                </p>
-                <div class="down-buttons">
-                  <div class="main-blue-button-hover">
-                    <a href="#about">Tentang Kami</a>
-                  </div>
-                  <div class="call-button">
-                    <a href="#"><i class="fa fa-phone"></i> 081-234-56789</a>
-                  </div>
-                </div>
-              </div>
-              <div class="item header-text">
-                <h6>Coffee On The Go</h6>
-                <h2>
-                  <em>Pesan sekarang</em> dan nikmati kopi
-                  <span>dimanapun</span>
-                </h2>
-                <p>
-                  Kami menyediakan kopi siap saji dengan kualitas terbaik. Klik
-                  dan pesan untuk menikmati kopi Anda sekarang juga!
-                </p>
-                <div class="down-buttons">
-                  <div class="main-blue-button-hover">
-                    <a href="#contact">Hubungi Kami</a>
-                  </div>
-                  <div class="call-button">
-                    <a href="#"><i class="fa fa-phone"></i> 081-234-56789</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <!-- Optional: Tempat untuk gambar kopi -->
-            <img
-              src="{{ url_for('static', filename='assets/images/banner-coffee.jpg') }}"
-              alt="Coffee Banner"
-              class="img-fluid"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="menu" class="pricing-tables section">
+<div id="menu top" class="pricing-tables section">
   <div class="tables-left-dec">
     <img
       src="{{ url_for('static', filename='assets/images/tables-left-dec.png') }}"

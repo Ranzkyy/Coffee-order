@@ -304,6 +304,24 @@ body {
   background-color: #b19b84;
 }
 
+
+.main-blue-button-hover-x a {
+  display: inline-block;
+  background-color: #ff8c00;
+  font-size: 15px;
+  font-weight: 400;
+  color: #fff;
+  text-transform: capitalize;
+  padding: 12px 25px;
+  border-radius: 23px;
+  letter-spacing: 0.25px;
+  transition: all 0.3s;
+}
+
+.main-blue-button-hover-x a:hover {
+  background-color: #e67e22;
+}
+
 .main-red-button a {
   display: inline-block;
   background-color: #b19b84;
@@ -1980,6 +1998,115 @@ footer .copyright p {
 footer .copyright p a {
   color: #b19b84;
 }
+
+
+.profile-container {
+  max-width: 800px;
+  margin: auto;
+  padding-top:5rem;
+}
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px 8px 0 0;
+}
+.profile-header img {
+  border-radius: 50%;
+  max-width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border: 3px solid rgb(59, 59, 59);
+}
+.profile-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #333;
+}
+.profile-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+.profile-body {
+  padding: 20px;
+}
+.profile-actions {
+  margin-bottom: 20px;
+  text-align: right;
+}
+.profile-table th, .profile-table td {
+  padding: 12px 15px;
+  font-size: 1rem;
+}
+.profile-table th {
+  text-align: left;
+  color: #555;
+}
+.profile-table td {
+  color: #333;
+}
+.profile-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.profile-table tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+.profile-table tr:hover {
+  background-color: #f1f1f1;
+}
+.edit-profile-container {
+  max-width: 800px;
+  margin: auto;
+  padding-top: 5rem;
+}
+.edit-profile-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+.edit-profile-header {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px 8px 0 0;
+  text-align: center;
+}
+.edit-profile-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #333;
+}
+.edit-profile-body {
+  padding: 20px;
+}
+.edit-profile-body .form-label {
+  font-weight: bold;
+  color: #555;
+}
+.edit-profile-body .form-control {
+  border-radius: 5px;
+}
+.image-preview-container {
+  display: flex;
+  gap: 20px;
+}
+.image-preview-container div {
+  text-align: center;
+}
+.image-preview-container img {
+  max-width: 120px;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+}
+.edit-profile-actions {
+  text-align: right;
+  margin-top: 20px;
+} 
 
 /* 
 ---------------------------------------------
