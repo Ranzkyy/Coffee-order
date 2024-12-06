@@ -1,35 +1,55 @@
 {% extends 'layout.html' %}
 {% block title %}Edit Profile{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <h1>Edit Profile</h1>
-    <form method="POST" action="{{ url_for('edit_profile') }}" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" id="username" name="username" value="{{ user.username }}" class="form-control" required>
+<style>
+</style>
+
+<div class="container edit-profile-container" style="margin-top:4rem">
+    <div class="edit-profile-card">
+        <div class="edit-profile-header">
+            <h1>Edit Profile</h1>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Profile Picture</label>
-            <div class="d-flex align-items-center">
-                <!-- Gambar Lama -->
-                <div class="me-3 text-center">
-                    <h6>Current Image</h6>
-                    <img src="{{ url_for('static', filename='img/upload/' + user.image) }}" alt="Current Profile Image" id="oldImage" class="img-thumbnail" style="max-width: 150px;">
+        <div class="edit-profile-body">
+            <form method="POST" action="{{ url_for('edit_profile') }}" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" name="username" value="{{ user.username }}" class="form-control" required>
                 </div>
-                <!-- Gambar Baru -->
-                <div class="text-center">
-                    <h6>New Image</h6>
-                    <img id="newImagePreview" class="img-thumbnail" style="max-width: 150px;" alt="New Profile Image Preview">
+                <div class="mb-3">
+                    <label for="full_name" class="form-label">Full Name</label>
+                    <input type="text" id="full_name" name="full_name" value="{{ user.full_name or '' }}" class="form-control" required>
                 </div>
-            </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" name="email" value="{{ user.email or '' }}" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="whatsapp" class="form-label">WhatsApp Number</label>
+                    <input type="text" id="whatsapp" name="whatsapp" value="{{ user.whatsapp or '' }}" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="user_image" class="form-label">Profile Picture</label>
+                    <div class="image-preview-container">
+                        <div>
+                            <h6>Current Image</h6>
+                            <img src="{{ url_for('static', filename='img/upload/' + user.image) }}" alt="Current Profile Image" id="oldImage">
+                        </div>
+                        <div>
+                            <h6>New Image</h6>
+                            <img id="newImagePreview" alt="New Profile Image Preview">
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <input type="file" id="user_image" name="user_image" class="form-control" accept="image/*" onchange="previewNewImage(event)">
+                </div>
+                <div class="edit-profile-actions">
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                    <a href="{{ url_for('profile') }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="user_image" class="form-label">Upload New Image</label>
-            <input type="file" id="user_image" name="user_image" class="form-control" accept="image/*" onchange="previewNewImage(event)">
-        </div>
-        <button type="submit" class="btn btn-success">Save Changes</button>
-        <a href="{{ url_for('profile') }}" class="btn btn-secondary">Cancel</a>
-    </form>
+    </div>
 </div>
 
 <script>

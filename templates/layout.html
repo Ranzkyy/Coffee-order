@@ -83,13 +83,13 @@
                   <a href="{{ url_for('home') }}#services">Layanan</a>
                 </li>
                 <li class="scroll-to-section">
-                  <a href="{{ url_for('about') }}">About</a>
+                  <a href="{{ url_for('about') }}">Tentang Kami</a>
                 </li>
                 <li class="scroll-to-section">
                   <a href="{{ url_for('home') }}#menu">Menu</a>
                 </li>
                 <li class="scroll-to-section">
-                  <a href="{{ url_for('home') }}#contact">Contact Us</a>
+                  <a href="{{ url_for('home') }}#contact">Kontak</a>
                 </li>
                 {% if 'username' not in session %}
                 <li class="scroll-to-section mobile-only">
@@ -106,24 +106,23 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false">
                   <i class="fa fa-gear"></i> 
-                Menu
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li>
                       <a class="dropdown-item" href="{{ url_for('view_cart') }}"
-                        >Cart</a
+                        >Keranjang</a
                       >
                     </li>
                     <li>
                       <a
                         class="dropdown-item"
                         href="{{ url_for('your_order') }}"
-                        >Your Order</a
+                        >Pesanan</a
                       >
                     </li>
                     <li>
                       <a class="dropdown-item" href="{{ url_for('profile') }}"
-                        >Your Profile</a
+                        >Profile</a
                       >
                     </li>
                     <hr class="dropdown-divider" />
@@ -143,7 +142,7 @@
                   </ul>
                 </li>
                 <!-- Logout Button -->
-                <li class="scroll-to-section">
+                <li class="scroll-to-section" style="display: none;">
                   <a href="{{ url_for('logout') }}" class="btn btn-primary "
                     >Logout</a
                   >
@@ -168,7 +167,7 @@
     </header>
     <!-- ***** Header Area End ***** -->
 
-    <main style="margin-top: 7rem">
+    <main style="margin-top: 1rem">
       {% with messages = get_flashed_messages(with_categories=true) %} {% if
       messages %}
       <div

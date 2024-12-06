@@ -1,16 +1,35 @@
 {% extends 'layout.html' %}
 {% block title %}Profile{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <h1>Your Profile</h1>
-    <div class="card">
-        <div class="card-header">
-            <img src="{{ url_for('static', filename='img/upload/' + user.image) }}" alt="User Image" class="img-thumbnail" style="max-width: 150px;">
-            
+<style>
+</style>
+
+<div class="container mt-5 profile-container" style="margin-top:4rem">
+    <div class="profile-card">
+        <div class="profile-header">
+            <img src="{{ url_for('static', filename='img/upload/' + user.image) }}" alt="Profile picture of {{ user.username }}">
+            <h1>{{ user.username }}</h1>
         </div>
-        <div class="card-body">
-            <h4>Nama: {{ user.username }}</h4>
-            <a href="{{ url_for('edit_profile') }}" class="btn btn-primary">Edit Profile</a>
+        <div class="profile-body">
+            <div class="profile-actions">
+                <a href="{{ url_for('edit_profile') }}" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </a>
+            </div>
+            <table class="profile-table">
+                <tr>
+                    <th>Full Name</th>
+                    <td>{{ user.full_name or 'Not provided' }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ user.email or 'Not provided' }}</td>
+                </tr>
+                <tr>
+                    <th>WhatsApp Number</th>
+                    <td>{{ user.whatsapp or 'Not provided' }}</td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>

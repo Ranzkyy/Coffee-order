@@ -913,23 +913,39 @@ def edit_profile():
     user = db.users.find_one({'username': session['username']})
 
     if request.method == 'POST':
+        # Ambil data dari form
         username = request.form.get('username')
+        full_name = request.form.get('full_name')
+        email = request.form.get('email')
+        whatsapp = request.form.get('whatsapp')
         user_image_file = request.files.get('user_image')
 
+        # Update data user di database
+        updates = {}
         if username:
-            db.users.update_one({'_id': user['_id']}, {'$set': {'username': username}})
+            updates['username'] = username
             session['username'] = username
+        if full_name:
+            updates['full_name'] = full_name
+        if email:
+            updates['email'] = email
+        if whatsapp:
+            updates['whatsapp'] = whatsapp
 
         if user_image_file and user_image_file.filename != '':
             image_filename = secure_filename(user_image_file.filename)
             image_path = f'static/img/upload/{image_filename}'
             user_image_file.save(image_path)
-            db.users.update_one({'_id': user['_id']}, {'$set': {'image': image_filename}})
-        
+            updates['image'] = image_filename
+
+        if updates:
+            db.users.update_one({'_id': user['_id']}, {'$set': updates})
+
         flash('Profile updated successfully', 'success')
         return redirect(url_for('profile'))
 
     return render_template('user/edit-profile.html', user=user)
+
 
 @app.route('/upload_payment_proof/<order_id>', methods=['POST'])
 def upload_payment_proof(order_id):

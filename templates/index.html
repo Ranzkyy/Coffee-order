@@ -1,6 +1,31 @@
 {% extends 'layout.html' %} {% block title %}User Dashboard{% endblock %} {%
 block content %}
 
+              
+<style>
+  .styled-textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #9BDBF8;
+    border-radius: 8px;
+    outline: none;
+    resize: vertical; /* Mengizinkan pengguna mengubah ukuran vertikal */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .styled-textarea:focus {
+    border-color: #9BDBF8;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+  }
+
+  .styled-textarea::placeholder {
+    color: #aaa;
+    font-style: italic;
+  }
+</style>
+
 <div class="main-banner" id="top">
   <div class="container">
     <div class="row">
@@ -323,8 +348,8 @@ block content %}
     <!-- Button Lihat Semua Produk -->
     <div class="row">
       <div class="col-lg-12 text-center">
-        <div class="main-blue-button-hover" style="margin-top: 30px">
-          <a href="{{ url_for('show_products') }}">Lihat Semua Produk</a>
+        <div class="main-blue-button-hover-x" style="margin-top: 30px">
+          <a href="{{ url_for('show_products') }}" >Lihat Semua Produk</a>
         </div>
       </div>
     </div>
@@ -349,44 +374,33 @@ block content %}
               allowfullscreen=""
             ></iframe>
           </div>
-          <!-- <div class="info">
-            <span
-              ><i class="fa fa-whatsapp"></i>
-              <a href="#">010-020-0340<br />090-080-0760</a></span
-            >
+          <div class="info mt-4">
             <span
               ><i class="fa fa-envelope"></i>
               <a href="#">info@company.com<br />mail@company.com</a></span
             >
             <span
-              ><i class="fa fa-instagram"></i>
+              ><i class="fa-brands fa-instagram"></i>
               <a href="#">@bean_to_drinks<br />@bean_to_drinks</a></span
             >
-          </div> -->
+          </div>
         </div>
       </div>
       <div class="col-lg-5 align-self-center">
-        <form id="contact" action="" method="get">
+        <form
+          id="contact"
+          action="https://wa.me/6281234567890"
+          method="get"
+          onsubmit="return sendToWhatsApp()"
+        >
           <div class="row">
             <div class="col-lg-12">
               <fieldset>
                 <input
-                  type="name"
+                  type="text"
                   name="name"
                   id="name"
-                  placeholder="Name"
-                  autocomplete="on"
-                  required
-                />
-              </fieldset>
-            </div>
-            <div class="col-lg-12">
-              <fieldset>
-                <input
-                  type="surname"
-                  name="surname"
-                  id="surname"
-                  placeholder="Surname"
+                  placeholder="Nama Anda"
                   autocomplete="on"
                   required
                 />
@@ -399,26 +413,27 @@ block content %}
                   name="email"
                   id="email"
                   pattern="[^ @]*@[^ @]*"
-                  placeholder="Your Email"
+                  placeholder="Email Anda"
                   required=""
                 />
               </fieldset>
             </div>
             <div class="col-lg-12">
               <fieldset>
-                <input
-                  type="text"
-                  name="website"
-                  id="website"
-                  placeholder="Your Website URL"
-                  required=""
-                />
+                <textarea
+                  name="message"
+                  id="message"
+                  placeholder="Pesan Anda"
+                  rows="4"
+                  required
+                  class="styled-textarea"
+                ></textarea>
               </fieldset>
             </div>
             <div class="col-lg-12">
               <fieldset>
                 <button type="submit" id="form-submit" class="main-button">
-                  Submit Request
+                  Kirim Pesan via WhatsApp
                 </button>
               </fieldset>
             </div>
@@ -427,19 +442,24 @@ block content %}
       </div>
     </div>
   </div>
-  <div class="contact-dec">
-    <img
-      src="{{ url_for('static', filename='assets/images/contact-dec.png') }}"
-      alt=""
-    />
-  </div>
-  <div class="contact-left-dec">
-    <img
-      src="{{ url_for('static', filename='assets/images/contact-left-dec.png') }}"
-      alt=""
-    />
-  </div>
 </div>
+
+<script>
+  function sendToWhatsApp() {
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const message = document.getElementById("message").value;
+
+    const phoneNumber = "6285155452451"; 
+    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+      `Halo, saya ${name}. Berikut adalah pesan saya:\n\n${message}\n\nEmail: ${email}`
+    )}`;
+
+    window.open(whatsappURL, "_blank");
+    return false; 
+  }
+</script>
+
 <div class="footer-dec">
   <img src="assets/images/footer-dec.png" alt="" />
 </div>
