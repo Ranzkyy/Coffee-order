@@ -12,16 +12,15 @@ from flask import (
     jsonify,
 )
 
-from flask import get_flashed_messages
-from pymongo import MongoClient
-from werkzeug.utils import secure_filename
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import get_flashed_messages #flash message untuk alert
+from pymongo import MongoClient #mengambil database mongodb
+from werkzeug.utils import secure_filename #mengamangkan nama file
+from werkzeug.security import generate_password_hash, check_password_hash #mengamankan password dengan cara hash
 import requests
-from datetime import datetime
-from bson import ObjectId
+from datetime import datetime #datetime untuk created at
+from bson import ObjectId #mengambil id
 import urllib.parse
-import urllib
-
+import urllib #mengambil url
 
 # Load environment variables
 dotenv_path = join(dirname(__file__), '.env')
@@ -600,9 +599,45 @@ def order(product_id):
 
     return render_template('product_details.html', product=product)
 
-
 @app.route('/order')
 def your_order():
+    if 'username' not in session:
+        flash("Please log in to view your orders.", "error")
+        return redirect(url_for('login'))
+
+    user = db.users.find_one({"username": session["username"]})
+    if not user:
+        flash("User not found. Please log in again.", "error")
+        return redirect(url_for('logout'))
+
+    try:
+        cart_items = get_cart_items(user["_id"])
+        total_amount = sum(item['total_price'] for item in cart_items)
+    except Exception as e:
+        flash(f"Error loading cart items: {str(e)}", "error")
+        cart_items = []
+        total_amount = 0
+
+    try:
+        orders = list(db.orders.find({"user_id": user["_id"]}).sort("date", -1))
+        if not orders:
+            flash("You have no orders yet.", "info")
+    except Exception as e:
+        flash(f"Error fetching orders: {str(e)}", "error")
+        orders = []
+
+    active_tab = request.args.get('active_tab', 'pending')
+
+    return render_template(
+        'user/order.html',
+        cart_items=cart_items,
+        total_amount=total_amount,
+        orders=orders,
+        active_tab=active_tab
+    )
+
+
+
     if 'username' not in session:
         flash("Please log in to view your cart.", "error")
         return redirect(url_for('login'))
