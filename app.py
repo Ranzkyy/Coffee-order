@@ -914,10 +914,12 @@ def checkout():
 
         db.carts.delete_one({"user_id": ObjectId(user["_id"])})
 
-        if payment_method == "QRIS":
-            return redirect(url_for('payment_instructions', method='QRIS'))
+        if payment_method == "Gopay":
+            return redirect(url_for('payment_instructions', method='Gopay'))
         elif payment_method == "BCA":
             return redirect(url_for('payment_instructions', method='BCA'))
+        elif payment_method == "Dana":
+            return redirect(url_for('payment_instructions', method='Dana'))
 
     total_price = sum(item['total_price'] for item in cart_items)
     return render_template('user/checkout.html', cart_items=cart_items, total_price=total_price, user=user)

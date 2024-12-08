@@ -3,22 +3,61 @@
 {% block title %}Payment Instructions{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<style>
+    .payment-img {
+        max-width: 19rem;
+        max-height: 19rem;
+        display: block;
+        margin: 1.5rem auto; /* Centers the image and adds vertical spacing */
+        border-radius: 0.5rem; /* Adds rounded corners */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    }
+
+    .card-header {
+        background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+        color: white;
+    }
+
+    .card-body h5 {
+        font-weight: bold;
+        color: #333;
+        text-align: center; /* Center-align the text */
+    }
+
+    .card-body p {
+        font-size: 0.9rem;
+        text-align: justify;
+        margin-top: 1rem;
+    }
+
+    a {
+        color: #2575fc;
+        text-decoration: underline;
+    }
+
+    a:hover {
+        color: #6a11cb;
+    }
+</style>
+
+<div class="container" style="margin-top: 8rem;">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0">Payment Instructions</h3>
+                <div class="card-header">
+                    <h3 class="mb-0 text-center">Payment Instructions</h3>
                 </div>
                 <div class="card-body">
-                    {% if method == 'QRIS' %}
-                    <h5>Silakan lakukan pembayaran menggunakan QRIS:</h5>
-                    <img src="https://i.pinimg.com/736x/57/cc/4d/57cc4d615eb4a26fbd1328087c644a8e.jpg" alt="QRIS" class="img-fluid">
-                    {% elif method == 'BCA' %}
-                    <h5>Silakan lakukan pembayaran ke nomor rekening BCA:</h5>
-                    <p>Nomor Rekening: 1234567890</p>
+                    {% if method == 'BCA' %}
+                    <h5>Silakan Transfer ke <br><u><b>1370322275</b></u> <br>BCA Erifan Permana</h5>
+                    {% elif method == 'Gopay' %}
+                    <h5>Silakan lakukan pembayaran ke Gopay:</h5>
+                    <img src="{{ url_for('static', filename='assets/images/gopay.jpeg') }}" alt="Gopay QR Code" class="img-fluid payment-img">
+                    {% elif method == 'Dana' %}
+                    <h5>Silakan lakukan pembayaran ke Dana:</h5>
+                    <img src="{{ url_for('static', filename='assets/images/dana.jpeg') }}" alt="Dana QR Code" class="img-fluid payment-img">
                     {% endif %}
-                    <p class="mt-3">Setelah melakukan pembayaran, jangan lupa screenshot bukti pembayaran dan lampirkan di halaman <a href="{{ url_for('your_order') }}">order history</a>.</p>
+                    <p>Setelah melakukan pembayaran, jangan lupa screenshot bukti pembayaran dan lampirkan di halaman <a href="{{ url_for('your_order') }}">order history</a>.</p>
                 </div>
             </div>
         </div>
