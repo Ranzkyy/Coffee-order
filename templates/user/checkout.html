@@ -25,17 +25,9 @@
                             <label for="payment_method" class="form-label">Metode Pembayaran</label>
                             <select name="paymentMethod" id="paymentMethod" class="form-select" required>
                                 <option value="BCA">Bank BCA</option>
-                                <option value="QRIS">QRIS</option>
+                                <option value="Gopay">Gopay</option>
+                                <option value="Dana">Dana</option>
                             </select>
-                        </div>
-                        <div class="mb-3" id="paymentDetails" style="display:none;">
-                            <p><strong>Instruksi Pembayaran:</strong></p>
-                            <div id="qrisImage" style="display:none;">
-                                <img src="path/to/your/qris-image.png" alt="QRIS" class="img-fluid">
-                            </div>
-                            <div id="bcaDetails" style="display:none;">
-                                <p>Nomor Rekening BCA: 1234567890</p>
-                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="address" class="form-label">Alamat</label>
@@ -55,25 +47,4 @@
     </div>
 </div>
 
-<script>
-    // Menampilkan detail pembayaran berdasarkan pilihan metode pembayaran
-    document.getElementById('paymentMethod').addEventListener('change', function() {
-        const paymentMethod = this.value;
-        const paymentDetails = document.getElementById('paymentDetails');
-        const qrisImage = document.getElementById('qrisImage');
-        const bcaDetails = document.getElementById('bcaDetails');
-
-        if (paymentMethod === 'QRIS') {
-            paymentDetails.style.display = 'block';
-            qrisImage.style.display = 'block';
-            bcaDetails.style.display = 'none';
-        } else if (paymentMethod === 'BCA') {
-            paymentDetails.style.display = 'block';
-            qrisImage.style.display = 'none';
-            bcaDetails.style.display = 'block';
-        } else {
-            paymentDetails.style.display = 'none';
-        }
-    });
-</script>
 {% endblock %}
