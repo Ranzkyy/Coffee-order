@@ -1,122 +1,118 @@
-{% extends 'layout.html' %}
-
-{% block title %}User Dashboard{% endblock %}
-
-{% block content %}
+{% extends 'layout.html' %} {% block title %}User Dashboard{% endblock %} {%
+block content %}
 
 <div id="about" class="about-us section">
   <div class="container">
-      <div class="row">
-          <div class="col-lg-6 align-self-center">
-              <div class="left-image">
-                  <img src="{{ url_for('static', filename='assets/images/tentang-kiri.png') }}" alt="Tentang Kami" style="width: 100%;">
-              </div>
-          </div>
-          <div class="col-lg-6">
-              <div class="section-heading">
-                  <h2>Tentang <em>Bean to Drinks</em> &amp; <span>Coffee Experience</span></h2>
-                  <p>Di Bean to Drinks, kami percaya bahwa secangkir kopi yang baik dapat menciptakan momen spesial. Kami menggunakan biji kopi terbaik, diproses dengan penuh perhatian, untuk memberikan rasa yang otentik dan memuaskan.</p>
-                  <div class="row">
-                      <div class="col-lg-4">
-                          <div class="fact-item">
-                              <div class="count-area-content">
-                                  <div class="icon">
-                                      <img src="assets/images/service-icon-01.png" alt="">
-                                  </div>
-                                  <div class="count-digit">500+</div>
-                                  <div class="count-title">Cangkir Kopi</div>
-                                  <p>Disajikan setiap hari di berbagai lokasi.</p>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="col-lg-4">
-                          <div class="fact-item">
-                              <div class="count-area-content">
-                                  <div class="icon">
-                                      <img src="assets/images/service-icon-02.png" alt="">
-                                  </div>
-                                  <div class="count-digit">20+</div>
-                                  <div class="count-title">Varian Menu</div>
-                                  <p>Dari Espresso klasik hingga Latte favorit Anda.</p>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="col-lg-4">
-                          <div class="fact-item">
-                              <div class="count-area-content">
-                                  <div class="icon">
-                                      <img src="assets/images/service-icon-03.png" alt="">
-                                  </div>
-                                  <div class="count-digit">100%</div>
-                                  <div class="count-title">Kopi Premium</div>
-                                  <p>Dari biji kopi pilihan lokal terbaik.</p>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
+    <div class="row">
+      <div class="col-lg-6 align-self-center">
+        <div class="left-image">
+          <img
+            src="{{ url_for('static', filename='assets/images/tentang-kiri.png') }}"
+            alt="Tentang Kami"
+            style="width: 100%"
+          />
+        </div>
       </div>
+      <div class="col-lg-6">
+        <div class="section-heading">
+          <h2>
+            Tentang <em>Bean to Drinks</em> &amp; <span>Coffee Experience</span>
+          </h2>
+          <p>
+            Di Bean to Drinks, kami percaya bahwa secangkir kopi yang baik dapat
+            menciptakan momen spesial. Kami menggunakan biji kopi terbaik,
+            diproses dengan penuh perhatian, untuk memberikan rasa yang otentik
+            dan memuaskan.
+          </p>
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="fact-item">
+                <div class="count-area-content">
+                  <div class="icon">
+                    <img src="assets/images/service-icon-01.png" alt="" />
+                  </div>
+                  <div class="count-digit">500+</div>
+                  <div class="count-title">Cangkir Kopi</div>
+                  <p>Disajikan setiap hari di berbagai lokasi.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="fact-item">
+                <div class="count-area-content">
+                  <div class="icon">
+                    <img src="assets/images/service-icon-02.png" alt="" />
+                  </div>
+                  <div class="count-digit">20+</div>
+                  <div class="count-title">Varian Menu</div>
+                  <p>Dari Espresso klasik hingga Latte favorit Anda.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="fact-item">
+                <div class="count-area-content">
+                  <div class="icon">
+                    <img src="assets/images/service-icon-03.png" alt="" />
+                  </div>
+                  <div class="count-digit">100%</div>
+                  <div class="count-title">Kopi Premium</div>
+                  <p>Dari biji kopi pilihan lokal terbaik.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <section id="logo" class="logo section">
-    <div class="container">
-      <h2 class="section-title text-center mb-4">Logo</h2>
-      <div class="row align-items-center">
-        <div class="col-md-6">
-          <img
-            src="{{ url_for('static', filename='img/logo.png') }}"
-            alt="Coffee Background"
-            class="img-fluid rounded"
-          />
-        </div>
-        <div class="col-md-6">
-          <h3 class="sub-title">Filosofi Logo</h3>
-          <h5>Daun dan Biji Kopi:</h5>
-          <p>
-            Menggambarkan item atau produk inti yang diolah menjadi minuman.
-          </p>
-          <h5>Cup dan Sedotan:</h5>
-          <p>
-            Menggambarkan minuman dijual dengan dingin.
-          </p>
-          <h5>No 81:</h5>
-          <p>
-            Menggambarkan nomor rumah.
-          </p>
-        </div>
+  <div class="container">
+    <h2 class="section-title text-center mb-4">Logo</h2>
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <img
+          src="{{ url_for('static', filename='img/logo.png') }}"
+          alt="Coffee Background"
+          class="img-fluid rounded"
+        />
+      </div>
+      <div class="col-md-6">
+        <h3 class="sub-title">Filosofi Logo</h3>
+        <h5>Daun dan Biji Kopi:</h5>
+        <p>Menggambarkan item atau produk inti yang diolah menjadi minuman.</p>
+        <h5>Cup dan Sedotan:</h5>
+        <p>Menggambarkan minuman dijual dengan dingin.</p>
+        <h5>No 81:</h5>
+        <p>Menggambarkan nomor rumah.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="about" class="about-section py-5 mt-5">
-    <div class="container">
-      <h2 class="section-title text-center mb-4">Pemilik</h2>
-      <div class="row align-items-center">
-        <div class="col-md-6">
-          <img
-            src="https://www.nestle.com/sites/default/files/2023-09/coffee-farming-feed.jpg"
-            alt="Coffee Background"
-            class="img-fluid rounded"
-          />
-        </div>
-        <div class="col-md-6">
-          <h3 class="sub-title">Filosofi Logo</h3>
-          <h5>Daun dan Biji Kopi:</h5>
-          <p>
-            Menggambarkan item atau produk inti yang diolah menjadi minuman.
-          </p>
-          <h5>Cup dan Sedotan:</h5>
-          <p>
-            Menggambarkan minuman dijual dengan dingin.
-          </p>
-          <h5>No 81:</h5>
-          <p>
-            Menggambarkan nomor rumah.
-          </p>
-        </div>
+<section id="about" class="about-section py-5 mt-5">
+  <div class="container">
+    <h2 class="section-title text-center mb-4">Pemilik</h2>
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <img
+          src="https://www.nestle.com/sites/default/files/2023-09/coffee-farming-feed.jpg"
+          alt="Coffee Background"
+          class="img-fluid rounded"
+        />
+      </div>
+      <div class="col-md-6">
+        <h3 class="sub-title">Filosofi Logo</h3>
+        <h5>Daun dan Biji Kopi:</h5>
+        <p>Menggambarkan item atau produk inti yang diolah menjadi minuman.</p>
+        <h5>Cup dan Sedotan:</h5>
+        <p>Menggambarkan minuman dijual dengan dingin.</p>
+        <h5>No 81:</h5>
+        <p>Menggambarkan nomor rumah.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 {% endblock %}
