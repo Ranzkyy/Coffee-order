@@ -11,52 +11,6 @@
     <h2>Your Orders</h2>
     {% if orders %}
 
-    <!-- Modal box for removing items -->
-    {% for item in cart_items %}
-    <div
-      class="modal fade"
-      id="removeModal{{ item.product._id }}"
-      tabindex="-1"
-      aria-labelledby="removeModalLabel{{ item.product._id }}"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="removeModalLabel{{ item.product._id }}">
-              Confirm Removal
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            Are you sure you want to remove "{{ item.product.name }}" from your
-            cart?
-          </div>
-          <div class="modal-footer">
-            <form
-              action="{{ url_for('delete_from_cart', product_id=item.product._id) }}"
-              method="POST"
-              style="display: inline"
-            >
-              <button type="submit" class="btn btn-danger">Yes, Remove</button>
-            </form>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endfor %}
     <!-- Order Status Tabs -->
     <ul class="nav nav-tabs" id="orderStatusTabs" role="tablist">
       <li class="nav-item" role="presentation">
