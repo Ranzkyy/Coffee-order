@@ -117,7 +117,7 @@ block content %}
             Kami <em>Menyediakan</em> Kopi Terbaik dengan
             <span>Pelayanan Unggul</span>
           </h2>
-          <span style="color:black">Layanan Kami</span>
+          <span style="color: black">Layanan Kami</span>
         </div>
       </div>
     </div>
@@ -354,7 +354,7 @@ block content %}
           <img
             src="{{ url_for('static', filename='img/upload/' + product.image_filename) }}"
             alt="Latte"
-            style="width: 100%; margin-bottom: 15px; border-radius: 15px;"
+            style="width: 100%; margin-bottom: 15px; border-radius: 15px"
           />
           <h4>{{ product.name }}</h4>
           <ul>
@@ -395,13 +395,13 @@ block content %}
           </h2>
           <div id="map">
             <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15846.477711847498!2d107.61918366783777!3d-6.816057043147879!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e0ee675ff88f%3A0xd19446ae5feee9d7!2sJl.%20Sukamaju%20Timur%20No.81%2C%20Kayuambon%2C%20Kec.%20Lembang%2C%20Kabupaten%20Bandung%20Barat%2C%20Jawa%20Barat%2040391!5e0!3m2!1sid!2sid!4v1733669575227!5m2!1sid!2sid"
-            width="100%"
-            height="360px"
-            frameborder="0"
-            style="border: 0"
-            allowfullscreen=""
-           ></iframe>
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15846.477711847498!2d107.61918366783777!3d-6.816057043147879!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e0ee675ff88f%3A0xd19446ae5feee9d7!2sJl.%20Sukamaju%20Timur%20No.81%2C%20Kayuambon%2C%20Kec.%20Lembang%2C%20Kabupaten%20Bandung%20Barat%2C%20Jawa%20Barat%2040391!5e0!3m2!1sid!2sid!4v1733669575227!5m2!1sid!2sid"
+              width="100%"
+              height="360px"
+              frameborder="0"
+              style="border: 0"
+              allowfullscreen=""
+            ></iframe>
           </div>
           <div class="info mt-4">
             <span
@@ -410,7 +410,11 @@ block content %}
             >
             <span
               ><i class="fa-brands fa-instagram"></i>
-              <a href="https://www.instagram.com/bean_to.drinks/" target="_blank">@bean_to_drinks<br />@bean_to_drinks</a></span
+              <a
+                href="https://www.instagram.com/bean_to.drinks/"
+                target="_blank"
+                >@bean_to_drinks<br />@bean_to_drinks</a
+              ></span
             >
           </div>
         </div>
@@ -488,9 +492,5 @@ block content %}
     return false;
   }
 </script>
-
-<div class="footer-dec">
-  <img src="assets/images/footer-dec.png" alt="" />
-</div>
 
 {% endblock %}
