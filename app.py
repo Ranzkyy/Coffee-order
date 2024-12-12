@@ -906,6 +906,7 @@ def checkout():
                 'quantity': item_quantity,
                 'price': item_price,
                 'total_price': total_price,
+                'topping_name': item['topping_name'],
                 'status': 'pending',
                 'created_at': datetime.now()
             }
