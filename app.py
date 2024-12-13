@@ -636,40 +636,7 @@ def your_order():
         active_tab=active_tab
     )
 
-
-
-    if 'username' not in session:
-        flash("Please log in to view your cart.", "error")
-        return redirect(url_for('login'))
-
-    user = db.users.find_one({"username": session["username"]})
-    if not user:
-        flash("User not found. Please log in again.", "error")
-        return redirect(url_for('logout'))
-
-    try:
-        cart_items = get_cart_items(user["_id"])
-        total_amount = sum(item['total_price'] for item in cart_items)
-    except Exception as e:
-        flash(f"Error loading cart items: {str(e)}", "error")
-        cart_items = []
-        total_amount = 0
-
-    try:
-        orders = list(db.orders.find({"user_id": user["_id"]}).sort("date", -1))
-    except Exception as e:
-        flash(f"Error fetching orders: {str(e)}", "error")
-        orders = []
-
-    active_tab = request.args.get('active_tab', 'pending')
-
-    return render_template(
-        'user/order.html',
-        cart_items=cart_items,
-        total_amount=total_amount,
-        orders=orders,
-        active_tab=active_tab
-    )
+    
 def add_to_cart(user_id, product_id, quantity, topping_id=None, total_price=None):
     
     cart = db.carts.find_one({"user_id": ObjectId(user_id)})
@@ -928,6 +895,26 @@ def checkout():
 @app.route('/payment-instructions/<method>')
 def payment_instructions(method):
     return render_template('user/payment-instructions.html', method=method)
+
+from flask import request, redirect, url_for, flash
+
+@app.route('/sudah_sampai/<order_id>', methods=['POST'])
+def sudah_sampai(order_id):
+    new_status = request.form.get('status')
+    if new_status:
+        order = db.orders.find_one({"_id": ObjectId(order_id)})
+        if order:
+            db.orders.update_one(
+                {"_id": ObjectId(order_id)},
+                {"$set": {"status": new_status}}
+            )
+            flash("Order status updated successfully!", "success")
+        else:
+            flash("Order not found.", "error")
+    else:
+        flash("Invalid status update request.", "error")
+    return redirect(url_for('your_order'))
+
 
 @app.route('/profile')
 def profile():

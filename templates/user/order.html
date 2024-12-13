@@ -172,43 +172,50 @@
 
       <!-- Proceed Orders -->
       <div
-        class="tab-pane fade {% if active_tab == 'proceed' %}show active{% endif %}"
-        id="proceed"
-        role="tabpanel"
-        aria-labelledby="proceed-tab"
-      >
-        {% for order in orders if order.status == 'proceed' %}
-        <div class="card mb-3">
-          <div class="card-header">
-            <h5>{{ order.product_name }}</h5>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-2">
-                <img
-                  src="{{ url_for('static', filename='img/upload/' + (order.product_image or 'default.jpg')) }}"
-                  alt="{{ order.product_name or 'No image available' }}"
-                  class="img-thumbnail"
-                  style="max-width: 150px"
-                />
-              </div>
-              <div class="col-md-10">
-                <p>
-                  <strong>Jumlah:</strong> {{ order.quantity }}<br />
-                  <strong>Harga:</strong> {{ order.price }} IDR <br />
-
-                  <strong>Tanggal:</strong> {{ order.created_at.strftime('%A,
-                  %d-%m-%Y') }}<br />
-                  <strong>Total Harga:</strong> {{ order.total_price }} IDR
-                </p>
-              </div>
+      class="tab-pane fade {% if active_tab == 'proceed' %}show active{% endif %}"
+      id="proceed"
+      role="tabpanel"
+      aria-labelledby="proceed-tab"
+    >
+      {% for order in orders if order.status == 'proceed' %}
+      <div class="card mb-3">
+        <div class="card-header">
+          <h5>{{ order.product_name }}</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-2">
+              <img
+                src="{{ url_for('static', filename='img/upload/' + (order.product_image or 'default.jpg')) }}"
+                alt="{{ order.product_name or 'No image available' }}"
+                class="img-thumbnail"
+                style="max-width: 150px"
+              />
+            </div>
+            <div class="col-md-10">
+              <p>
+                <strong>Jumlah:</strong> {{ order.quantity }}<br />
+                <strong>Harga:</strong> {{ order.price }} IDR <br />
+                <strong>Tanggal:</strong> {{ order.created_at.strftime('%A, %d-%m-%Y') }}<br />
+                <strong>Total Harga:</strong> {{ order.total_price }} IDR
+              </p>
+              <!-- Tombol untuk mengubah status -->
+              <form
+                action="{{ url_for('sudah_sampai', order_id=order._id) }}"
+                method="POST"
+              >
+                <input type="hidden" name="status" value="done" />
+                <button type="submit" class="btn btn-success">Product telah sampai</button>
+              </form>
             </div>
           </div>
         </div>
-        {% else %}
-        <p>No orders in progress.</p>
-        {% endfor %}
       </div>
+      {% else %}
+      <p>No orders in progress.</p>
+      {% endfor %}
+    </div>
+    
 
       <!-- Done Orders -->
       <div
