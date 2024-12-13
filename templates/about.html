@@ -59,10 +59,9 @@
       </div>
   </div>
 </div>
-
-<section id="logo" class="logo section">
+<div class="container"><hr></div>
+<section id="logo" class="logo section my-5">
     <div class="container">
-      <h2 class="section-title text-center mb-4">Logo</h2>
       <div class="row align-items-center">
         <div class="col-md-6">
           <img
@@ -72,19 +71,29 @@
           />
         </div>
         <div class="col-md-6">
-          <h3 class="sub-title">Filosofi Logo</h3>
-          <h5>Daun dan Biji Kopi:</h5>
-          <p>
-            Menggambarkan item atau produk inti yang diolah menjadi minuman.
-          </p>
-          <h5>Cup dan Sedotan:</h5>
-          <p>
-            Menggambarkan minuman dijual dengan dingin.
-          </p>
-          <h5>No 81:</h5>
-          <p>
-            Menggambarkan nomor rumah.
-          </p>
+          <div class="section-heading">
+            <h2> Filosofi <em> Logo</em></h2>
+            <table class="table table-borderless">
+              <tbody>
+                <tr>
+                  <td><b>Daun dan Biji Kopi</b></td>
+                  <td>:</td>
+                  <td>Menggambarkan item atau produk inti yang diolah menjadi minuman.</td>
+                </tr>
+                <tr>
+                  <td><b>Cup dan Sedotan</b></td>
+                  <td>:</td>
+                  <td>Menggambarkan minuman dijual dengan dingin.</td>
+                </tr>
+                <tr>
+                  <td><b>No 81</b></td>
+                  <td>:</td>
+                  <td>Menggambarkan nomor rumah.</td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+        </div>
         </div>
       </div>
     </div>
@@ -92,31 +101,25 @@
 
   <section id="about" class="about-section py-5 mt-5">
     <div class="container">
-      <h2 class="section-title text-center mb-4">Pemilik</h2>
       <div class="row align-items-center">
-        <div class="col-md-6">
+        <div class="col-md-6 d-flex justify-content-center">
           <img
-            src="https://www.nestle.com/sites/default/files/2023-09/coffee-farming-feed.jpg"
+            src="{{ url_for('static', filename='assets/images/ipan.jpg') }}"
             alt="Coffee Background"
-            class="img-fluid rounded"
+            class="img-fluid rounded-circle"
+            style="width: 350px; height: 350px; object-fit: cover; object-position: center;"
           />
         </div>
         <div class="col-md-6">
-          <h3 class="sub-title">Filosofi Logo</h3>
-          <h5>Daun dan Biji Kopi:</h5>
-          <p>
-            Menggambarkan item atau produk inti yang diolah menjadi minuman.
-          </p>
-          <h5>Cup dan Sedotan:</h5>
-          <p>
-            Menggambarkan minuman dijual dengan dingin.
-          </p>
-          <h5>No 81:</h5>
-          <p>
-            Menggambarkan nomor rumah.
-          </p>
+          <div class="section-heading">
+            <h2> Awal mula terbentuknya <em> Bean to Drinks </em></h2>
+            <p>Awalnya saya seorang waiter di hotel,setelah lama di waiter saya naik ke bar/barista yang membuat minuman di hotel disini saya banyak belajar tentang kopi dan minuman lainnya. Selain menjadi barista saya hobi juga nongkrong di cafe cafe dan suka membeli kopi di ritail luar,lama kelamaan saya berfikir kalo saya bikin kopi sendiri untuk dijual sepertinya worth it,dari sini saya mencoba membeli beberapa alat penunjang untuk membuat kopi dari mulai mesin hingga alat alat kecil lainnya setelah alat nya terkumpul saya meracik beberapa kopi lalu saya membuat food cost atau perhitungan harganya kemudian saya cocokan dengan market saya,setelah harganya sudah ada saya membuat beberapa menu menarik,menambah target pasar,dan membuat beberapa promo yang berjalan sampai sekarang.
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </section>
+  </section>  
+
+  
 {% endblock %}
