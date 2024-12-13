@@ -1,13 +1,12 @@
 {% extends 'layout.html' %} {% block title %}User Dashboard{% endblock %} {%
 block content %}
 
-              
 <style>
   .styled-textarea {
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #9BDBF8;
+    border: 1px solid #9bdbf8;
     border-radius: 8px;
     outline: none;
     resize: vertical; /* Mengizinkan pengguna mengubah ukuran vertikal */
@@ -16,7 +15,7 @@ block content %}
   }
 
   .styled-textarea:focus {
-    border-color: #9BDBF8;
+    border-color: #9bdbf8;
     box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
   }
 
@@ -118,7 +117,7 @@ block content %}
             Kami <em>Menyediakan</em> Kopi Terbaik dengan
             <span>Pelayanan Unggul</span>
           </h2>
-          <span style="color:black">Layanan Kami</span>
+          <span style="color: black">Layanan Kami</span>
         </div>
       </div>
     </div>
@@ -128,7 +127,10 @@ block content %}
           <div class="item">
             <h4>Pemesanan Online</h4>
             <div class="icon">
-              <img src="{{ url_for('static', filename='assets/images/service-icon-01.png') }}" alt="" />
+              <img
+                src="{{ url_for('static', filename='assets/images/service-icon-01.png') }}"
+                alt=""
+              />
             </div>
             <p>
               Pesan kopi favorit Anda kapan saja, dimana saja melalui website
@@ -138,7 +140,10 @@ block content %}
           <div class="item">
             <h4>Kopi Siap Antar</h4>
             <div class="icon">
-              <img src="{{ url_for('static', filename='assets/images/service-icon-02.png') }}" alt="" />
+              <img
+                src="{{ url_for('static', filename='assets/images/service-icon-02.png') }}"
+                alt=""
+              />
             </div>
             <p>
               Pengantaran cepat untuk memastikan kopi Anda tetap segar dan
@@ -148,7 +153,10 @@ block content %}
           <div class="item">
             <h4>Biji Kopi Pilihan</h4>
             <div class="icon">
-              <img src="{{ url_for('static', filename='assets/images/service-icon-03.png') }}" alt="" />
+              <img
+                src="{{ url_for('static', filename='assets/images/service-icon-03.png') }}"
+                alt=""
+              />
             </div>
             <p>
               Kami hanya menggunakan biji kopi berkualitas tinggi dari petani
@@ -158,7 +166,10 @@ block content %}
           <div class="item">
             <h4>Custom Kopi</h4>
             <div class="icon">
-              <img src="{{ url_for('static', filename='assets/images/service-icon-04.png') }}" alt="" />
+              <img
+                src="{{ url_for('static', filename='assets/images/service-icon-04.png') }}"
+                alt=""
+              />
             </div>
             <p>
               Buat kopi sesuai selera Anda dengan pilihan tingkat kepekatan dan
@@ -168,7 +179,10 @@ block content %}
           <div class="item">
             <h4>Paket Langganan</h4>
             <div class="icon">
-              <img src="{{ url_for('static', filename='assets/images/service-icon-02.png') }}" alt="" />
+              <img
+                src="{{ url_for('static', filename='assets/images/service-icon-02.png') }}"
+                alt=""
+              />
             </div>
             <p>
               Nikmati diskon khusus untuk pelanggan setia dengan langganan
@@ -178,17 +192,23 @@ block content %}
           <div class="item">
             <h4>Workshop Kopi</h4>
             <div class="icon">
-              <img src="{{ url_for('static', filename='assets/images/service-icon-03.png')}}" alt="" />
+              <img
+                src="{{ url_for('static', filename='assets/images/service-icon-03.png')}}"
+                alt=""
+              />
             </div>
             <p>
-              Ikuti kelas membuat kopi untuk memahami seni brewing, mewing dan menyeduh
-              kopi.
+              Ikuti kelas membuat kopi untuk memahami seni brewing, mewing dan
+              menyeduh kopi.
             </p>
           </div>
           <div class="item">
             <h4>Biji Kopi Pilihan</h4>
             <div class="icon">
-              <img src="{{ url_for('static', filename='assets/images/service-icon-03.png')}}" alt="" />
+              <img
+                src="{{ url_for('static', filename='assets/images/service-icon-03.png')}}"
+                alt=""
+              />
             </div>
             <p>
               Kami hanya menggunakan biji kopi berkualitas tinggi dari petani
@@ -198,7 +218,10 @@ block content %}
           <div class="item">
             <h4>Custom Kopi</h4>
             <div class="icon">
-              <img src="{{ url_for('static', filename='assets/images/service-icon-04.png') }}" alt="" />
+              <img
+                src="{{ url_for('static', filename='assets/images/service-icon-04.png') }}"
+                alt=""
+              />
             </div>
             <p>
               Buat kopi sesuai selera Anda dengan pilihan tingkat kepekatan dan
@@ -208,7 +231,10 @@ block content %}
           <div class="item">
             <h4>Paket Langganan</h4>
             <div class="icon">
-              <img src="{{ url_for('static', filename='assets/images/service-icon-02.png') }}" alt="" />
+              <img
+                src="{{ url_for('static', filename='assets/images/service-icon-02.png') }}"
+                alt=""
+              />
             </div>
             <p>
               Nikmati diskon khusus untuk pelanggan setia dengan langganan
@@ -218,7 +244,10 @@ block content %}
           <div class="item">
             <h4>Workshop Kopi</h4>
             <div class="icon">
-              <img src="{{ url_for('static', filename='assets/images/service-icon-03.png') }}" alt="" />
+              <img
+                src="{{ url_for('static', filename='assets/images/service-icon-03.png') }}"
+                alt=""
+              />
             </div>
             <p>
               Ikuti kelas membuat kopi untuk memahami seni brewing dan menyeduh
@@ -325,7 +354,7 @@ block content %}
           <img
             src="{{ url_for('static', filename='img/upload/' + product.image_filename) }}"
             alt="Latte"
-            style="width: 100%; margin-bottom: 15px; border-radius: 15px;"
+            style="width: 100%; margin-bottom: 15px; border-radius: 15px"
           />
           <h4>{{ product.name }}</h4>
           <ul>
@@ -349,7 +378,7 @@ block content %}
     <div class="row">
       <div class="col-lg-12 text-center">
         <div class="main-blue-button-hover-x" style="margin-top: 30px">
-          <a href="{{ url_for('show_products') }}" >Lihat Semua Produk</a>
+          <a href="{{ url_for('show_products') }}">Lihat Semua Produk</a>
         </div>
       </div>
     </div>
@@ -366,13 +395,13 @@ block content %}
           </h2>
           <div id="map">
             <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15846.477711847498!2d107.61918366783777!3d-6.816057043147879!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e0ee675ff88f%3A0xd19446ae5feee9d7!2sJl.%20Sukamaju%20Timur%20No.81%2C%20Kayuambon%2C%20Kec.%20Lembang%2C%20Kabupaten%20Bandung%20Barat%2C%20Jawa%20Barat%2040391!5e0!3m2!1sid!2sid!4v1733669575227!5m2!1sid!2sid"
-            width="100%"
-            height="360px"
-            frameborder="0"
-            style="border: 0"
-            allowfullscreen=""
-          ></iframe>
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15846.477711847498!2d107.61918366783777!3d-6.816057043147879!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e0ee675ff88f%3A0xd19446ae5feee9d7!2sJl.%20Sukamaju%20Timur%20No.81%2C%20Kayuambon%2C%20Kec.%20Lembang%2C%20Kabupaten%20Bandung%20Barat%2C%20Jawa%20Barat%2040391!5e0!3m2!1sid!2sid!4v1733669575227!5m2!1sid!2sid"
+              width="100%"
+              height="360px"
+              frameborder="0"
+              style="border: 0"
+              allowfullscreen=""
+            ></iframe>
           </div>
           <div class="info mt-4">
             <span
@@ -381,7 +410,11 @@ block content %}
             >
             <span
               ><i class="fa-brands fa-instagram"></i>
-              <a href="https://www.instagram.com/bean_to.drinks/" target="_blank">@bean_to_drinks<br />@bean_to_drinks</a></span
+              <a
+                href="https://www.instagram.com/bean_to.drinks/"
+                target="_blank"
+                >@bean_to_drinks<br />@bean_to_drinks</a
+              ></span
             >
           </div>
         </div>
@@ -450,18 +483,14 @@ block content %}
     const email = document.getElementById("email").value;
     const message = document.getElementById("message").value;
 
-    const phoneNumber = "6285155452451"; 
+    const phoneNumber = "6285155452451";
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
       `Halo, saya ${name}. Berikut adalah pesan saya:\n\n${message}\n\nEmail: ${email}`
     )}`;
 
     window.open(whatsappURL, "_blank");
-    return false; 
+    return false;
   }
 </script>
-
-<div class="footer-dec">
-  <img src="assets/images/footer-dec.png" alt="" />
-</div>
 
 {% endblock %}

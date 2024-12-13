@@ -46,7 +46,7 @@
         <tr>
           <td><a class="text-heading font-semibold" href="#">{{ product.name }}</a></td>
           <td>{{ product.category }}</td>
-          <td>{{ product.description }}</td>
+          <td>{{ product.description[:30] }}...</td>
           <td>{{ product.stock }}</td>
           <td>
             <img

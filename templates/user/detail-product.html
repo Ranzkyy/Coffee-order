@@ -1,47 +1,93 @@
 {% extends 'layout.html' %} {% block title %}{{ product.name }} - Product
 Details{% endblock %} {% block content %}
-<div class="container my-5" style="padding-top: 5rem;"> 
-  <a href="{{ url_for('show_products') }}" class="btn btn-sm btn-outline-dark mb-4">
-    
+<div class="container my-5" style="padding-top: 5rem">
+  <a
+    href="{{ url_for('show_products') }}"
+    class="btn btn-sm btn-outline-dark mb-4"
+  >
     <i class="bx bxs-left-arrow-alt"></i> Back to Products
   </a>
-  <div class="card shadow-lg rounded-lg p-4 bg-light">
-      <h1 class="text-center mb-4">{{ product.name }}</h1>
-      <div class="row">
-          <div class="col-md-6 text-center">
-              <div class="product-img-box shadow-sm bg-white p-3 mb-4 rounded">
-                  <img src="{{ url_for('static', filename='img/upload/' + product.image_filename) }}" alt="Image of {{ product.name }}" class="img-fluid rounded">
-              </div>
-          </div>
-          <div class="col-md-6 d-flex flex-column justify-content-center">
-              <p class="lead"><strong>Description:</strong> {{ product.description }}</p>
-              <p class="h3 text-success"><strong>Price:</strong> {{ product.price|rupiah }}</p>
-              <form method="POST" action="{{ url_for('add_to_cart_route', product_id=product['_id']) }}" class="mt-3">
-                  <div class="mb-3">
-                      <label for="cart_quantity" class="form-label">Add to Cart Quantity</label>
-                      <input type="number" class="form-control" name="quantity" value="1" min="1">
-                  </div>
-                  <div class="mb-3">
-                      <label for="topping" class="form-label">Select Topping (Optional)</label>
-                      <select class="form-control" name="topping" id="topping">
-                          {% for topping in toppings %}
-                          <option value="{{ topping['_id'] }}" data-price="{{ topping.price }}" selected>{{ topping.name }} - {{ topping.price|rupiah }}</option>
-                          {% endfor %}
-                      </select>
-                  </div>
-                  <p class="h4">Total Price: <span id="total-price">{{ product.price|float }}</span></p>
-                  <input type="hidden" name="total_price" id="total-price-hidden" value="{{ product.price|float }}">
-                  <div class="row">
-                      <div class="col-md-6">
-                          <a href="{{ product.shopee_url }}" target="_blank" class="btn w-100 text-white" style="background-color:#FE5C29 !important">Pesan Lewat Shopee</a>
-                      </div>
-                      <div class="col-md-6">
-                          <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
-                      </div>
-                  </div>
-              </form>
-          </div>
+  <div class="card shadow rounded-lg p-4 bg-light">
+    <h1 class="text-center mb-4">{{ product.name }}</h1>
+    <div class="row">
+      <div class="col-md-6 text-center">
+        <div class="product-img-box shadow-sm bg-white p-3 mb-4 rounded">
+          <img
+            src="{{ url_for('static', filename='img/upload/' + product.image_filename) }}"
+            alt="Image of {{ product.name }}"
+            class="img-fluid rounded"
+            style="max-width: 350px"
+          />
+        </div>
       </div>
+      <div class="col-md-6 d-flex flex-column justify-content-center">
+        <p style="font-size: 1.05rem; font-weight: 350">
+          <strong>Description:</strong> {{ product.description }}
+        </p>
+        <p class="h5 text-success">
+          <strong>Price:</strong> {{ product.price|rupiah }}
+        </p>
+        <form
+          method="POST"
+          action="{{ url_for('add_to_cart_route', product_id=product['_id']) }}"
+          class="mt-3"
+        >
+          <div class="mb-3">
+            <label for="cart_quantity" class="form-label"
+              >Add to Cart Quantity</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              name="quantity"
+              value="1"
+              min="1"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="topping" class="form-label"
+              >Select Topping (Optional)</label
+            >
+            <select class="form-control" name="topping" id="topping">
+              {% for topping in toppings %}
+              <option
+                value="{{ topping['_id'] }}"
+                data-price="{{ topping.price }}"
+                selected
+              >
+                {{ topping.name }} - {{ topping.price|rupiah }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+          <p class="h4">
+            Total Price: <span id="total-price">{{ product.price|float }}</span>
+          </p>
+          <input
+            type="hidden"
+            name="total_price"
+            id="total-price-hidden"
+            value="{{ product.price|float }}"
+          />
+          <div class="row">
+            <div class="col-md-6">
+              <a
+                href="{{ product.shopee_url }}"
+                target="_blank"
+                class="btn w-100 text-white"
+                style="background-color: #fe5c29 !important"
+                >Pesan Lewat Shopee</a
+              >
+            </div>
+            <div class="col-md-6">
+              <button type="submit" class="btn btn-primary w-100">
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -66,13 +112,19 @@ Details{% endblock %} {% block content %}
         totalPrice.toFixed(2);
     });
 
-    document.querySelector('select[name="topping"]').addEventListener("change", function () {
-            const selectedOption = this.options[this.selectedIndex];
-            const toppingPrice = parseFloat(selectedOption.getAttribute("data-price") || 0);
-            const basePrice = parseFloat("{{ product.price }}");
-            const totalPrice = basePrice + toppingPrice;
-            document.getElementById("total-price").textContent = totalPrice.toFixed(2);
-            document.getElementById("total-price-hidden").value = totalPrice.toFixed(2);
-        });
+  document
+    .querySelector('select[name="topping"]')
+    .addEventListener("change", function () {
+      const selectedOption = this.options[this.selectedIndex];
+      const toppingPrice = parseFloat(
+        selectedOption.getAttribute("data-price") || 0
+      );
+      const basePrice = parseFloat("{{ product.price }}");
+      const totalPrice = basePrice + toppingPrice;
+      document.getElementById("total-price").textContent =
+        totalPrice.toFixed(2);
+      document.getElementById("total-price-hidden").value =
+        totalPrice.toFixed(2);
+    });
 </script>
 {% endblock %}

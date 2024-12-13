@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
     <style>
       .cart-item {
         border-bottom: 1px solid #dee2e6;
@@ -22,13 +22,29 @@
         position: sticky;
         top: 20px;
       }
+      @media (max-width: 736px) {
+        .small-screen {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
+      }
     </style>
   </head>
   <body>
     {% extends 'layout.html' %} {% block title %}Cart{% endblock %} {% block
     content %}
-    <div class="d-flex justify-content-center m-5" style="padding-top:2rem;">
-      <div class="container mt-5 shadow p-4 rounded bg-light">
+    <div class="container mt-5" style="padding-top: 5rem">
+      <a
+        href="{{ url_for('show_products') }}"
+        class="btn btn-sm btn-outline-dark mb-4"
+      >
+        <i class="bx bxs-left-arrow-alt"></i> Back to Products
+      </a>
+    </div>
+    <div class="d-flex justify-content-center mx-5">
+      <div class="container shadow p-4 rounded bg-light">
         <h1 class="mb-4 text-center text-primary">Shopping Cart</h1>
         {% if cart_items %}
         <form action="{{ url_for('checkout_selected') }}" method="POST">
@@ -37,7 +53,9 @@
             <div class="col-md-8">
               <div class="list-group">
                 {% for item in cart_items %}
-                <div class="list-group-item d-flex align-items-center p-3 mb-2 shadow-sm">
+                <div
+                  class="list-group-item d-lg-flex justify-content-center align-items-center mb-2 shadow-sm small-screen flex-column flex-lg-row text-center text-lg-start"
+                >
                   <input
                     class="form-check-input me-3"
                     type="checkbox"
@@ -50,24 +68,27 @@
                   <img
                     src="{{ url_for('static', filename='img/upload/' + (item.product_image or 'default.jpg')) }}"
                     alt="{{ item.product.name }}"
-                    class="img-thumbnail"
-                    style="height: 75px; width: 75px; object-fit: cover;"
+                    class="img-thumbnail mb-3 mb-lg-0"
+                    style="height: 75px; width: 75px; object-fit: cover"
                   />
-                  <div class="ms-3">
-
+                  <div class="ms-0 ms-lg-3">
                     <h5 class="mb-1">{{ item.product.name }}</h5>
-                    <small class="text-muted">{{ item.product.category }}</small><br />
+                    <small class="text-muted">{{ item.product.category }}</small
+                    ><br />
                     <span>{{ item.product.price | rupiah }}</span>
                     {% if item.topping_name %}
                     <p class="text-muted small mt-1">
-                      + {{ item.topping_name }}: {{ item.topping_price | rupiah }}
+                      + {{ item.topping_name }}: {{ item.topping_price | rupiah
+                      }}
                     </p>
                     {% endif %}
                   </div>
-                  <div class="ms-auto text-center">
-                    <p class="mb-0">Qty: <strong>{{ item.quantity }}</strong></p>
+                  <div class="ms-0 ms-lg-auto text-center">
+                    <p class="mb-0">
+                      Qty: <strong>{{ item.quantity }}</strong>
+                    </p>
                   </div>
-                  <div class="ms-auto text-center">
+                  <div class="ms-0 ms-lg-auto text-center">
                     <p class="mb-1 fw-bold text-success">
                       {{ (item.total_price * item.quantity) | rupiah }}
                     </p>
@@ -81,10 +102,11 @@
                     </button>
                   </div>
                 </div>
+
                 {% endfor %}
               </div>
             </div>
-    
+
             <!-- Cart Summary -->
             <div class="col-md-4">
               <div class="border p-4 bg-white rounded shadow-sm">
@@ -115,14 +137,21 @@
           </div>
         </form>
         {% else %}
-        <div class="d-flex flex-column align-items-center justify-content-center" style="height: 6rem;">
-          <p class="text-center text-muted mb-3">Keranjangmu masih kosong nih :(</p>
-          <a href="{{url_for('show_products')}}" class="btn btn-primary">Yuk, Pesan Sekarang</a>
-        </div>      
+        <div
+          class="d-flex flex-column align-items-center justify-content-center"
+          style="height: 6rem"
+        >
+          <p class="text-center text-muted mb-3">
+            Keranjangmu masih kosong nih :(
+          </p>
+          <a href="{{url_for('show_products')}}" class="btn btn-primary"
+            >Yuk, Pesan Sekarang</a
+          >
+        </div>
         {% endif %}
       </div>
     </div>
-    
+
     <!-- Modal box for removing items -->
     {% for item in cart_items %}
     <div
@@ -150,10 +179,14 @@
             cart?
           </div>
           <div class="modal-footer">
-            <form action="{{ url_for('delete_from_cart', item_id=item.item_id) }}" method="POST" style="display: inline">
+            <form
+              action="{{ url_for('delete_from_cart', item_id=item.item_id) }}"
+              method="POST"
+              style="display: inline"
+            >
               <button type="submit" class="btn btn-danger">Yes, Remove</button>
-          </form>
-          
+            </form>
+
             <button
               type="button"
               class="btn btn-secondary"
