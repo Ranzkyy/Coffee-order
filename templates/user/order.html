@@ -169,53 +169,103 @@
         <p>No pending orders.</p>
         {% endfor %}
       </div>
-
       <!-- Proceed Orders -->
       <div
-      class="tab-pane fade {% if active_tab == 'proceed' %}show active{% endif %}"
-      id="proceed"
-      role="tabpanel"
-      aria-labelledby="proceed-tab"
-    >
-      {% for order in orders if order.status == 'proceed' %}
-      <div class="card mb-3">
-        <div class="card-header">
-          <h5>{{ order.product_name }}</h5>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-2">
-              <img
-                src="{{ url_for('static', filename='img/upload/' + (order.product_image or 'default.jpg')) }}"
-                alt="{{ order.product_name or 'No image available' }}"
-                class="img-thumbnail"
-                style="max-width: 150px"
-              />
-            </div>
-            <div class="col-md-10">
-              <p>
-                <strong>Jumlah:</strong> {{ order.quantity }}<br />
-                <strong>Harga:</strong> {{ order.price }} IDR <br />
-                <strong>Tanggal:</strong> {{ order.created_at.strftime('%A, %d-%m-%Y') }}<br />
-                <strong>Total Harga:</strong> {{ order.total_price }} IDR
-              </p>
-              <!-- Tombol untuk mengubah status -->
-              <form
-                action="{{ url_for('sudah_sampai', order_id=order._id) }}"
-                method="POST"
-              >
-                <input type="hidden" name="status" value="done" />
-                <button type="submit" class="btn btn-success">Product telah sampai</button>
-              </form>
+        class="tab-pane fade {% if active_tab == 'proceed' %}show active{% endif %}"
+        id="proceed"
+        role="tabpanel"
+        aria-labelledby="proceed-tab"
+      >
+        {% for order in orders if order.status == 'proceed' %}
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5>{{ order.product_name }}</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-2">
+                <img
+                  src="{{ url_for('static', filename='img/upload/' + (order.product_image or 'default.jpg')) }}"
+                  alt="{{ order.product_name or 'No image available' }}"
+                  class="img-thumbnail"
+                  style="max-width: 150px"
+                />
+              </div>
+              <div class="col-md-10">
+                <p>
+                  <strong>Jumlah:</strong> {{ order.quantity }}<br />
+                  <strong>Harga:</strong> {{ order.price }} IDR <br />
+                  <strong>Tanggal:</strong> {{ order.created_at.strftime('%A,
+                  %d-%m-%Y') }}<br />
+                  <strong>Total Harga:</strong> {{ order.total_price }} IDR
+                </p>
+                <!-- Tombol untuk mengubah status -->
+                <button
+                  type="button"
+                  class="btn btn-success"
+                  data-bs-toggle="modal"
+                  data-bs-target="#confirmModal{{ order._id }}"
+                >
+                  Product telah sampai
+                </button>
+
+                <!-- Modal konfirmasi -->
+                <div
+                  class="modal fade"
+                  id="confirmModal{{ order._id }}"
+                  tabindex="-1"
+                  aria-labelledby="confirmModalLabel{{ order._id }}"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5
+                          class="modal-title"
+                          id="confirmModalLabel{{ order._id }}"
+                        >
+                          Konfirmasi Aksi
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        Apakah Anda yakin ingin menandai produk ini sebagai
+                        "Sudah Sampai"?
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Batal
+                        </button>
+                        <form
+                          action="{{ url_for('sudah_sampai', order_id=order._id) }}"
+                          method="POST"
+                        >
+                          <input type="hidden" name="status" value="done" />
+                          <button type="submit" class="btn btn-success">
+                            Ya, Tandai sebagai Sudah Sampai
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        {% else %}
+        <p>No orders in progress.</p>
+        {% endfor %}
       </div>
-      {% else %}
-      <p>No orders in progress.</p>
-      {% endfor %}
-    </div>
-    
 
       <!-- Done Orders -->
       <div
