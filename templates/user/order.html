@@ -85,7 +85,7 @@
                 <p>
                   <strong>Jumlah:</strong> {{ order.quantity }}<br />
                   <strong>Harga:</strong> {{ order.price }} IDR <br />
-                  <strong>Topping:</strong> {{ order.topping_id }}<br />
+                  <strong>Topping:</strong> {{ order.topping_name }}<br />
                   <strong>Tanggal:</strong> {{ order.created_at.strftime('%A,
                   %d-%m-%Y') }}<br />
                   <strong>Total Harga:</strong> {{ order.total_price }} IDR
@@ -157,7 +157,8 @@
                     />
                   </div>
                   <button type="submit" class="btn btn-primary">
-                    Upload Proof
+                    {% if order.payment_proof %} Update Proof {% else %} Upload
+                    Proof {% endif %}
                   </button>
                 </form>
               </div>

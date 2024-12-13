@@ -16,14 +16,15 @@ Details{% endblock %} {% block content %}
             src="{{ url_for('static', filename='img/upload/' + product.image_filename) }}"
             alt="Image of {{ product.name }}"
             class="img-fluid rounded"
+            style="max-width: 350px"
           />
         </div>
       </div>
       <div class="col-md-6 d-flex flex-column justify-content-center">
-        <p class="lead">
+        <p style="font-size: 1.05rem; font-weight: 350">
           <strong>Description:</strong> {{ product.description }}
         </p>
-        <p class="h3 text-success">
+        <p class="h5 text-success">
           <strong>Price:</strong> {{ product.price|rupiah }}
         </p>
         <form
