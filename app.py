@@ -560,21 +560,23 @@ def show_products():
     products = list(db.products.find())
     return render_template('products.html', products=products)
 
-
 @app.route('/product/<product_id>')
 def detail_product(product_id):
     if 'username' not in session:
         flash("Silahkan login terlebih dahulu untuk meng-order.", "error")
         return redirect(url_for('login'))
     
+    # Cari produk berdasarkan ID
     product = db.products.find_one({'_id': ObjectId(product_id)})
-    topping = db.topping.find()
-    
     if not product:
         flash("Product not found.", "error")
         return redirect(url_for('show_products'))
     
-    return render_template('user/detail-product.html', product=product , toppings=topping)
+    #harga(ascending:murah)
+    toppings = db.topping.find().sort('price', 1) 
+    
+    return render_template('user/detail-product.html', product=product, toppings=toppings)
+
 
 @app.route('/order/<product_id>', methods=['GET', 'POST'])
 def order(product_id):
@@ -834,7 +836,7 @@ def checkout():
     cart_items = get_cart_items(user["_id"])
 
     if request.method == 'POST':
-        full_name = request.form.get('fullName')
+        full_name = request.form.get('full_name')
         phone_number = request.form.get('phoneNumber')
         payment_method = request.form.get('paymentMethod')
         address = request.form.get('address')

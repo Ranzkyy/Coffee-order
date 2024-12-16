@@ -53,7 +53,7 @@ Details{% endblock %} {% block content %}
               <option
                 value="{{ topping['_id'] }}"
                 data-price="{{ topping.price }}"
-                selected
+                {% if loop.first %}selected{% endif %}
               >
                 {{ topping.name }} - {{ topping.price|rupiah }}
               </option>
@@ -61,7 +61,7 @@ Details{% endblock %} {% block content %}
             </select>
           </div>
           <p class="h4">
-            Total Price: <span id="total-price">{{ product.price|float }}</span>
+            Total Price: <span id="total-price">{{ product.price|rupiah }}</span>
           </p>
           <input
             type="hidden"
