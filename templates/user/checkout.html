@@ -14,8 +14,8 @@
                     <form method="post" action="{{ url_for('checkout') }}">
                         <!-- Full Name akan diisi otomatis dari session -->
                         <div class="mb-3">
-                            <label for="fullName" class="form-label">Nama Lengkap</label>
-                            <input type="text" name="fullName" id="fullName" class="form-control" value="{{ user['username'] }}" readonly required disabled>
+                            <label for="full_name" class="form-label">Nama Lengkap</label>
+                            <input type="text" name="full_name" id="full_name" class="form-control" value="{{ user['username'] }}" readonly required>
                         </div>
                         <div class="mb-3">
                             <label for="phoneNumber" class="form-label">Nomor Handphone</label>
